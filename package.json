@@ -1,0 +1,22 @@
+{
+  "name": "dnd5e",
+  "version": "1.0.0",
+  "description": "D&D website",
+  "main": "index.js",
+  "scripts": {
+    "start": "node Server.js"
+  },
+  "dependencies": {
+    "express": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirzael/D-D5e.git"
+  },
+  "author": "Michael Irizarry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mirzael/D-D5e/issues"
+  },
+  "homepage": "https://github.com/mirzael/D-D5e#readme"
+}
