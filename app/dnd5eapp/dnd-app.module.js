@@ -15,7 +15,6 @@ var http_1 = require('@angular/http');
 var dnd_component_1 = require('./dnd.component');
 var monsters_component_1 = require('./monsters.component');
 var monster_service_1 = require('./monster.service');
-var app_routing_1 = require('../app.routing');
 var DndApp = (function () {
     function DndApp() {
     }
@@ -24,8 +23,7 @@ var DndApp = (function () {
             imports: [
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
-                http_1.HttpModule,
-                app_routing_1.routing
+                http_1.HttpModule
             ],
             declarations: [
                 dnd_component_1.DndComponent,

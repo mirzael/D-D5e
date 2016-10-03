@@ -16,7 +16,7 @@ var DndComponent = (function () {
     DndComponent = __decorate([
         core_1.Component({
             selector: 'dnd-app',
-            template: "\n\t\t<h1>D&D 5e Encounter Generator</h1>\n\t\t<router-outlet></router-outlet>\n\t"
+            template: "\n\t\t<h1>D&D 5e Encounter Generator</h1>\n\t\t<monsters></monsters>\n\t"
         }), 
         __metadata('design:paramtypes', [])
     ], DndComponent);

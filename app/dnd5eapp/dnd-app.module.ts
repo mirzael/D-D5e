@@ -8,14 +8,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { DndComponent } from './dnd.component';
 import { MonstersComponent } from './monsters.component';
 import { MonsterService } from './monster.service';
-import { routing } from '../app.routing';
 
 @NgModule({
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
-    routing
+    HttpModule
   ],
   declarations: [
     DndComponent,

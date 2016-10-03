@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
 	selector: 'dnd-app',
 	template: `
 		<h1>D&D 5e Encounter Generator</h1>
-		<router-outlet></router-outlet>
+		<monsters></monsters>
 	`
 })
 

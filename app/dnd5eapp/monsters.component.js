@@ -16,13 +16,13 @@ var MonstersComponent = (function () {
     }
     MonstersComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.monsterService.getMonsters().subscribe(function (monsters) { return _this.monsters = monsters; }, function (error) { return _this.errorMessage = error; });
+        this.monsterService.getMonsters().subscribe(function (monsters) { _this.monsters = monsters; }, function (error) { return _this.errorMessage = error; });
     };
     MonstersComponent = __decorate([
         core_1.Component({
             selector: 'monsters',
             moduleId: module.id,
-            template: "\n\t\t<li *ngFor=\"let hero of monsters\">\n\t\t\t<span>{{monster.name}}</span> {{monster.category}}\n\t\t</li>\n\t"
+            template: "\n\t<div class=\"container\">\n\t\t<div class=\"row\">\n\t\t\t<div class=\"col-lg-12\">\n\t\t\t\t<table class=\"table table-striped table-hover\">\n\t\t\t\t\t<thead>\n\t\t\t\t\t\t<tr>\n\t\t\t\t\t\t\t<th> Name </th>\n\t\t\t\t\t\t\t<th> Type </th>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t</thead>\n\t\t\t\t\t<tbody>\n\t\t\t\t\t\t<tr *ngFor=\"let monster of monsters\">\n\t\t\t\t\t\t\t<td> {{monster.Name }} </td>\n\t\t\t\t\t\t\t<td> {{monster.Type }} </td>\n\t\t\t\t\t\t</tr>\n\t\t\t\t\t</tbody>\n\t\t\t\t</table>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t"
         }), 
         __metadata('design:paramtypes', [monster_service_1.MonsterService])
     ], MonstersComponent);
