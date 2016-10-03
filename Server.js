@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 var router = express.Router();
-var path = __dirname + '/views/';
+var path = __dirname;
 
 router.use(function(req,res,next) {
      console.log("/" + req.method);
@@ -10,6 +10,10 @@ router.use(function(req,res,next) {
 
 router.get("/", function(req,res){
      res.sendFile(path + "index.html");
+});
+
+router.get("/5emonsters", function(req, res){
+	res.sendFile(path + "5e-monsters.csv")
 });
 
 app.use("/",router);
