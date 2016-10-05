@@ -24,11 +24,12 @@
 	    '@angular/upgrade': 'npm:@angular/upgrade/bundles/upgrade.umd.js',
       'angular2/router': 'npm:angular2/router.js',
       'angular2/platform/browser': 'npm:angular2/platform/browser.js',
+      'xml2js': 'npm:xml2js/lib/xml2js.js',
 
       // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
-	  'ts':                        'npm:plugin-typescript@4.0.10/lib/plugin.js',
+	    'ts':                        'npm:plugin-typescript@4.0.10/lib/plugin.js',
       'typescript':                'npm:typescript@2.0.2/lib/typescript.js',
     },
     // packages tells the System loader how to load when no filename and/or no extension

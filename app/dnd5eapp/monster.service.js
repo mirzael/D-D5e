@@ -23,43 +23,42 @@ var MonsterService = (function () {
             return Rx_1.Observable.fromPromise(Promise.resolve(this.monsters));
         }
         else {
-            return this.http.get('/app/5e-monsters.csv')
+            return this.http.get('/app/monsters.xml')
                 .map(function (response) { return _this.extractData(response); })
                 .catch(this.handleError);
         }
     };
     MonsterService.prototype.extractData = function (res) {
         console.log(res);
-        var body = res.text();
-        var allTextLines = body.split(/\r\n|\n/);
-        var lines = [];
-        for (var i = 1; i < allTextLines.length; i++) {
-            var data = allTextLines[i].split(/,(?=([^\"]*\"[^\"]*\")*[^\"]*$)/);
-            console.log(data);
-            for (var j = 0; j < data.length; j++) {
-                if (data[j] === undefined) {
-                    data.splice(j, 1);
-                }
+        var doc = JSON.parse(xml2json(res.text(), "  "));
+        var monsters = doc.compendium.monster;
+        for (var i = monsters.length - 1; i >= 0; i--) {
+            console.log(monsters[i]);
+            var monster = new monster_1.Monster();
+            monster.Name = monsters[i].name;
+            monster.Size = monsters[i].size;
+            monster.Type = monsters[i].type.replace(", monster manual", "");
+            monster.Align = monsters[i].alignment;
+            if (monsters[i].cr.indexOf("/") != -1) {
+                monster.CR = eval(monsters[i].cr);
             }
-            if (data.length >= 8) {
-                var monster = new monster_1.Monster;
-                //Monster,CR,Type,Subtype,Size,Align,Legendary?,Lair?
-                monster.Name = data[0].replace(/"/g, "");
-                if (data[1].indexOf('/') > 0) {
-                    monster.CR = eval(data[1]);
-                }
-                else {
-                    monster.CR = parseInt(data[1]);
-                }
-                monster.Type = data[2];
-                monster.SubType = data[3];
-                monster.Size = data[4];
-                monster.Align = data[5];
-                monster.Legendary = data[6] === 'Y';
-                monster.Lair = data[7].indexOf('Y') !== -1;
-                console.log(monster);
-                this.monsters.push(monster);
+            else {
+                monster.CR = parseInt(monsters[i].cr);
             }
+            monster.AC = monsters[i].ac;
+            monster.HP = monsters[i].hp;
+            monster.Speed = monsters[i].speed;
+            if (monsters[i].hasOwnProperty("skill")) {
+                monster.Bonuses = monsters[i].skill.split(',');
+            }
+            monster.Perception = monsters[i].passive;
+            monster.Strength = monsters[i].str;
+            monster.Dexterity = monsters[i].dex;
+            monster.Wisdom = monsters[i].wis;
+            monster.Intelligence = monsters[i].int;
+            monster.Charisma = monsters[i].cha;
+            monster.Constitution = monsters[i].con;
+            this.monsters.push(monster);
         }
         return this.monsters;
     };
