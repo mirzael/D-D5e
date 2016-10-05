@@ -7,69 +7,49 @@ import { MonsterService } from './monster.service';
 	moduleId: module.id,
 	template: `
 	<div class="container">
-		<div class="row">
-			<div class="col-lg-12">
-				<table class="table table-striped table-hover">
-					<thead>
-						<tr>
-							<th> Name </th>
-							<th> Size </th>
-							<th> Type </th>
-							<th> Align </th>
-							<th> CR </th>
-							<th> AC </th>
-							<th> HP </th>
-							<th> Speed </th>
-							<th> Bonuses </th>
-							<th> Perception </th>
-							<th> Strength </th>
-							<th> Dexterity </th>
-							<th> Wisdom </th>
-							<th> Intelligence </th>
-							<th> Charisma </th>
-							<th> Constitution </th>
-							<th> Traits </th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let monster of monsters">
-							<td> {{ monster.Name }} </td>
-							<td> {{ monster.Size }} </td>
-							<td> {{ monster.Type }} </td>
-							<td> {{ monster.Align }} </td>
-							<td> {{ monster.CR }} </td>
-							<td> {{ monster.AC }} </td>
-							<td> {{ monster.HP }} </td>
-							<td> {{ monster.Speed }} </td>
-							<td> {{ monster.Bonuses }} </td>
-							<td> {{ monster.Perception }} </td>
-							<td> {{ monster.Strength }} </td>
-							<td> {{ monster.Dexterity }} </td>
-							<td> {{ monster.Wisdom }} </td>
-							<td> {{ monster.Intelligence }} </td>
-							<td> {{ monster.Charisma }} </td>
-							<td> {{ monster.Constitution }} </td>
-							<td> 
-								<div class="row" >
-									<div class="col-md-12" *ngFor="let trait of monster.Traits">
-										<div class="row">
-											<div class="col-md-6"> {{ trait.Name}} </div>
-											<div class="col-md-6"> 
-												<span style="display: inline-block" *ngFor="let description of trait.Description">
-													{{description}}
-												</span>
-											</div>
-										</div>
+		<div class="row bg-primary" *ngFor="let monster of monsters" style="padding: 10px 0; margin: 10px 0;">
+			<div class="col-md-2 attributes border-right"> 
+				Attributes
+			</div>
+			<div class="col-md-2 attributesDef borders" >
+				<div class="row" [ngClass]="{'text-success': monster.Strength > 15}"> STR: {{ monster.Strength }} </div>
+				<div class="row"> DEX: {{ monster.Dexterity }} </div>
+				<div class="row"> WIS: {{ monster.Wisdom }} </div>
+				<div class="row"> INT: {{ monster.Intelligence }} </div>
+				<div class="row"> CHA: {{ monster.Charisma }} </div>
+				<div class="row"> CON: {{ monster.Constitution }} </div>
+			</div>
+			<!--
+					<div> {{ monster.Name }} </div>
+					<div> {{ monster.Size }} </div>
+					<div> {{ monster.Type }} </div>
+					<div> {{ monster.Align }} </div>
+					<div> {{ monster.CR }} </div>
+					<div> {{ monster.AC }} </div>
+					<div> {{ monster.HP }} </div>
+					<div> {{ monster.Speed }} </div>
+					<div> {{ monster.Bonuses }} </div>
+
+					<div> {{ monster.Constitution }} </div>
+					<div> 
+						<div class="row" >
+							<div *ngFor="let trait of monster.Traits">
+								<div class="row">
+									<div > {{ trait.Name}} </div>
+									<div > 
+										<span style="display: inline-block" *ngFor="let description of trait.Description">
+											{{description}}
+										</span>
 									</div>
 								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+							</div>
+						</div>
+					</div>
+			-->
 		</div>
 	</div>
-	`
+	`,
+	styleUrls: ["monsters.component.css"]
 })
 
 export class MonstersComponent implements OnInit{
@@ -79,7 +59,7 @@ export class MonstersComponent implements OnInit{
 
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
-			monsters => {this.monsters = monsters; console.log(monsters);},
+			monsters => {this.monsters = monsters.slice(1,5); console.log(monsters);},
 			error => this.errorMessage = <any>error
 		);
 	}
