@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { Monster } from './monster';
+import { Monster, MonsterProperty, Attack } from './monster';
 
 declare var xml2json: any;
 
@@ -54,11 +54,228 @@ export class MonsterService{
 			monster.Intelligence = monsters[i].int;
 			monster.Charisma = monsters[i].cha;
 			monster.Constitution = monsters[i].con;
+			monster.Traits = this.processTraits(monsters[i]);
+			monster.Actions = this.processActions(monsters[i]);
+			monster.Legendaries = this.processLegendaries(monsters[i]);
+
+			if(monsters[i].hasOwnProperty("languages")){
+				monster.Languages = monsters[i].languages.split(",");
+			}
+
+			if(monsters[i].hasOwnProperty("immune")){
+				monster.Immunities = monsters[i].immune;
+			}
 
 			this.monsters.push(monster);
 		}
 		return this.monsters;
 	}
+
+	private processTraits(monster: any): MonsterProperty[]{
+		let traits: MonsterProperty[] = []
+		if(monster.hasOwnProperty("trait")){
+			if(Array.isArray(monster.trait)){
+				for( var j = monster.trait.length - 1; j >= 0; j--){
+					let trait: MonsterProperty = new MonsterProperty();
+					let xmlTrait : any = monster.trait[j];
+					trait.Name = xmlTrait.name;
+
+					if(Array.isArray(xmlTrait.text)){
+						for(var k = xmlTrait.text.length - 1; k >= 0; k--){
+							trait.Description.push(xmlTrait.text[k]);
+						}
+					}else{
+						trait.Description.push(xmlTrait.text);
+					}
+
+					traits.push(trait);
+				}
+			}else{
+				let trait: MonsterProperty = new MonsterProperty();
+				let xmlTrait : any = monster.trait;
+				trait.Name = xmlTrait.name;
+
+				if(Array.isArray(xmlTrait.text)){
+					for(var k = xmlTrait.text.length - 1; k >= 0; k--){
+						trait.Description.push(xmlTrait.text[k]);
+					}
+				}else{
+					trait.Description.push(xmlTrait.text);
+				}
+
+				traits.push(trait);
+			}
+		}
+		return traits;
+	}
+
+	private processActions(monster: any): MonsterProperty[]{
+		let actions: MonsterProperty[] = []
+		if(monster.hasOwnProperty("action")){
+			if(Array.isArray(monster.action)){
+				for( var j = monster.action.length - 1; j >= 0; j--){
+					let action: MonsterProperty = new MonsterProperty();
+					let xmlaction : any = monster.action[j];
+					action.Name = xmlaction.name;
+
+					if(Array.isArray(xmlaction.text)){
+						for(var k = xmlaction.text.length - 1; k >= 0; k--){
+							action.Description.push(xmlaction.text[k]);
+						}
+					}else{
+						action.Description.push(xmlaction.text);
+					}
+
+					if(xmlaction.hasOwnProperty("attack")){
+						if(Array.isArray(xmlaction.attack)){
+							for(var k = xmlaction.attack.length - 1; k >= 0; k--){
+								let attack:Attack = new Attack();
+								let actAttrs = xmlaction.attack[k].split("|");
+								attack.Name = actAttrs[0];
+								attack.ToHitBonus = parseInt(actAttrs[1]);
+								attack.Damage = actAttrs[1];
+
+								action.Attacks.push(attack);
+							}
+						}else{
+							let attack:Attack = new Attack();
+							let actAttrs = xmlaction.attack.split("|");
+							attack.Name = actAttrs[0];
+							attack.ToHitBonus = parseInt(actAttrs[1]);
+							attack.Damage = actAttrs[1];
+
+							action.Attacks.push(attack);
+						}
+					}
+
+					actions.push(action);
+				}
+			}else{
+				let action: MonsterProperty = new MonsterProperty();
+				let xmlaction : any = monster.action;
+				action.Name = xmlaction.name;
+
+				if(Array.isArray(xmlaction.text)){
+					for(var k = xmlaction.text.length - 1; k >= 0; k--){
+						action.Description.push(xmlaction.text[k]);
+					}
+				}else{
+					action.Description.push(xmlaction.text);
+				}
+
+				if(xmlaction.hasOwnProperty("attack")){
+					if(Array.isArray(xmlaction.attack)){
+						for(var k = xmlaction.attack.length - 1; k >= 0; k--){
+							let attack:Attack = new Attack();
+							let actAttrs = xmlaction.attack[k].split("|");
+							attack.Name = actAttrs[0];
+							attack.ToHitBonus = parseInt(actAttrs[1]);
+							attack.Damage = actAttrs[1];
+
+							action.Attacks.push(attack);
+						}
+					}else{
+						let attack:Attack = new Attack();
+						let actAttrs = xmlaction.attack.split("|");
+						attack.Name = actAttrs[0];
+						attack.ToHitBonus = parseInt(actAttrs[1]);
+						attack.Damage = actAttrs[1];
+
+						action.Attacks.push(attack);
+					}
+				}
+
+				actions.push(action);
+			}
+		}
+
+		return actions;
+	}
+
+	private processLegendaries(monster: any): MonsterProperty[]{
+	let legendaries: MonsterProperty[] = []
+	if(monster.hasOwnProperty("legendary")){
+		if(Array.isArray(monster.legendary)){
+			for( var j = monster.legendary.length - 1; j >= 0; j--){
+				let legendary: MonsterProperty = new MonsterProperty();
+				let xmllegendary : any = monster.legendary[j];
+				legendary.Name = xmllegendary.name;
+
+				if(Array.isArray(xmllegendary.text)){
+					for(var k = xmllegendary.text.length - 1; k >= 0; k--){
+						legendary.Description.push(xmllegendary.text[k]);
+					}
+				}else{
+					legendary.Description.push(xmllegendary.text);
+				}
+
+				if(xmllegendary.hasOwnProperty("attack")){
+					if(Array.isArray(xmllegendary.attack)){
+						for(var k = xmllegendary.attack.length - 1; k >= 0; k--){
+							let attack:Attack = new Attack();
+							let actAttrs = xmllegendary.attack[k].split("|");
+							attack.Name = actAttrs[0];
+							attack.ToHitBonus = parseInt(actAttrs[1]);
+							attack.Damage = actAttrs[1];
+
+							legendary.Attacks.push(attack);
+						}
+					}else{
+						let attack:Attack = new Attack();
+						let actAttrs = xmllegendary.attack.split("|");
+						attack.Name = actAttrs[0];
+						attack.ToHitBonus = parseInt(actAttrs[1]);
+						attack.Damage = actAttrs[1];
+
+						legendary.Attacks.push(attack);
+					}
+				}
+
+				legendaries.push(legendary);
+			}
+		}else{
+			let legendary: MonsterProperty = new MonsterProperty();
+			let xmllegendary : any = monster.legendary;
+			legendary.Name = xmllegendary.name;
+
+			if(Array.isArray(xmllegendary.text)){
+				for(var k = xmllegendary.text.length - 1; k >= 0; k--){
+					legendary.Description.push(xmllegendary.text[k]);
+				}
+			}else{
+				legendary.Description.push(xmllegendary.text);
+			}
+
+			if(xmllegendary.hasOwnProperty("attack")){
+				if(Array.isArray(xmllegendary.attack)){
+					for(var k = xmllegendary.attack.length - 1; k >= 0; k--){
+						let attack:Attack = new Attack();
+						let actAttrs = xmllegendary.attack[k].split("|");
+						attack.Name = actAttrs[0];
+						attack.ToHitBonus = parseInt(actAttrs[1]);
+						attack.Damage = actAttrs[1];
+
+						legendary.Attacks.push(attack);
+					}
+				}else{
+					let attack:Attack = new Attack();
+					let actAttrs = xmllegendary.attack.split("|");
+					attack.Name = actAttrs[0];
+					attack.ToHitBonus = parseInt(actAttrs[1]);
+					attack.Damage = actAttrs[1];
+
+					legendary.Attacks.push(attack);
+				}
+			}
+
+			legendaries.push(legendary);
+		}
+	}
+
+	return legendaries;
+}
+
+
 
 	private handleError(error: any): Promise<any>{
 		  console.error('An error occurred', error); // for demo purposes only

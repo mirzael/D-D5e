@@ -28,6 +28,7 @@ import { MonsterService } from './monster.service';
 							<th> Intelligence </th>
 							<th> Charisma </th>
 							<th> Constitution </th>
+							<th> Traits </th>
 						</tr>
 					</thead>
 					<tbody>
@@ -48,6 +49,20 @@ import { MonsterService } from './monster.service';
 							<td> {{ monster.Intelligence }} </td>
 							<td> {{ monster.Charisma }} </td>
 							<td> {{ monster.Constitution }} </td>
+							<td> 
+								<div class="row" >
+									<div class="col-md-12" *ngFor="let trait of monster.Traits">
+										<div class="row">
+											<div class="col-md-6"> {{ trait.Name}} </div>
+											<div class="col-md-6"> 
+												<span style="display: inline-block" *ngFor="let description of trait.Description">
+													{{description}}
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -64,7 +79,7 @@ export class MonstersComponent implements OnInit{
 
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
-			monsters => {this.monsters = monsters;},
+			monsters => {this.monsters = monsters; console.log(monsters);},
 			error => this.errorMessage = <any>error
 		);
 	}

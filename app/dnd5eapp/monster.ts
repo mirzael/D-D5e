@@ -12,23 +12,23 @@ export class Monster {
 	Intelligence: number;
 	Wisdom: number;
 	Charisma: number;
-	Saves: string[];
-	Bonuses: string[];
+	Saves: string[] = [];
+	Bonuses: string[] = [];
 	Perception: number;
-	Languages: string[];
-	Immunities: string[];
+	Languages: string[] = [];
+	Immunities: string;
 	CR: number;
-	Traits: MonsterProperty[];
-	Actions: MonsterProperty[];
-	Legendary: MonsterProperty[];
+	Traits: MonsterProperty[] = [];
+	Actions: MonsterProperty[] = [];
+	Legendaries: MonsterProperty[] = [];
 	Description: string;
 	Spells: string[];
 }
 
 export class MonsterProperty {
 	Name: string;
-	Description: string;
-	Attack: Attack;
+	Description: string[] = [];
+	Attacks: Attack[] = [];
 }
 
 export class Attack {

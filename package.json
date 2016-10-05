@@ -10,7 +10,7 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings",
-	"cxsd": "cxsd"
+	   "cxsd": "cxsd"
   },
   "dependencies": {
     "express": "latest",
