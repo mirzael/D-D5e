@@ -7,17 +7,52 @@ import { MonsterService } from './monster.service';
 	moduleId: module.id,
 	template: `
 	<div class="container">
-		<div class="row bg-primary" *ngFor="let monster of monsters" style="padding: 10px 0; margin: 10px 0;">
-			<div class="col-md-2 attributes border-right"> 
-				Attributes
+		<div class="row" *ngFor="let monster of monsters" style="margin: 10px 0;background-color: darkgray;">
+			<div class="row" style="padding: 10px 0; margin: 10px 10px; background-color: dimgrey; width=80%;">
+				<div class="col-md-2">
+					Name
+				</div>
+				<div class="col-md-3">
+					{{monster.Name}}
+				</div>
 			</div>
-			<div class="col-md-2 attributesDef borders" >
-				<div class="row" [ngClass]="{'text-success': monster.Strength > 15}"> STR: {{ monster.Strength }} </div>
-				<div class="row"> DEX: {{ monster.Dexterity }} </div>
-				<div class="row"> WIS: {{ monster.Wisdom }} </div>
-				<div class="row"> INT: {{ monster.Intelligence }} </div>
-				<div class="row"> CHA: {{ monster.Charisma }} </div>
-				<div class="row"> CON: {{ monster.Constitution }} </div>
+
+			<div class="row" style="padding: 10px 0; margin: 10px 10px; background-color: dimgrey; width=80%;">
+				<div class="col-md-2 attributes"> 
+					Attributes
+				</div>
+				<div class="col-md-3 attributesDef" >
+					<div class="row" 
+						[ngClass]="{'text-info': monster.Strength > 15, 'text-muted': monster.Strength < 10}"
+					> 
+						STR: {{ monster.Strength }} 
+					</div>
+					<div class="row"
+						[ngClass]="{'text-info': monster.Dexterity > 15, 'text-muted': monster.Dexterity < 10}"
+					> 
+						DEX: {{ monster.Dexterity }} 
+					</div>
+					<div class="row"
+						[ngClass]="{'text-info': monster.Wisdom > 15, 'text-muted': monster.Wisdom < 10}"
+					> 
+						WIS: {{ monster.Wisdom }} 
+					</div>
+					<div class="row"
+						[ngClass]="{'text-info': monster.Intelligence > 15, 'text-muted': monster.Intelligence < 10}"
+					> 
+						INT: {{ monster.Intelligence }} 
+					</div>
+					<div class="row"
+						[ngClass]="{'text-info': monster.Charisma > 15, 'text-muted': monster.Charisma < 10}"
+					> 
+						CHA: {{ monster.Charisma }} 
+					</div>
+					<div class="row"
+						[ngClass]="{'text-info': monster.Constitution > 15, 'text-muted': monster.Constitution < 10}"
+					> 
+						CON: {{ monster.Constitution }} 
+					</div>
+				</div>
 			</div>
 			<!--
 					<div> {{ monster.Name }} </div>
@@ -59,7 +94,7 @@ export class MonstersComponent implements OnInit{
 
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
-			monsters => {this.monsters = monsters.slice(1,5); console.log(monsters);},
+			monsters => {this.monsters = monsters; console.log(monsters);},
 			error => this.errorMessage = <any>error
 		);
 	}
