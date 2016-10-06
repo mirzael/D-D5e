@@ -66,6 +66,10 @@ export class MonsterService{
 				monster.Immunities = monsters[i].immune;
 			}
 
+			if(monsters[i].hasOwnProperty("spells")){
+				monster.Spells = monsters[i].spells.split(",");
+			}
+
 			this.monsters.push(monster);
 		}
 		return this.monsters;
@@ -76,7 +80,7 @@ export class MonsterService{
 		newProp.Name = property.name;
 
 		if(Array.isArray(property.text)){
-			for(var k = property.text.length - 1; k >= 0; k--){
+			for(var k = 0; k < property.text.length; k++){
 				newProp.Description.push(property.text[k]);
 			}
 		}else{
@@ -90,7 +94,7 @@ export class MonsterService{
 					let actAttrs = property.attack[k].split("|");
 					attack.Name = actAttrs[0];
 					attack.ToHitBonus = parseInt(actAttrs[1]);
-					attack.Damage = actAttrs[1];
+					attack.Damage = actAttrs[2];
 
 					newProp.Attacks.push(attack);
 				}
@@ -99,7 +103,7 @@ export class MonsterService{
 				let actAttrs = property.attack.split("|");
 				attack.Name = actAttrs[0];
 				attack.ToHitBonus = parseInt(actAttrs[1]);
-				attack.Damage = actAttrs[1];
+				attack.Damage = actAttrs[2];
 
 				newProp.Attacks.push(attack);
 			}

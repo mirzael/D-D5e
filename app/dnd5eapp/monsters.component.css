@@ -9,3 +9,13 @@
 .border-left {
     border-left: 1px solid #ddd;
 }
+.monsterRow{
+	padding: 10px 0; 
+	margin: 10px 10px; 
+	background-color: dimgrey;
+	width=80%;
+}
+.monsterContainer{
+	margin: 10px 0;
+	background-color: darkgray;
+}

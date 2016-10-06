@@ -7,8 +7,8 @@ import { MonsterService } from './monster.service';
 	moduleId: module.id,
 	template: `
 	<div class="container">
-		<div class="row" *ngFor="let monster of monsters" style="margin: 10px 0;background-color: darkgray;">
-			<div class="row" style="padding: 10px 0; margin: 10px 10px; background-color: dimgrey; width=80%;">
+		<div class="row monsterContainer" *ngFor="let monster of monsters" style="margin: 10px 0;background-color: darkgray;">
+			<div class="row monsterRow" >
 				<div class="col-md-2">
 					Name
 				</div>
@@ -17,7 +17,61 @@ import { MonsterService } from './monster.service';
 				</div>
 			</div>
 
-			<div class="row" style="padding: 10px 0; margin: 10px 10px; background-color: dimgrey; width=80%;">
+			<div class="row monsterRow" >
+				<div class="col-md-2">
+					CR
+				</div>
+				<div class="col-md-3">
+					{{monster.CR}}
+				</div>
+			</div>
+
+			<div class="row monsterRow" >
+				<div class="col-md-2">
+					Size
+				</div>
+				<div class="col-md-3">
+					{{monster.Size}}
+				</div>
+			</div>
+
+			<div class="row monsterRow" >
+				<div class="col-md-2">
+					Type
+				</div>
+				<div class="col-md-3">
+					{{monster.Type}}
+				</div>
+			</div>
+
+			<div class="row monsterRow" >
+				<div class="col-md-2">
+					Alignment
+				</div>
+				<div class="col-md-3">
+					{{monster.Align}}
+				</div>
+			</div>
+
+			<div class="row monsterRow" >
+				<div class="col-md-2">
+					HP
+				</div>
+				<div class="col-md-3">
+					{{monster.HP}}
+				</div>
+			</div>
+
+			<div class="row monsterRow" >
+				<div class="col-md-2">
+					AC
+				</div>
+				<div class="col-md-3">
+					{{monster.AC}}
+				</div>
+			</div>
+
+			<div class="row monsterRow">
 				<div class="col-md-2 attributes"> 
 					Attributes
 				</div>
@@ -54,33 +108,48 @@ import { MonsterService } from './monster.service';
 					</div>
 				</div>
 			</div>
-			<!--
-					<div> {{ monster.Name }} </div>
-					<div> {{ monster.Size }} </div>
-					<div> {{ monster.Type }} </div>
-					<div> {{ monster.Align }} </div>
-					<div> {{ monster.CR }} </div>
-					<div> {{ monster.AC }} </div>
-					<div> {{ monster.HP }} </div>
-					<div> {{ monster.Speed }} </div>
-					<div> {{ monster.Bonuses }} </div>
 
-					<div> {{ monster.Constitution }} </div>
-					<div> 
-						<div class="row" >
-							<div *ngFor="let trait of monster.Traits">
-								<div class="row">
-									<div > {{ trait.Name}} </div>
-									<div > 
-										<span style="display: inline-block" *ngFor="let description of trait.Description">
-											{{description}}
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
+			<div class="row monsterRow" >
+				<div class="col-md-2">
+					Speed
+				</div>
+				<div class="col-md-3">
+					{{monster.Speed}}
+				</div>
+			</div>
+
+			<div class="row monsterRow" *ngIf="monster.Traits.length > 0">
+				Traits
+				<div class="row monsterRow" *ngFor="let trait of monster.Traits">
+					<div class="monsterRow"> {{trait.Name}} </div>
+					<div class="monsterRow"> 
+						<span style="display: inline-block" *ngFor="let description of trait.Description">
+							{{description}}
+							<br/>
+						</span>
 					</div>
-			-->
+				</div>
+			</div>
+
+			<div class="row monsterRow" *ngIf="monster.Actions.length > 0">
+				Actions
+				<div class="monsterRow" *ngFor="let action of monster.Actions">
+					<div class="monsterRow"> {{action.Name}} </div>
+					<div class="monsterRow"> 
+						<span style="display: inline-block" *ngFor="let description of action.Description">
+							{{description}}
+							<br/>
+						</span>
+					</div>
+					<div class="monsterRow" *ngFor="let attack of action.Attacks">
+						{{attack.Name}}
+						<br/>
+						Bonus: +{{attack.ToHitBonus}}
+						<br/>
+						Damage: {{attack.Damage}}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	`,
