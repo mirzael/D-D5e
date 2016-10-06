@@ -57,17 +57,38 @@ export class MonsterService{
 			monster.Traits = this.processTraits(monsters[i]);
 			monster.Actions = this.processActions(monsters[i]);
 			monster.Legendaries = this.processLegendaries(monsters[i]);
+			monster.Reactions = this.processMonsterProperty(monsters[i].reaction);
 
 			if(monsters[i].hasOwnProperty("languages")){
 				monster.Languages = monsters[i].languages.split(",");
 			}
 
 			if(monsters[i].hasOwnProperty("immune")){
-				monster.Immunities = monsters[i].immune;
+				monster.Immunities = monster.Immunities.concat(monsters[i].immune.split(/[;,]/));
+			}
+			
+			if(monsters[i].hasOwnProperty("conditionImmune")){
+				monster.Immunities = monster.Immunities.concat(monsters[i].conditionImmune.split(/[;,]/));
+			}
+			
+			if(monsters[i].hasOwnProperty("resist")){
+				monster.Resistances = monsters[i].resist.split(/[;,]/);
+			}
+			
+			if(monsters[i].hasOwnProperty("vulnerable")){
+				monster.Vulnerabilities = monsters[i].vulnerable.split(/[;,]/);
 			}
 
 			if(monsters[i].hasOwnProperty("spells")){
-				monster.Spells = monsters[i].spells.split(",");
+				monster.Spells = monsters[i].spells.split(/[;,]/);
+			}
+			
+			if(monsters[i].hasOwnProperty("save")){
+				monster.Saves = monsters[i].save.split(/[;,]/);
+			}
+			
+			if(monsters[i].hasOwnProperty("senses")){
+				monsters.Senses = monsters[i].senses.split(/[;,]/);
 			}
 
 			this.monsters.push(monster);

@@ -3,10 +3,16 @@ var Monster = (function () {
     function Monster() {
         this.Saves = [];
         this.Bonuses = [];
+        this.Senses = [];
         this.Languages = [];
+        this.Immunities = [];
+        this.Resistances = [];
+        this.Vulnerabilities = [];
         this.Traits = [];
         this.Actions = [];
         this.Legendaries = [];
+        this.Reactions = [];
+        this.Spells = [];
     }
     return Monster;
 }());

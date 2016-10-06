@@ -70,6 +70,17 @@ import { MonsterService } from './monster.service';
 					{{monster.AC}}
 				</div>
 			</div>
+			
+			<div class="row monsterRow" *ngIf="monster.Senses.length > 0" >
+				<div class="col-md-2">
+					Senses
+				</div>
+				<div class="col-md-3">
+					<div class="row" *ngFor="let sense of monster.Senses">
+						{{sense}}
+					</div>
+				</div>
+			</div>
 
 			<div class="row monsterRow">
 				<div class="col-md-2 attributes"> 
@@ -108,6 +119,61 @@ import { MonsterService } from './monster.service';
 					</div>
 				</div>
 			</div>
+			
+			<div class="row monsterRow" *ngIf="monster.Bonuses.length > 0" >
+				<div class="col-md-2">
+					Skill Bonuses
+				</div>
+				<div class="col-md-3">
+					<div class="row" *ngFor="let bonus of monster.Bonuses">
+						{{bonus}}
+					</div>
+				</div>
+			</div>
+			
+			<div class="row monsterRow" *ngIf="monster.Saves.length > 0" >
+				<div class="col-md-2">
+					Save Bonuses
+				</div>
+				<div class="col-md-3">
+					<div class="row" *ngFor="let save of monster.Saves">
+						{{save}}
+					</div>
+				</div>
+			</div>
+			
+			<div class="row monsterRow" *ngIf="monster.Resistances.length > 0" >
+				<div class="col-md-2">
+					Resistances
+				</div>
+				<div class="col-md-4">
+					<div class="row" *ngFor="let resistance of monster.Resistances">
+						{{resistance}}
+					</div>
+				</div>
+			</div>
+			
+			<div class="row monsterRow" *ngIf="monster.Immunities.length > 0" >
+				<div class="col-md-2">
+					Immunities
+				</div>
+				<div class="col-md-4">
+					<div class="row" *ngFor="let immunity of monster.Immunities">
+						{{immunity}}
+					</div>
+				</div>
+			</div>
+			
+			<div class="row monsterRow" *ngIf="monster.Vulnerabilities.length > 0" >
+				<div class="col-md-2">
+					Vulnerabilities
+				</div>
+				<div class="col-md-4">
+					<div class="row" *ngFor="let vulnerable of monster.Vulnerabilities">
+						{{vulnerable}}
+					</div>
+				</div>
+			</div>
 
 			<div class="row monsterRow" >
 				<div class="col-md-2">
@@ -117,37 +183,83 @@ import { MonsterService } from './monster.service';
 					{{monster.Speed}}
 				</div>
 			</div>
-
-			<div class="row monsterRow" *ngIf="monster.Traits.length > 0">
-				Traits
-				<div class="row monsterRow" *ngFor="let trait of monster.Traits">
-					<div class="monsterRow"> {{trait.Name}} </div>
-					<div class="monsterRow"> 
-						<span style="display: inline-block" *ngFor="let description of trait.Description">
-							{{description}}
-							<br/>
-						</span>
+			
+			<div class="row monsterRow" *ngIf="monster.Spells.length > 0" >
+				<div class="col-md-2">
+					Spells
+				</div>
+				<div class="col-md-4">
+					<div class="row" *ngFor="let spell of monster.Spells">
+						{{spell}}
 					</div>
 				</div>
 			</div>
+			
 
-			<div class="row monsterRow" *ngIf="monster.Actions.length > 0">
+			<span class="monsterListDescription" *ngIf="monster.Traits.length > 0">
+				Traits
+			</span>
+			<div class="row monsterRow" *ngFor="let trait of monster.Traits">
+				<div class="monsterRow"> {{trait.Name}} </div>
+				<div class="monsterRow"> 
+					<span style="display: inline-block" *ngFor="let description of trait.Description">
+						{{description}}
+						<br/>
+					</span>
+				</div>
+			</div>
+
+
+			<span  class="monsterListDescription" *ngIf="monster.Actions.length > 0">
 				Actions
-				<div class="monsterRow" *ngFor="let action of monster.Actions">
-					<div class="monsterRow"> {{action.Name}} </div>
-					<div class="monsterRow"> 
-						<span style="display: inline-block" *ngFor="let description of action.Description">
-							{{description}}
-							<br/>
-						</span>
-					</div>
-					<div class="monsterRow" *ngFor="let attack of action.Attacks">
-						{{attack.Name}}
+			</span>
+			<div class="monsterRow" *ngFor="let action of monster.Actions">
+				<div class="monsterRow"> {{action.Name}} </div>
+				<div class="monsterRow" *ngFor="let attack of action.Attacks">
+					{{attack.Name}}
+					<br/>
+					Bonus: +{{attack.ToHitBonus}}
+					<br/>
+					Damage: {{attack.Damage}}
+				</div>
+				<div class="monsterRow"> 
+					<span style="display: inline-block" *ngFor="let description of action.Description">
+						{{description}}
 						<br/>
-						Bonus: +{{attack.ToHitBonus}}
+					</span>
+				</div>
+			</div>
+			
+			<span  class="monsterListDescription" *ngIf="monster.Legendaries.length > 0">
+				Legendaries
+			</span>
+			<div class="monsterRow" *ngFor="let legendary of monster.Legendaries">
+				<div class="monsterRow"> {{legendary.Name}} </div>
+				<div class="monsterRow" *ngFor="let attack of legendary.Attacks">
+					{{attack.Name}}
+					<br/>
+					Bonus: +{{attack.ToHitBonus}}
+					<br/>
+					Damage: {{attack.Damage}}
+				</div>
+				<div class="monsterRow"> 
+					<span style="display: inline-block" *ngFor="let description of legendary.Description">
+						{{description}}
 						<br/>
-						Damage: {{attack.Damage}}
-					</div>
+					</span>
+				</div>
+			</div>
+			
+			<span class="monsterListDescription" *ngIf="monster.Reactions.length > 0">
+				Reactions
+			</span>
+			<div class="row monsterRow" *ngFor="let reaction of monster.Reactions">
+				<div class="monsterRow"> {{reaction.Name}} </div>
+				<div class="monsterRow"> 
+					<span style="display: inline-block" *ngFor="let description of reaction.Description">
+						{{description}}
+						<br/>
+					</span>
 				</div>
 			</div>
 		</div>

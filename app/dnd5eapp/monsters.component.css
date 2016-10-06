@@ -19,3 +19,9 @@
 	margin: 10px 0;
 	background-color: darkgray;
 }
+
+.monsterListDescription{
+	display: table;
+	margin: 0 auto;
+	color: darkred;
+}

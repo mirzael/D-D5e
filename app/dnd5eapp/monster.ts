@@ -15,14 +15,18 @@ export class Monster {
 	Saves: string[] = [];
 	Bonuses: string[] = [];
 	Perception: number;
+	Senses: string[] = [];
 	Languages: string[] = [];
-	Immunities: string;
+	Immunities: string[] = [];
+	Resistances: string[] = [];
+	Vulnerabilities: string[] = [];
 	CR: number;
 	Traits: MonsterProperty[] = [];
 	Actions: MonsterProperty[] = [];
 	Legendaries: MonsterProperty[] = [];
+	Reactions: MonsterProperty[] = []
 	Description: string;
-	Spells: string[];
+	Spells: string[] = [];
 }
 
 export class MonsterProperty {
