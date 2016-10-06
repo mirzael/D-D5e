@@ -1,27 +1,43 @@
-.border-right {
-    border-right: 1px solid #ddd;
-}
-.borders {
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-    margin: -1px;
-}
-.border-left {
-    border-left: 1px solid #ddd;
+.panel-primary *:not(.panel-title|.panel-heading) {
+	color: #e0e0e0;
 }
 .monsterRow{
-	padding: 10px 0; 
-	margin: 10px 10px; 
-	background-color: dimgrey;
-	width=80%;
+	width:80%;
+	display: table;
+	margin: 0 auto;
 }
 .monsterContainer{
 	margin: 10px 0;
-	background-color: darkgray;
 }
 
 .monsterListDescription{
 	display: table;
 	margin: 0 auto;
-	color: darkred;
+}
+
+.monsterHeader{
+	border-color: transparent;
+}
+
+.text-bad{
+	color: #860000;
+}
+
+.text-good{
+	color: #004b9a;
+}
+
+.panel-success > .panel-dark {
+    background-color: #2f542f;
+    border-color: darkgreen;
+}
+
+.panel-dark{
+	padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.panel-dark:first-child {
+	margin-top: 15px;
 }
