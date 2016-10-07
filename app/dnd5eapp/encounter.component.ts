@@ -6,7 +6,7 @@ import { MonsterService } from './monster.service';
 	selector: 'encounter',
 	moduleId: module.id,
 	template: `
-	<div class="dropdown">
+	<div class="dropdown" style="margin: 40px auto; width: 90%">
 		<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
 		<span class="caret"></span></button>
 		<ul class="dropdown-menu">
@@ -33,16 +33,20 @@ import { MonsterService } from './monster.service';
 		</ul>
 	</div>
 
-	<div class="panel panel-info" *ngIf="players.length > 0">
+	<div class="panel panel-info" *ngIf="players.length > 0" style="width: 90%; margin: 0 auto;">
+		<div class="panel-heading" >
+			<h3 class="panel-title">Players</h3>
+		</div>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-2 bg-success" style="margin: 10px; text-align: center" *ngFor="let player of players">
-					<button class="close" (click)="removePlayer(index-1)">x</button>Level {{player}}
+				<div class="col-sm-2 bg-success playerElement" *ngFor="let player of players; let i = index;">
+					<button class="close" style="margin-top: 7px" (click)="removePlayer(i)">x</button>Level {{player}}
 				</div>
 			</div>
 		</div>
 	</div>
-	`
+	`,
+	styleUrls: ["encounter.component.css"]
 })
 
 export class EncounterComponent{

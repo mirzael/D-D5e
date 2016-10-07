@@ -1,0 +1,11 @@
+.playerRow {
+	display: table;
+}
+
+.playerElement{
+	margin: 10px;
+	text-align: center;
+	line-height: 40px;
+	vertical-align: middle;
+	border-radius: 5px;
+}
