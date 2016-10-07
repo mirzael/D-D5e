@@ -25,14 +25,11 @@ export class MonsterService{
 	}
 
 	private extractData(res: Response): Monster[]{
-		console.log(res);
 		let doc: any = JSON.parse(xml2json(res.text(), "  "));
 
 		let monsters = doc.compendium.monster;
 
 		for (var i = monsters.length - 1; i >= 0; i--) {
-			console.log(monsters[i]);
-
 			let monster: Monster = new Monster();
 			monster.ID = i+1;
 			monster.Name = monsters[i].name;
