@@ -30,6 +30,7 @@ export class MonsterService{
 			console.log(monsters[i]);
 
 			let monster: Monster = new Monster();
+			monster.ID = i+1;
 			monster.Name = monsters[i].name;
 			monster.Size = monsters[i].size;
 			monster.Type = monsters[i].type.replace(", monster manual", "");

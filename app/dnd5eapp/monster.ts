@@ -1,4 +1,5 @@
 export class Monster {
+	ID: number;
 	Name: string;
 	Size: string;
 	Type: string;

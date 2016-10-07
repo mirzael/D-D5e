@@ -35,6 +35,7 @@ var MonsterService = (function () {
         for (var i = monsters.length - 1; i >= 0; i--) {
             console.log(monsters[i]);
             var monster = new monster_1.Monster();
+            monster.ID = i + 1;
             monster.Name = monsters[i].name;
             monster.Size = monsters[i].size;
             monster.Type = monsters[i].type.replace(", monster manual", "");
