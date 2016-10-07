@@ -32,11 +32,9 @@ var MonsterService = (function () {
         return this.monsters.filter(function (monster) { return ids.indexOf(monster.ID) !== -1; });
     };
     MonsterService.prototype.extractData = function (res) {
-        console.log(res);
         var doc = JSON.parse(xml2json(res.text(), "  "));
         var monsters = doc.compendium.monster;
         for (var i = monsters.length - 1; i >= 0; i--) {
-            console.log(monsters[i]);
             var monster = new monster_1.Monster();
             monster.ID = i + 1;
             monster.Name = monsters[i].name;
