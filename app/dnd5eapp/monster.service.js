@@ -28,6 +28,9 @@ var MonsterService = (function () {
                 .catch(this.handleError);
         }
     };
+    MonsterService.prototype.getMonstersByIds = function (ids) {
+        return this.monsters.filter(function (monster) { return ids.indexOf(monster.ID) !== -1; });
+    };
     MonsterService.prototype.extractData = function (res) {
         console.log(res);
         var doc = JSON.parse(xml2json(res.text(), "  "));

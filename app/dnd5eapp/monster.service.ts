@@ -19,6 +19,10 @@ export class MonsterService{
 				.catch(this.handleError);
 		}
 	}
+	
+	getMonstersByIds(ids: number[]): Monster[]{
+		return this.monsters.filter(monster => ids.indexOf(monster.ID) !== -1);
+	}
 
 	private extractData(res: Response): Monster[]{
 		console.log(res);

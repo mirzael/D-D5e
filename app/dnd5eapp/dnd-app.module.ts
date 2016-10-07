@@ -11,6 +11,7 @@ import { EncounterComponent } from './encounter.component';
 import { MonsterService } from './monster.service';
 import { routing } from '../app.routing';
 
+
 @NgModule({
   imports: [
     BrowserModule,

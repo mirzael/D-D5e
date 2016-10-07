@@ -4,8 +4,8 @@ import { MonstersComponent } from './dnd5eapp/monsters.component';
 import { EncounterComponent } from './dnd5eapp/encounter.component';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'monsters', pathMatch:'full' },
-  { path: 'monsters', component: MonstersComponent },
+  { path: '', redirectTo: 'encounter', pathMatch:'full' },
+  { path: 'monsters/:ids', component: MonstersComponent },
   { path: 'encounter', component: EncounterComponent }
 ];
 

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
 
@@ -6,7 +8,7 @@ import { MonsterService } from './monster.service';
 	selector: 'encounter',
 	moduleId: module.id,
 	template: `
-	<div class="dropdown" style="margin: 40px auto; width: 90%">
+	<div class="dropdown pageButton" style="width: 90%">
 		<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
 		<span class="caret"></span></button>
 		<ul class="dropdown-menu">
@@ -45,16 +47,33 @@ import { MonsterService } from './monster.service';
 			</div>
 		</div>
 	</div>
+	
+	<button class="btn btn-success pageButton" (click)="generateEncounter()">
+		GENERATE ENCOUNTER
+	</button>
 	`,
 	styleUrls: ["encounter.component.css"]
 })
 
-export class EncounterComponent{
+export class EncounterComponent implements OnInit{
 	players: number[] = []
-	constructor(private monsterService: MonsterService){}
+	monsters: Monster[] = []
+	constructor(private monsterService: MonsterService, private router: Router){}
 
 	private generateEncounter(){
-
+		if(this.players.length <= 0){
+			console.error("Cannot generate encounter with no players. Please add at least one player.");
+		}else{
+			let monsterIds: number[] = [];
+			for(let i: number = 0; i <= 5; i++){
+				let monsterId: number = Math.floor(Math.random() * this.monsters.length);
+				
+				monsterIds.push(monsterId);
+			}
+			
+			let link = ['/monsters', monsterIds.toString()];
+			this.router.navigate(link);
+		}
 	} 
 
 	private addPlayer(number){
@@ -63,5 +82,12 @@ export class EncounterComponent{
 
 	private removePlayer(index){
 		this.players.splice(index,1);
+	}
+	
+	ngOnInit(): void{
+		this.monsterService.getMonsters().subscribe(
+			monsters => this.monsters = monsters,
+			error => console.error(error)
+		);
 	}
 }
