@@ -1,11 +1,15 @@
 **Combat Encounter Difficulty**
-*There are four categories of encounter difficulty.*
+
+*There are four categories of encounter difficulty*
+
 1. Easy. An easy encounter doesn't tax the characters' resources or put them in serious peril. They might lose a few hit points, but victory is pretty much guaranteed. Medium. A medium encounter usually has one or two scary moments for the players, but the characters should emerge victorious with no casualties. One or more of them might need to use healing resources.
+
 2. Hard. A hard encounter could go badly for the adventurers. Weaker characters might get taken out of the fight, and there's a slim chance that one or more characters might die. 
+
 3. Deadly. A deadly encounter could be lethal for one or more player characters. Survival often requires good tactics and quick thinking, and the party risks defeat.
 
 
-** Difficulty Table**
+**Difficulty Table**
 
 | Level | Easy  | Medium | Hard  | Deadly |
 |:-----:|:-----:|:------:|:-----:|:------:|
@@ -77,3 +81,15 @@
 | 18th  |            27,000                 |
 | 19th  |            30,000                 |
 | 20th  |            40,000                 |
+
+**Challenge Rating**
+
+When putting together an encounter or adventure, especially at lower levels, exercise caution when using monsters whose challenge rating is higher than the party’s average level. Such a creature might deal enough damage with a single action to take out adventurers of a lower level. For example, an ogre has a challenge rating of 2, but it can kill a 1st-level wizard with a single blow.
+
+**PARTY SIZE**
+
+The preceding guidelines assume that you have a party consisting of three to five adventurers.
+
+If the party contains fewer than three characters, apply the next highest multiplier on the Encounter Multipliers table. For example, apply a multiplier of 1.5 when the characters fight a single monster, and a multiplier of 5 for groups of fifteen or more monsters.
+
+If the party contains six or more characters, use the next lowest multiplier on the table. Use a multiplier of 0.5 for a single monster.

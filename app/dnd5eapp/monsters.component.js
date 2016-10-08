@@ -12,11 +12,14 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var common_1 = require('@angular/common');
 var monster_service_1 = require('./monster.service');
+var encounterConstants_1 = require('./encounterConstants');
 var MonstersComponent = (function () {
     function MonstersComponent(monsterService, route, location) {
         this.monsterService = monsterService;
         this.route = route;
         this.location = location;
+        this.monsters = [];
+        this.totalXP = 0;
     }
     MonstersComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -30,6 +33,10 @@ var MonstersComponent = (function () {
                 }
                 console.log(ids);
                 _this.monsters = _this.monsterService.getMonstersByIds(ids);
+                for (var _i = 0, _a = _this.monsters; _i < _a.length; _i++) {
+                    var monster = _a[_i];
+                    _this.totalXP += encounterConstants_1.crMap[monster.CR];
+                }
                 console.log(_this.monsters);
             });
         }, function (err) {

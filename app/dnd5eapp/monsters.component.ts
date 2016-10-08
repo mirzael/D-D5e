@@ -5,6 +5,7 @@ import { SimplePageScroll } from 'ng2-simple-page-scroll';
 
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
+import { crMap } from './encounterConstants';
 
 @Component ({
 	selector: 'monsters',
@@ -15,8 +16,9 @@ import { MonsterService } from './monster.service';
 
 export class MonstersComponent implements OnInit{
 	constructor(private monsterService: MonsterService, private route: ActivatedRoute, private location: Location){}
-	monsters: Monster[]
-	errorMessage: any
+	monsters: Monster[] = [];
+	totalXP: number = 0;
+	errorMessage: any;
 
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
@@ -28,6 +30,10 @@ export class MonstersComponent implements OnInit{
 					for(var i = 0; i<ids.length; i++){ ids[i] = +ids[i]; }
 					console.log(ids);
 					this.monsters = this.monsterService.getMonstersByIds(ids);
+					
+					for(let monster of this.monsters){
+						this.totalXP += crMap[monster.CR];
+					}
 					
 					console.log(this.monsters);
 				});

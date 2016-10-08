@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
+import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers } from './encounterConstants';
 
 @Component({
 	selector: 'encounter',
@@ -64,17 +65,68 @@ export class EncounterComponent implements OnInit{
 		if(this.players.length <= 0){
 			console.error("Cannot generate encounter with no players. Please add at least one player.");
 		}else{
-			let monsterIds: number[] = [];
-			for(let i: number = 0; i <= 5; i++){
-				let monsterId: number = Math.floor(Math.random() * this.monsters.length);
-				
-				monsterIds.push(monsterId);
+			var maxCr = Math.min(...this.players);
+			let xpThreshold: number = 0;
+			let encounterMonsters: Monster[] = [];
+
+
+			for (var level of this.players) { xpThreshold += mediumMap[level]; }
+
+			var filteredMonsters = this.monsters.filter(monster => monster.CR <= maxCr);
+
+			let currentXP: number = 0;
+			let unmodifiedXP: number = 0;
+			console.log("Threshold XP: " + xpThreshold);
+
+			let retries: number = 0;
+			while(!this.withinThreshold(currentXP, xpThreshold, 0.10)){
+				console.log("Current XP: " + currentXP);
+
+				let randIndex: number = Math.floor(Math.random() * filteredMonsters.length);
+				let monsterToExamine: Monster = filteredMonsters[randIndex];
+
+				let monsterXP: number = crMap[monsterToExamine.CR];
+
+				let calculatedXP: number = 0;
+
+				calculatedXP = this.calculateXP(encounterMonsters.length+1, unmodifiedXP,monsterXP);
+
+				if(calculatedXP < xpThreshold){
+					encounterMonsters.push(monsterToExamine);
+					currentXP = calculatedXP;
+					unmodifiedXP += monsterXP;
+					console.log("New XP: " + currentXP);
+				}else{
+					retries++;
+					if(retries > 5){
+						var monster = encounterMonsters.pop();
+						currentXP =  this.calculateXP(encounterMonsters.length, unmodifiedXP,monsterXP);
+						unmodifiedXP -= crMap[monster.CR];
+						retries = 0;
+					}
+				}
 			}
-			
+
+			let monsterIds: number[] = [];
+			for(var monster of encounterMonsters){ monsterIds.push(monster.ID); }
+			console.log(encounterMonsters)
 			let link = ['/monsters', monsterIds.toString()];
 			this.router.navigate(link);
 		}
 	} 
+
+	private calculateXP(numMonsters: number, unModifiedXP: number, newXP: number): number{
+		var multiplier = encounterMultipliers[numMonsters]; 
+		return (unModifiedXP + newXP) * multiplier;
+	}
+
+	private withinThreshold(currentNumber: number, maxNumber: number, thresholdPercentage: number): boolean{
+		if(currentNumber == 0) return false;
+		console.log(Math.abs(maxNumber - currentNumber));
+		console.log(Math.abs(maxNumber - currentNumber)/(currentNumber));
+		console.log(Math.abs(maxNumber - currentNumber)/(currentNumber) < thresholdPercentage);
+		return Math.abs(maxNumber - currentNumber)/(currentNumber) < thresholdPercentage;
+	}
 
 	private addPlayer(number){
 		this.players.push(number);
