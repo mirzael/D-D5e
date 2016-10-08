@@ -1,4 +1,11 @@
-interface intDictionary{
+export enum Difficulty{
+	Easy,
+	Medium,
+	Hard,
+	Deadly
+}
+
+export interface intDictionary{
 	[cr: number]: number;
 }
 

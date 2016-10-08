@@ -13,3 +13,7 @@
 .pageButton{
 	margin: 40px;
 }
+
+.selectedButton {
+	border-color: whitesmoke;
+}

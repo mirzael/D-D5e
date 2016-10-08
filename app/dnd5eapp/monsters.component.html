@@ -6,12 +6,10 @@
 				<a simplePageScroll href="#{{monster.ID}}" data-toggle="tab">{{monster.Name}}</a>
 			</li>
 		</ng-container>
-		<li>
-			<div class="bg-success" style="padding:10px;">
-				Total XP: {{totalXP}}
-			</div>
-		</li>
 	</ul>
+	<div class="bg-success xpDiv" style="padding:10px;">
+		Total XP: {{totalXP}}
+	</div>
 	<div class="tab-content">
 		<ng-container *ngFor="let monster of monsters; let firstTab = first;">
 			<div role="tabpanel" [ngClass]="{'active': firstTab}" class="tab-pane" id="{{monster.ID}}">

@@ -3,12 +3,18 @@ import { Router } from '@angular/router';
 
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
-import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers } from './encounterConstants';
+import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers, intDictionary, Difficulty } from './encounterConstants';
 
 @Component({
 	selector: 'encounter',
 	moduleId: module.id,
 	template: `
+	<div class="btn group">
+		<button class="btn btn-info" (click)="setDifficulty(difficultyEnum.Easy)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Easy}"> Easy </button>
+		<button class="btn btn-success" (click)="setDifficulty(difficultyEnum.Medium)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Medium}"> Medium </button>
+		<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
+		<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
+	</div>
 	<div class="dropdown pageButton" style="width: 90%">
 		<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
 		<span class="caret"></span></button>
@@ -56,9 +62,13 @@ import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers } f
 	styleUrls: ["encounter.component.css"]
 })
 
+
+
 export class EncounterComponent implements OnInit{
-	players: number[] = []
-	monsters: Monster[] = []
+	public difficultyEnum = Difficulty;
+	players: number[] = [];
+	monsters: Monster[] = [];
+	difficultyLevel: Difficulty = Difficulty.Easy;
 	constructor(private monsterService: MonsterService, private router: Router){}
 
 	private generateEncounter(){
@@ -69,8 +79,28 @@ export class EncounterComponent implements OnInit{
 			let xpThreshold: number = 0;
 			let encounterMonsters: Monster[] = [];
 
+			let map: intDictionary;
 
-			for (var level of this.players) { xpThreshold += mediumMap[level]; }
+			switch (this.difficultyLevel) {
+				case Difficulty.Easy:
+					map = easyMap;
+					break;
+				case Difficulty.Medium:
+					map = mediumMap;
+					break;
+				case Difficulty.Hard:
+					map = hardMap;
+					break;
+				case Difficulty.Deadly:
+					map = deadlyMap;
+					break;
+				default:
+					console.log(this.difficultyLevel);
+					console.error("Undefined Difficulty encountered. Not generating encounter.");
+					return;
+			}
+
+			for (var level of this.players) { xpThreshold += map[level]; }
 
 			var filteredMonsters = this.monsters.filter(monster => monster.CR <= maxCr);
 
@@ -100,8 +130,8 @@ export class EncounterComponent implements OnInit{
 					retries++;
 					if(retries > 5){
 						var monster = encounterMonsters.pop();
-						currentXP =  this.calculateXP(encounterMonsters.length, unmodifiedXP,monsterXP);
 						unmodifiedXP -= crMap[monster.CR];
+						currentXP =  this.calculateXP(encounterMonsters.length, unmodifiedXP,monsterXP);
 						retries = 0;
 					}
 				}
@@ -122,10 +152,7 @@ export class EncounterComponent implements OnInit{
 
 	private withinThreshold(currentNumber: number, maxNumber: number, thresholdPercentage: number): boolean{
 		if(currentNumber == 0) return false;
-		console.log(Math.abs(maxNumber - currentNumber));
-		console.log(Math.abs(maxNumber - currentNumber)/(currentNumber));
-		console.log(Math.abs(maxNumber - currentNumber)/(currentNumber) < thresholdPercentage);
-		return Math.abs(maxNumber - currentNumber)/(currentNumber) < thresholdPercentage;
+		return Math.abs(Math.max(maxNumber, currentNumber) - Math.min(maxNumber, currentNumber))/Math.min(maxNumber, currentNumber) < thresholdPercentage;
 	}
 
 	private addPlayer(number){
@@ -134,6 +161,10 @@ export class EncounterComponent implements OnInit{
 
 	private removePlayer(index){
 		this.players.splice(index,1);
+	}
+
+	private setDifficulty(diff){
+		this.difficultyLevel = diff;
 	}
 	
 	ngOnInit(): void{

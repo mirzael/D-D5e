@@ -5,7 +5,7 @@ import { SimplePageScroll } from 'ng2-simple-page-scroll';
 
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
-import { crMap } from './encounterConstants';
+import { crMap, encounterMultipliers } from './encounterConstants';
 
 @Component ({
 	selector: 'monsters',
@@ -34,6 +34,8 @@ export class MonstersComponent implements OnInit{
 					for(let monster of this.monsters){
 						this.totalXP += crMap[monster.CR];
 					}
+
+					this.totalXP *= encounterMultipliers[this.monsters.length];
 					
 					console.log(this.monsters);
 				});

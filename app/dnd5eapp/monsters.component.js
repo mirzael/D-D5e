@@ -37,6 +37,7 @@ var MonstersComponent = (function () {
                     var monster = _a[_i];
                     _this.totalXP += encounterConstants_1.crMap[monster.CR];
                 }
+                _this.totalXP *= encounterConstants_1.encounterMultipliers[_this.monsters.length];
                 console.log(_this.monsters);
             });
         }, function (err) {
