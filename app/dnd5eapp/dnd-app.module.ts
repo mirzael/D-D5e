@@ -7,8 +7,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { DndComponent } from './dnd.component';
 import { MonstersComponent } from './monsters.component';
+import { SpellsComponent } from './spell.component';
 import { EncounterComponent } from './encounter.component';
 import { MonsterService } from './monster.service';
+import { SpellService } from './spell.service';
 import { routing } from '../app.routing';
 
 
@@ -22,10 +24,12 @@ import { routing } from '../app.routing';
   declarations: [
     DndComponent,
     MonstersComponent,
-    EncounterComponent
+    EncounterComponent,
+	SpellsComponent
   ],
   providers: [
-    MonsterService
+    MonsterService,
+	SpellService
   ],
   bootstrap: [ 
     DndComponent

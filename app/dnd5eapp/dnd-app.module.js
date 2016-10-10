@@ -14,8 +14,10 @@ var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
 var dnd_component_1 = require('./dnd.component');
 var monsters_component_1 = require('./monsters.component');
+var spell_component_1 = require('./spell.component');
 var encounter_component_1 = require('./encounter.component');
 var monster_service_1 = require('./monster.service');
+var spell_service_1 = require('./spell.service');
 var app_routing_1 = require('../app.routing');
 var DndApp = (function () {
     function DndApp() {
@@ -31,10 +33,12 @@ var DndApp = (function () {
             declarations: [
                 dnd_component_1.DndComponent,
                 monsters_component_1.MonstersComponent,
-                encounter_component_1.EncounterComponent
+                encounter_component_1.EncounterComponent,
+                spell_component_1.SpellsComponent
             ],
             providers: [
-                monster_service_1.MonsterService
+                monster_service_1.MonsterService,
+                spell_service_1.SpellService
             ],
             bootstrap: [
                 dnd_component_1.DndComponent
