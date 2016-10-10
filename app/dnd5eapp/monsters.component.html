@@ -241,7 +241,9 @@
 							<div class="panel-dark monsterRow" >
 								<div class="monsterRow"> {{action.Name}} </div>
 								<div class="monsterRow" *ngFor="let attack of action.Attacks">
+									<label *ngIf="action.Attacks.length > 1">
 									{{attack.Name}}
+									</label>
 									<br/>
 									Bonus: +{{attack.ToHitBonus}}
 									<br/>

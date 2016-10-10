@@ -16,6 +16,7 @@ var MonsterService = (function () {
     function MonsterService(http) {
         this.http = http;
         this.monsters = [];
+        this.types = [];
     }
     MonsterService.prototype.getMonsters = function () {
         var _this = this;
@@ -40,6 +41,10 @@ var MonsterService = (function () {
             monster.Name = monsters[i].name;
             monster.Size = monsters[i].size;
             monster.Type = monsters[i].type.replace(", monster manual", "");
+            var newType = monster.Type.replace(/\(.*\)/, "").trim();
+            if (this.types.indexOf(newType) === -1) {
+                this.types.push(newType);
+            }
             monster.Align = monsters[i].alignment;
             if (monsters[i].cr.indexOf("/") != -1) {
                 monster.CR = eval(monsters[i].cr);
@@ -91,6 +96,15 @@ var MonsterService = (function () {
             this.monsters.push(monster);
         }
         return this.monsters;
+    };
+    MonsterService.prototype.getTypes = function () {
+        var _this = this;
+        if (this.types.length === 0) {
+            return this.getMonsters().toPromise().then(function (monsters) { return _this.types; });
+        }
+        else {
+            return Promise.resolve(this.types);
+        }
     };
     MonsterService.prototype.processSingleMonsterProperty = function (property) {
         var newProp = new monster_1.MonsterProperty();

@@ -15,6 +15,12 @@ import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers, in
 		<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
 		<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
 	</div>
+	<select class="form-control" #selectedType style="display:inline; width: inherit" (change)="setFilter(selectedType.value)">
+		<option value="none"> none </option>
+		<ng-container *ngFor="let type of types">
+			<option [value]="type">{{type}}</option>
+		</ng-container>
+	</select>
 	<div class="dropdown pageButton" style="width: 90%">
 		<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
 		<span class="caret"></span></button>
@@ -69,6 +75,8 @@ export class EncounterComponent implements OnInit{
 	players: number[] = [];
 	monsters: Monster[] = [];
 	difficultyLevel: Difficulty = Difficulty.Easy;
+	typeFilter: string = "none";
+	types: String[];
 	constructor(private monsterService: MonsterService, private router: Router){}
 
 	private generateEncounter(){
@@ -101,20 +109,32 @@ export class EncounterComponent implements OnInit{
 			}
 
 			for (var level of this.players) { xpThreshold += map[level]; }
-
-			var filteredMonsters = this.monsters.filter(monster => monster.CR <= maxCr);
-
+			
+			let crMult: number = 1;
+			if(this.difficultyLevel === Difficulty.Deadly) crMult = 1.5;
+			
+			var filteredMonsters = this.monsters.filter(monster => monster.CR * crMult <= maxCr && (this.typeFilter === "none" || monster.Type.indexOf(this.typeFilter) > -1 ));
+			console.log(filteredMonsters);
+			if(filteredMonsters.length === 0){
+				console.error("There are no monsters of type: " + this.typeFilter + " that match the filter and players that you have selected. " );
+				return;
+			}
+			
 			let currentXP: number = 0;
 			let unmodifiedXP: number = 0;
 			console.log("Threshold XP: " + xpThreshold);
 
 			let retries: number = 0;
+			let totalRetries: number = 0;
+			let resets: number = 0;
+			let MAX_RESETS: number = 8;
 			while(!this.withinThreshold(currentXP, xpThreshold, 0.10)){
 				console.log("Current XP: " + currentXP);
 
 				let randIndex: number = Math.floor(Math.random() * filteredMonsters.length);
+				console.log(randIndex < filteredMonsters.length);
 				let monsterToExamine: Monster = filteredMonsters[randIndex];
-
+				console.log(monsterToExamine);
 				let monsterXP: number = crMap[monsterToExamine.CR];
 
 				let calculatedXP: number = 0;
@@ -128,11 +148,27 @@ export class EncounterComponent implements OnInit{
 					console.log("New XP: " + currentXP);
 				}else{
 					retries++;
-					if(retries > 5){
+					totalRetries++;
+					if(retries > 5 && totalRetries % 5 < 4 && encounterMonsters.length > 0){
 						var monster = encounterMonsters.pop();
 						unmodifiedXP -= crMap[monster.CR];
 						currentXP =  this.calculateXP(encounterMonsters.length, unmodifiedXP,monsterXP);
+						console.log("Retrying. New XP: " + currentXP);
 						retries = 0;
+					}else if(retries > 5 && (totalRetries % 5 == 4 || encounterMonsters.length === 0)){
+						encounterMonsters = [];
+						unmodifiedXP = 0;
+						currentXP = 0;
+						resets++;
+						retries = 0;
+					}
+					
+					if(resets >= MAX_RESETS){
+						encounterMonsters = [];
+						unmodifiedXP = 0;
+						currentXP = 0;
+						console.error("Could not generate encounter with given parameters");
+						return;
 					}
 				}
 			}
@@ -147,6 +183,9 @@ export class EncounterComponent implements OnInit{
 
 	private calculateXP(numMonsters: number, unModifiedXP: number, newXP: number): number{
 		var multiplier = encounterMultipliers[numMonsters]; 
+		if(isNaN(multiplier) && numMonsters > 0){
+			multiplier = encounterMultipliers.maxValue;
+		}
 		return (unModifiedXP + newXP) * multiplier;
 	}
 
@@ -167,10 +206,18 @@ export class EncounterComponent implements OnInit{
 		this.difficultyLevel = diff;
 	}
 	
+	private setFilter(filter){
+	console.log("setting filter");
+		this.typeFilter = filter;
+	console.log(this.typeFilter);
+	}
+	
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
 			monsters => this.monsters = monsters,
 			error => console.error(error)
 		);
+		
+		this.monsterService.getTypes().then(types => {this.types = types; this.types.sort();});
 	}
 }

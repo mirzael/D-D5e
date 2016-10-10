@@ -40,7 +40,8 @@ exports.crMap = {
     27: 105000,
     28: 120000,
     29: 135000,
-    30: 155000
+    30: 155000,
+    maxValue: 155000
 };
 exports.easyMap = {
     1: 25,
@@ -62,7 +63,8 @@ exports.easyMap = {
     17: 2000,
     18: 2100,
     19: 2400,
-    20: 2800
+    20: 2800,
+    maxValue: 2800
 };
 exports.mediumMap = {
     1: 50,
@@ -84,7 +86,8 @@ exports.mediumMap = {
     17: 3900,
     18: 4200,
     19: 4900,
-    20: 5700
+    20: 5700,
+    maxValue: 5700
 };
 exports.hardMap = {
     1: 75,
@@ -106,7 +109,8 @@ exports.hardMap = {
     17: 5900,
     18: 6300,
     19: 7300,
-    20: 8500
+    20: 8500,
+    maxValue: 8500
 };
 exports.deadlyMap = {
     1: 100,
@@ -128,7 +132,8 @@ exports.deadlyMap = {
     17: 8800,
     18: 9500,
     19: 10900,
-    20: 12700
+    20: 12700,
+    maxValue: 12700
 };
 exports.encounterMultipliers = {
     1: 1,
@@ -145,6 +150,7 @@ exports.encounterMultipliers = {
     12: 3,
     13: 3,
     14: 3,
-    15: 4
+    15: 4,
+    maxValue: 4
 };
 //# sourceMappingURL=encounterConstants.js.map

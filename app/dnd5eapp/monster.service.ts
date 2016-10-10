@@ -9,6 +9,7 @@ declare var xml2json: any;
 export class MonsterService{
 	constructor(private http: Http){}
 	monsters : Monster[] = [];
+	types: String[] = []
 
 	getMonsters(): Observable<Monster[]>{
 		if(this.monsters.length > 0){
@@ -35,6 +36,12 @@ export class MonsterService{
 			monster.Name = monsters[i].name;
 			monster.Size = monsters[i].size;
 			monster.Type = monsters[i].type.replace(", monster manual", "");
+			
+			var newType = monster.Type.replace(/\(.*\)/, "").trim();
+			if(this.types.indexOf(newType) === -1){
+				this.types.push(newType);
+			}
+			
 			monster.Align = monsters[i].alignment;
 			if(monsters[i].cr.indexOf("/") != -1) {
 				monster.CR = eval(monsters[i].cr);
@@ -96,6 +103,14 @@ export class MonsterService{
 			this.monsters.push(monster);
 		}
 		return this.monsters;
+	}
+	
+	getTypes(): Promise<String[]>{
+		if(this.types.length === 0){
+			return this.getMonsters().toPromise().then((monsters) => this.types);
+		}else{
+			return Promise.resolve(this.types);
+		}
 	}
 
 	private processSingleMonsterProperty(property: any): MonsterProperty{

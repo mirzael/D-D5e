@@ -35,7 +35,12 @@ export class MonstersComponent implements OnInit{
 						this.totalXP += crMap[monster.CR];
 					}
 
-					this.totalXP *= encounterMultipliers[this.monsters.length];
+					var multiplier = encounterMultipliers[this.monsters.length]; 
+					if(isNaN(multiplier) && this.monsters.length > 0){
+						multiplier = encounterMultipliers.maxValue;
+					}
+					
+					this.totalXP *= multiplier;
 					
 					console.log(this.monsters);
 				});
