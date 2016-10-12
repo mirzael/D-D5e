@@ -13,10 +13,40 @@ import { Spell } from './spell';
 
 export class SpellsComponent implements OnInit{
 	spells: Spell[] = [];
+	classes: string[] = [];
+	levels: string[] = [];
+	
+	classFilter: string;
+	levelFilter: string;
+	filteredSpells: Spell[] = [];
+	
 	constructor(private spellService: SpellService){}
+	
 	ngOnInit(): void{
 		this.spellService.getSpells().subscribe(
-			spells => {this.spells = spells;}
+			spells => {this.spells = spells; this.filteredSpells = spells;}
 		);
+		
+		this.spellService.getClasses().then((classes) => this.classes = classes);
+		this.spellService.getLevels().then((levels) => this.levels = levels);
 	}
+	
+	setClassFilter(classFilter: string){
+		this.classFilter = classFilter;
+		this.filterSpells();
+	}
+	
+	setLevelFilter(levelFilter: string){
+		this.levelFilter = levelFilter;
+		this.filterSpells();
+	}
+	
+	filterSpells(){
+		this.filteredSpells = this.spells.filter(spell =>  
+			(this.classFilter === "none" || spell.classes.indexOf(this.classFilter) > -1)
+				&&
+			(this.levelFilter === "none" || spell.level.indexOf(this.levelFilter) > -1));
+	}
+	
+	
 }

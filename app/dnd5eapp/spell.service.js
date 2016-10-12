@@ -17,7 +17,8 @@ var SpellService = (function () {
         this.http = http;
         this.spells = [];
         this.classes = [];
-        this.schools = [];
+        this.levels = [];
+        this.completedProcessing = false;
     }
     SpellService.prototype.getSpells = function () {
         var _this = this;
@@ -29,6 +30,20 @@ var SpellService = (function () {
                 .map(function (response) { return _this.extractData(response); })
                 .catch(this.handleError);
         }
+    };
+    SpellService.prototype.getClasses = function () {
+        var _this = this;
+        return new Promise(function (resolve) {
+            return setTimeout(resolve, 1500);
+        })
+            .then(function () { return _this.classes; });
+    };
+    SpellService.prototype.getLevels = function () {
+        var _this = this;
+        return new Promise(function (resolve) {
+            return setTimeout(resolve, 1500);
+        })
+            .then(function () { return _this.levels; });
     };
     SpellService.prototype.extractData = function (resp) {
         console.log(resp);
@@ -43,20 +58,39 @@ var SpellService = (function () {
             spell.range = jSpell.range;
             spell.components = jSpell.components;
             spell.material = jSpell.material;
-            spell.ritual = jSpell.ritual.indexOf("yes") > -1;
+            spell.ritual = jSpell.ritual.toUpperCase();
             spell.duration = jSpell.duration;
-            spell.concentration = jSpell.duration.indexOf("yes") > -1;
+            spell.concentration = jSpell.concentration.toUpperCase();
             spell.casting_time = jSpell.casting_time;
-            spell.level = jSpell.level;
+            spell.level = jSpell.level.trim();
             spell.school = jSpell.school;
             spell.classes = jSpell.class.split(',');
+            for (var i = spell.classes.length - 1; i >= 0; i--) {
+                spell.classes[i] = spell.classes[i].trim();
+            }
+            this.addClasses(spell.classes);
+            this.addLevels(spell.level);
             this.spells.push(spell);
         }
+        this.completedProcessing = true;
         return this.spells;
     };
     SpellService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
+    };
+    SpellService.prototype.addClasses = function (classes) {
+        for (var _i = 0, classes_1 = classes; _i < classes_1.length; _i++) {
+            var cls = classes_1[_i];
+            if (this.classes.indexOf(cls.trim()) === -1) {
+                this.classes.push(cls.trim());
+            }
+        }
+    };
+    SpellService.prototype.addLevels = function (level) {
+        if (this.levels.indexOf(level.trim()) === -1) {
+            this.levels.push(level.trim());
+        }
     };
     SpellService = __decorate([
         core_1.Injectable(), 

@@ -14,10 +14,31 @@ var SpellsComponent = (function () {
     function SpellsComponent(spellService) {
         this.spellService = spellService;
         this.spells = [];
+        this.classes = [];
+        this.levels = [];
+        this.filteredSpells = [];
     }
     SpellsComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.spellService.getSpells().subscribe(function (spells) { _this.spells = spells; });
+        this.spellService.getSpells().subscribe(function (spells) { _this.spells = spells; _this.filteredSpells = spells; });
+        this.spellService.getClasses().then(function (classes) { return _this.classes = classes; });
+        this.spellService.getLevels().then(function (levels) { return _this.levels = levels; });
+    };
+    SpellsComponent.prototype.setClassFilter = function (classFilter) {
+        this.classFilter = classFilter;
+        this.filterSpells();
+    };
+    SpellsComponent.prototype.setLevelFilter = function (levelFilter) {
+        this.levelFilter = levelFilter;
+        this.filterSpells();
+    };
+    SpellsComponent.prototype.filterSpells = function () {
+        var _this = this;
+        this.filteredSpells = this.spells.filter(function (spell) {
+            return (_this.classFilter === "none" || spell.classes.indexOf(_this.classFilter) > -1)
+                &&
+                    (_this.levelFilter === "none" || spell.level.indexOf(_this.levelFilter) > -1);
+        });
     };
     SpellsComponent = __decorate([
         core_1.Component({

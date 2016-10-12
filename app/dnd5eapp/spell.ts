@@ -4,9 +4,9 @@ export class Spell {
 	range: string;
 	components: string;
 	material: string;
-	ritual: boolean;
+	ritual: string;
 	duration: string;
-	concentration: boolean;
+	concentration: string;
 	casting_time: string;
 	school: string;
 	classes: string[] = [];

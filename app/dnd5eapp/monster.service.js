@@ -99,12 +99,10 @@ var MonsterService = (function () {
     };
     MonsterService.prototype.getTypes = function () {
         var _this = this;
-        if (this.types.length === 0) {
-            return this.getMonsters().toPromise().then(function (monsters) { return _this.types; });
-        }
-        else {
-            return Promise.resolve(this.types);
-        }
+        return new Promise(function (resolve) {
+            return setTimeout(resolve, 3000);
+        })
+            .then(function () { return _this.types; });
     };
     MonsterService.prototype.processSingleMonsterProperty = function (property) {
         var newProp = new monster_1.MonsterProperty();

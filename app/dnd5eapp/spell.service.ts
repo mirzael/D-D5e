@@ -8,7 +8,8 @@ export class SpellService{
 	constructor(private http: Http){}
 	spells : Spell[] = [];
 	classes: string[] = [];
-	schools: string[] = [];
+	levels: string[] = [];
+	completedProcessing: boolean = false;
 	
 
 	getSpells(): Observable<Spell[]>{
@@ -19,6 +20,18 @@ export class SpellService{
 				.map(response => this.extractData(response))
 				.catch(this.handleError);
 		}
+	}
+	
+	getClasses(): Promise<string[]>{
+		return new Promise<string[]>(resolve =>	
+			setTimeout(resolve, 1500))
+		.then(() => this.classes);
+	}
+	
+	getLevels(): Promise<string[]>{
+		return new Promise<string[]>(resolve =>	
+			setTimeout(resolve, 1500))
+		.then(() => this.levels);
 	}
 	
 	private extractData(resp: Response): Spell[]{
@@ -35,22 +48,44 @@ export class SpellService{
 			spell.range = jSpell.range;
 			spell.components = jSpell.components;
 			spell.material = jSpell.material;
-			spell.ritual = jSpell.ritual.indexOf("yes") > -1;
+			spell.ritual = jSpell.ritual.toUpperCase();
 			spell.duration = jSpell.duration;
-			spell.concentration = jSpell.duration.indexOf("yes") > -1;
+			spell.concentration = jSpell.concentration.toUpperCase();
 			spell.casting_time = jSpell.casting_time;
-			spell.level = jSpell.level;
+			spell.level = jSpell.level.trim();
 			spell.school = jSpell.school;
 			spell.classes = jSpell.class.split(',');
+			
+			for(var i = spell.classes.length-1; i >= 0; i--){
+				spell.classes[i] = spell.classes[i].trim();
+			}
+			
+			this.addClasses(spell.classes);
+			this.addLevels(spell.level);
 
 			this.spells.push(spell);
 		}
-
+		
+		this.completedProcessing = true;
 		return this.spells;
 	}
 
 	private handleError(error: any): Promise<any>{
 		  console.error('An error occurred', error); // for demo purposes only
 		  return Promise.reject(error.message || error);
+	}
+	
+	private addClasses(classes: string[]){
+		for(var cls of classes){
+			if(this.classes.indexOf(cls.trim()) === -1){
+				this.classes.push(cls.trim());
+			}
+		}
+	}
+	
+	private addLevels(level: string){
+		if(this.levels.indexOf(level.trim()) === -1){
+			this.levels.push(level.trim());
+		}
 	}
 }

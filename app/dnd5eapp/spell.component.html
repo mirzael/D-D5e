@@ -1,5 +1,17 @@
+<select class="form-control" #selectedClass style="display:inline; width: inherit" (change)="setClassFilter(selectedClass.value)">
+	<option value="none"> none </option>
+	<ng-container *ngFor="let class of classes">
+		<option [value]="class">{{class}}</option>
+	</ng-container>
+</select>
+<select class="form-control" #selectedLevel style="display:inline; width: inherit" (change)="setLevelFilter(selectedLevel.value)">
+	<option value="none"> none </option>
+	<ng-container *ngFor="let level of levels">
+		<option [value]="level">{{level}}</option>
+	</ng-container>
+</select>
 <div class="container">
-	<div *ngFor="let spell of spells">
+	<div *ngFor="let spell of filteredSpells">
 		<div class="panel panel-primary monsterContainer">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{spell.name}}</h3>
@@ -10,7 +22,7 @@
 					<div class="col-md-2">
 						Level
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-10">
 						{{spell.level}}
 					</div>
 				</div>
@@ -31,7 +43,7 @@
 					<div class="col-md-2">
 						Range
 					</div>
-					<div class="col-md-3" [innerHTML]="spell.range">
+					<div class="col-md-10" [innerHTML]="spell.range">
 					</div>
 				</div>
 			</div>
@@ -41,7 +53,7 @@
 					<div class="col-md-2">
 						Casting Time
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-10">
 						{{spell.casting_time}}
 					</div>
 				</div>
@@ -52,12 +64,56 @@
 					<div class="col-md-2">
 						Duration
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-10">
 						{{spell.duration}}
 					</div>
 				</div>
 			</div>
+			
+			<div class="panel panel-success monsterHeader">
+				<div class="panel-dark monsterRow" >
+					<div class="col-md-2">
+						Concentration
+					</div>
+					<div class="col-md-10">
+						{{spell.concentration}}
+					</div>
+				</div>
+			</div>
 
+			<div class="panel panel-success monsterHeader">
+				<div class="panel-dark monsterRow" >
+					<div class="col-md-2">
+						Ritual
+					</div>
+					<div class="col-md-10">
+						{{spell.ritual}}
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel panel-success monsterHeader">
+				<div class="panel-dark monsterRow" >
+					<div class="col-md-2">
+						Components
+					</div>
+					<div class="col-md-10">
+						{{spell.components}}
+					</div>
+				</div>
+			</div>
+			
+			<div class="panel panel-success monsterHeader" *ngIf="spell.material != null">
+				<div class="panel-dark monsterRow" >
+					<div class="col-md-2">
+						Materials
+					</div>
+					<div class="col-md-10">
+						{{spell.material}}
+					</div>
+				</div>
+			</div>
+			
 			<div class="panel panel-success monsterHeader">
 				<div class="panel-dark monsterRow" >
 					<div class="col-md-2">
@@ -71,16 +127,14 @@
 				</div>
 			</div>
 
+			
 			<div class="panel panel-success monsterHeader">
 				<div class="panel-dark monsterRow" >
 					<div class="col-md-2">
-						Ritual
+						School
 					</div>
-					<div class="col-md-3">
-						<div [ngClass]="{'glyphicon glyphicon-ok
-': spell.Ritual, 'glyphicon glyphicon-remove': !spell.Ritual}">
-							What does this do?
-						</div>
+					<div class="col-md-10">
+						{{spell.school}}
 					</div>
 				</div>
 			</div>

@@ -105,12 +105,10 @@ export class MonsterService{
 		return this.monsters;
 	}
 	
-	getTypes(): Promise<String[]>{
-		if(this.types.length === 0){
-			return this.getMonsters().toPromise().then((monsters) => this.types);
-		}else{
-			return Promise.resolve(this.types);
-		}
+	getTypes(): Promise<string[]>{
+		return new Promise<string[]>(resolve =>	
+			setTimeout(resolve, 3000))
+		.then(() => this.types);
 	}
 
 	private processSingleMonsterProperty(property: any): MonsterProperty{
