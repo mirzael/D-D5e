@@ -1,6 +1,6 @@
 {
   "port": 3000,
-  "files": ["app/*.{html,htm,css,js,csv}"],
+  "files": ["app/*.{html,htm,css,js,csv,json,js}"],
   "server": { "baseDir": "."},
   "startPath": "/index.html"
 }

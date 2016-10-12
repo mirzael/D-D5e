@@ -34,7 +34,25 @@ var SpellService = (function () {
         console.log(resp);
         var data = resp.json();
         console.log(data);
-        var spell = new spell_1.Spell;
+        for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
+            var jSpell = data_1[_i];
+            console.log(jSpell.class);
+            var spell = new spell_1.Spell;
+            spell.name = jSpell.name;
+            spell.description = jSpell.desc;
+            spell.range = jSpell.range;
+            spell.components = jSpell.components;
+            spell.material = jSpell.material;
+            spell.ritual = jSpell.ritual.indexOf("yes") > -1;
+            spell.duration = jSpell.duration;
+            spell.concentration = jSpell.duration.indexOf("yes") > -1;
+            spell.casting_time = jSpell.casting_time;
+            spell.level = jSpell.level;
+            spell.school = jSpell.school;
+            spell.classes = jSpell.class.split(',');
+            this.spells.push(spell);
+        }
+        return this.spells;
     };
     SpellService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only

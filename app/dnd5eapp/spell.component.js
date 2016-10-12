@@ -13,14 +13,18 @@ var spell_service_1 = require('./spell.service');
 var SpellsComponent = (function () {
     function SpellsComponent(spellService) {
         this.spellService = spellService;
+        this.spells = [];
     }
     SpellsComponent.prototype.ngOnInit = function () {
-        this.spellService.getSpells().subscribe(function (spells) { console.log(spells); });
+        var _this = this;
+        this.spellService.getSpells().subscribe(function (spells) { _this.spells = spells; });
     };
     SpellsComponent = __decorate([
         core_1.Component({
             selector: 'spells',
-            template: "\n\t\t<h3> TODO </h3>\n\t"
+            moduleId: module.id,
+            templateUrl: "spell.component.html",
+            styleUrls: ["monsters.component.css"]
         }), 
         __metadata('design:paramtypes', [spell_service_1.SpellService])
     ], SpellsComponent);

@@ -1,6 +1,6 @@
 export class Spell {
 	name: string;
-	desc: string;
+	description: string;
 	range: string;
 	components: string;
 	material: string;
@@ -9,5 +9,6 @@ export class Spell {
 	concentration: boolean;
 	casting_time: string;
 	school: string;
-	class: string[];
+	classes: string[] = [];
+	level: string;
 }

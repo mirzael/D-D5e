@@ -21,11 +21,32 @@ export class SpellService{
 		}
 	}
 	
-	private extractData(resp: Response){
+	private extractData(resp: Response): Spell[]{
 		console.log(resp);
 		var data = resp.json();
 		console.log(data);
-		let spell: Spell = new Spell;
+
+		for(let jSpell of data){
+			console.log(jSpell.class);
+
+			let spell: Spell = new Spell;
+			spell.name = jSpell.name;
+			spell.description = jSpell.desc;
+			spell.range = jSpell.range;
+			spell.components = jSpell.components;
+			spell.material = jSpell.material;
+			spell.ritual = jSpell.ritual.indexOf("yes") > -1;
+			spell.duration = jSpell.duration;
+			spell.concentration = jSpell.duration.indexOf("yes") > -1;
+			spell.casting_time = jSpell.casting_time;
+			spell.level = jSpell.level;
+			spell.school = jSpell.school;
+			spell.classes = jSpell.class.split(',');
+
+			this.spells.push(spell);
+		}
+
+		return this.spells;
 	}
 
 	private handleError(error: any): Promise<any>{

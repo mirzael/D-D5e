@@ -53,7 +53,7 @@ export class MonsterService{
 			monster.Speed = monsters[i].speed;
 			
 			if(monsters[i].hasOwnProperty("skill")){
-				monster.Bonuses = monsters[i].skill.split(',')
+				monster.Bonuses = monsters[i].skill.split(',');
 			}
 
 			monster.Perception = monsters[i].passive;
