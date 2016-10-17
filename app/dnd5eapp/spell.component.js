@@ -16,6 +16,8 @@ var SpellsComponent = (function () {
         this.spells = [];
         this.classes = [];
         this.levels = [];
+        this.classFilter = "all";
+        this.levelFilter = "all";
         this.filteredSpells = [];
     }
     SpellsComponent.prototype.ngOnInit = function () {
@@ -35,9 +37,9 @@ var SpellsComponent = (function () {
     SpellsComponent.prototype.filterSpells = function () {
         var _this = this;
         this.filteredSpells = this.spells.filter(function (spell) {
-            return (_this.classFilter === "none" || spell.classes.indexOf(_this.classFilter) > -1)
+            return (_this.classFilter === "all" || spell.classes.indexOf(_this.classFilter) > -1)
                 &&
-                    (_this.levelFilter === "none" || spell.level.indexOf(_this.levelFilter) > -1);
+                    (_this.levelFilter === "all" || spell.level.indexOf(_this.levelFilter) > -1);
         });
     };
     SpellsComponent = __decorate([

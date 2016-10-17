@@ -1,16 +1,28 @@
-<select class="form-control" #selectedClass style="display:inline; width: inherit" (change)="setClassFilter(selectedClass.value)">
-	<option value="none"> none </option>
-	<ng-container *ngFor="let class of classes">
-		<option [value]="class">{{class}}</option>
-	</ng-container>
-</select>
-<select class="form-control" #selectedLevel style="display:inline; width: inherit" (change)="setLevelFilter(selectedLevel.value)">
-	<option value="none"> none </option>
-	<ng-container *ngFor="let level of levels">
-		<option [value]="level">{{level}}</option>
-	</ng-container>
-</select>
 <div class="container">
+	<div class="row">
+		<div class="col-md-1">
+			Classes
+		</div>
+		<div class="col-md-5">
+			<select class="form-control" #selectedClass style="display:inline; width: inherit" (change)="setClassFilter(selectedClass.value)">
+				<option value="all"> All </option>
+				<ng-container *ngFor="let class of classes">
+					<option [value]="class">{{class}}</option>
+				</ng-container>
+			</select>
+		</div>
+		<div class="col-md-2">
+			Spell Levels
+		</div>
+		<div class="col-md-4">
+			<select class="form-control" #selectedLevel style="display:inline; width: inherit" (change)="setLevelFilter(selectedLevel.value)">
+				<option value="all"> All </option>
+				<ng-container *ngFor="let level of levels">
+					<option [value]="level">{{level}}</option>
+				</ng-container>
+			</select>
+		</div>
+	</div>
 	<div *ngFor="let spell of filteredSpells">
 		<div class="panel panel-primary monsterContainer">
 			<div class="panel-heading">

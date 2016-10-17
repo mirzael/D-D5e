@@ -16,8 +16,8 @@ export class SpellsComponent implements OnInit{
 	classes: string[] = [];
 	levels: string[] = [];
 	
-	classFilter: string;
-	levelFilter: string;
+	classFilter: string = "all";
+	levelFilter: string = "all";
 	filteredSpells: Spell[] = [];
 	
 	constructor(private spellService: SpellService){}
@@ -43,9 +43,9 @@ export class SpellsComponent implements OnInit{
 	
 	filterSpells(){
 		this.filteredSpells = this.spells.filter(spell =>  
-			(this.classFilter === "none" || spell.classes.indexOf(this.classFilter) > -1)
+			(this.classFilter === "all" || spell.classes.indexOf(this.classFilter) > -1)
 				&&
-			(this.levelFilter === "none" || spell.level.indexOf(this.levelFilter) > -1));
+			(this.levelFilter === "all" || spell.level.indexOf(this.levelFilter) > -1));
 	}
 	
 	

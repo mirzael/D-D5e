@@ -17,7 +17,18 @@ var SpellService = (function () {
         this.http = http;
         this.spells = [];
         this.classes = [];
-        this.levels = [];
+        this.levels = [
+            "Cantrip",
+            "1st-level",
+            "2nd-level",
+            "3rd-level",
+            "4th-level",
+            "5th-level",
+            "6th-level",
+            "7th-level",
+            "8th-level",
+            "9th-level"
+        ];
         this.completedProcessing = false;
     }
     SpellService.prototype.getSpells = function () {
