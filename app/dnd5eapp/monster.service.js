@@ -17,6 +17,18 @@ var MonsterService = (function () {
         this.http = http;
         this.monsters = [];
         this.types = [];
+        this.alignments = [
+            "lawful good",
+            "neutral good",
+            "chaotic good",
+            "lawful evil",
+            "neutral evil",
+            "chaotic evil",
+            "lawful neutral",
+            "neutral",
+            "chaotic neutral",
+            "unaligned"
+        ];
     }
     MonsterService.prototype.getMonsters = function () {
         var _this = this;
@@ -108,6 +120,9 @@ var MonsterService = (function () {
             return setTimeout(resolve, 2000);
         })
             .then(function () { return _this.types; });
+    };
+    MonsterService.prototype.getAlignments = function () {
+        return Promise.resolve(this.alignments);
     };
     MonsterService.prototype.processSingleMonsterProperty = function (property) {
         var newProp = new monster_1.MonsterProperty();

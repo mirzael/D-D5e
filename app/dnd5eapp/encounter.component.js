@@ -23,6 +23,7 @@ var EncounterComponent = (function () {
         this.monsters = [];
         this.difficultyLevel = encounterConstants_1.Difficulty.Easy;
         this.typeFilter = "all";
+        this.alignmentFilter = "all";
     }
     EncounterComponent.prototype.generateEncounter = function () {
         var _this = this;
@@ -59,7 +60,7 @@ var EncounterComponent = (function () {
             var crMult_1 = 1;
             if (this.difficultyLevel === encounterConstants_1.Difficulty.Deadly)
                 crMult_1 = 1.5;
-            var filteredMonsters = this.monsters.filter(function (monster) { return monster.CR * crMult_1 <= maxCr && (_this.typeFilter === "all" || monster.Type.indexOf(_this.typeFilter) > -1); });
+            var filteredMonsters = this.monsters.filter(function (monster) { return monster.CR * crMult_1 <= maxCr && (_this.typeFilter === "all" || monster.Type.indexOf(_this.typeFilter) > -1) && (_this.alignmentFilter === "all" || monster.Align.indexOf(_this.alignmentFilter) > -1); });
             console.log(filteredMonsters);
             if (filteredMonsters.length === 0) {
                 console.error("There are no monsters of type: " + this.typeFilter + " that match the filter and players that you have selected. ");
@@ -159,6 +160,9 @@ var EncounterComponent = (function () {
     EncounterComponent.prototype.setFilter = function (filter) {
         this.typeFilter = filter;
     };
+    EncounterComponent.prototype.setAlignmentFilter = function (filter) {
+        this.alignmentFilter = filter;
+    };
     EncounterComponent.prototype.getNearestCR = function (cr) {
         if (cr >= 1) {
             return Math.floor(cr);
@@ -180,12 +184,13 @@ var EncounterComponent = (function () {
         var _this = this;
         this.monsterService.getMonsters().subscribe(function (monsters) { return _this.monsters = monsters; }, function (error) { return console.error(error); });
         this.monsterService.getTypes().then(function (types) { _this.types = types; _this.types.sort(); });
+        this.monsterService.getAlignments().then(function (alignments) { _this.alignments = alignments; });
     };
     EncounterComponent = __decorate([
         core_1.Component({
             selector: 'encounter',
             moduleId: module.id,
-            template: "\n\t<div class=\"btn group\">\n\t\t<button class=\"btn btn-info\" (click)=\"setDifficulty(difficultyEnum.Easy)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Easy}\"> Easy </button>\n\t\t<button class=\"btn btn-success\" (click)=\"setDifficulty(difficultyEnum.Medium)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Medium}\"> Medium </button>\n\t\t<button class=\"btn btn-warning\" (click)=\"setDifficulty(difficultyEnum.Hard)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Hard}\"> Hard </button>\n\t\t<button class=\"btn btn-danger\" (click)=\"setDifficulty(difficultyEnum.Deadly)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Deadly}\"> Deadly </button>\n\t</div>\n\t<span>\n\t\tType \n\t</span>\n\t<select class=\"form-control\" #selectedType style=\"display:inline; width: inherit\" (change)=\"setFilter(selectedType.value)\">\n\t\t<option value=\"all\"> All </option>\n\t\t<ng-container *ngFor=\"let type of types\">\n\t\t\t<option [value]=\"type\">{{type}}</option>\n\t\t</ng-container>\n\t</select>\n\t<div class=\"dropdown pageButton\" style=\"width: 90%\">\n\t\t<button class=\"btn btn-primary dropdown-toogle\" type=\"button\" data-toggle=\"dropdown\">Add Player\n\t\t<span class=\"caret\"></span></button>\n\t\t<ul class=\"dropdown-menu\">\n\t\t\t<li><a (click)=\"addPlayer(1)\"> Level 01 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(2)\"> Level 02 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(3)\"> Level 03 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(4)\"> Level 04 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(5)\"> Level 05 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(6)\"> Level 06 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(7)\"> Level 07 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(8)\"> Level 08 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(9)\"> Level 09 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(10)\"> Level 10 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(11)\"> Level 11 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(12)\"> Level 12 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(13)\"> Level 13 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(14)\"> Level 14 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(15)\"> Level 15 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(16)\"> Level 16 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(17)\"> Level 17 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(18)\"> Level 18 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(19)\"> Level 19 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(20)\"> Level 20 </a></li>\t\t\n\t\t</ul>\n\t</div>\n\n\t<div class=\"panel panel-info\" *ngIf=\"players.length > 0\" style=\"width: 90%; margin: 0 auto;\">\n\t\t<div class=\"panel-heading\" >\n\t\t\t<h3 class=\"panel-title\">Players</h3>\n\t\t</div>\n\t\t<div class=\"container\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-sm-2 bg-success playerElement\" *ngFor=\"let player of players; let i = index;\">\n\t\t\t\t\t<button class=\"close\" style=\"margin-top: 7px\" (click)=\"removePlayer(i)\">x</button>Level {{player}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t\n\t<button class=\"btn btn-success pageButton\" (click)=\"generateEncounter()\">\n\t\tGENERATE ENCOUNTER\n\t</button>\n\t",
+            templateUrl: "encounter.component.html",
             styleUrls: ["encounter.component.css"]
         }), 
         __metadata('design:paramtypes', [monster_service_1.MonsterService, router_1.Router, gaussianNumberGenerator_1.gaussianRandomNumberGenerator])

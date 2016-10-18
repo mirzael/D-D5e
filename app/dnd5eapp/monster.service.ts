@@ -9,7 +9,19 @@ declare var xml2json: any;
 export class MonsterService{
 	constructor(private http: Http){}
 	monsters : Monster[] = [];
-	types: String[] = []
+	types: string[] = [];
+	alignments: string[] = [
+		"lawful good",
+		"neutral good",
+		"chaotic good",
+		"lawful evil",
+		"neutral evil",
+		"chaotic evil",
+		"lawful neutral",
+		"neutral",
+		"chaotic neutral",
+		"unaligned"
+	];
 
 	getMonsters(): Observable<Monster[]>{
 		if(this.monsters.length > 0){
@@ -113,6 +125,10 @@ export class MonsterService{
 		return new Promise<string[]>(resolve =>	
 			setTimeout(resolve, 2000))
 		.then(() => this.types);
+	}
+	
+	getAlignments(): Promise<string[]>{
+		return Promise.resolve(this.alignments);
 	}
 
 	private processSingleMonsterProperty(property: any): MonsterProperty{

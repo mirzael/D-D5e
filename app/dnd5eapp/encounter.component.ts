@@ -9,66 +9,7 @@ import { gaussianRandomNumberGenerator } from './gaussianNumberGenerator';
 @Component({
 	selector: 'encounter',
 	moduleId: module.id,
-	template: `
-	<div class="btn group">
-		<button class="btn btn-info" (click)="setDifficulty(difficultyEnum.Easy)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Easy}"> Easy </button>
-		<button class="btn btn-success" (click)="setDifficulty(difficultyEnum.Medium)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Medium}"> Medium </button>
-		<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
-		<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
-	</div>
-	<span>
-		Type 
-	</span>
-	<select class="form-control" #selectedType style="display:inline; width: inherit" (change)="setFilter(selectedType.value)">
-		<option value="all"> All </option>
-		<ng-container *ngFor="let type of types">
-			<option [value]="type">{{type}}</option>
-		</ng-container>
-	</select>
-	<div class="dropdown pageButton" style="width: 90%">
-		<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
-		<span class="caret"></span></button>
-		<ul class="dropdown-menu">
-			<li><a (click)="addPlayer(1)"> Level 01 </a></li>
-			<li><a (click)="addPlayer(2)"> Level 02 </a></li>
-			<li><a (click)="addPlayer(3)"> Level 03 </a></li>
-			<li><a (click)="addPlayer(4)"> Level 04 </a></li>			
-			<li><a (click)="addPlayer(5)"> Level 05 </a></li>			
-			<li><a (click)="addPlayer(6)"> Level 06 </a></li>			
-			<li><a (click)="addPlayer(7)"> Level 07 </a></li>			
-			<li><a (click)="addPlayer(8)"> Level 08 </a></li>			
-			<li><a (click)="addPlayer(9)"> Level 09 </a></li>			
-			<li><a (click)="addPlayer(10)"> Level 10 </a></li>
-			<li><a (click)="addPlayer(11)"> Level 11 </a></li>
-			<li><a (click)="addPlayer(12)"> Level 12 </a></li>
-			<li><a (click)="addPlayer(13)"> Level 13 </a></li>
-			<li><a (click)="addPlayer(14)"> Level 14 </a></li>			
-			<li><a (click)="addPlayer(15)"> Level 15 </a></li>			
-			<li><a (click)="addPlayer(16)"> Level 16 </a></li>			
-			<li><a (click)="addPlayer(17)"> Level 17 </a></li>			
-			<li><a (click)="addPlayer(18)"> Level 18 </a></li>			
-			<li><a (click)="addPlayer(19)"> Level 19 </a></li>			
-			<li><a (click)="addPlayer(20)"> Level 20 </a></li>		
-		</ul>
-	</div>
-
-	<div class="panel panel-info" *ngIf="players.length > 0" style="width: 90%; margin: 0 auto;">
-		<div class="panel-heading" >
-			<h3 class="panel-title">Players</h3>
-		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-2 bg-success playerElement" *ngFor="let player of players; let i = index;">
-					<button class="close" style="margin-top: 7px" (click)="removePlayer(i)">x</button>Level {{player}}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<button class="btn btn-success pageButton" (click)="generateEncounter()">
-		GENERATE ENCOUNTER
-	</button>
-	`,
+	templateUrl: "encounter.component.html",
 	styleUrls: ["encounter.component.css"]
 })
 
@@ -80,7 +21,9 @@ export class EncounterComponent implements OnInit{
 	monsters: Monster[] = [];
 	difficultyLevel: Difficulty = Difficulty.Easy;
 	typeFilter: string = "all";
-	types: String[];
+	alignmentFilter: string = "all";
+	types: string[];
+	alignments: string[];
 	constructor(private monsterService: MonsterService, private router: Router, private randGenerator: gaussianRandomNumberGenerator){}
 
 	private generateEncounter(){
@@ -117,7 +60,7 @@ export class EncounterComponent implements OnInit{
 			let crMult: number = 1;
 			if(this.difficultyLevel === Difficulty.Deadly) crMult = 1.5;
 			
-			var filteredMonsters = this.monsters.filter(monster => monster.CR * crMult <= maxCr && (this.typeFilter === "all" || monster.Type.indexOf(this.typeFilter) > -1 ));
+			var filteredMonsters = this.monsters.filter(monster => monster.CR * crMult <= maxCr && (this.typeFilter === "all" || monster.Type.indexOf(this.typeFilter) > -1 ) && (this.alignmentFilter === "all" || monster.Align.indexOf(this.alignmentFilter) > -1 ));
 			console.log(filteredMonsters);
 			if(filteredMonsters.length === 0){
 				console.error("There are no monsters of type: " + this.typeFilter + " that match the filter and players that you have selected. " );
@@ -227,6 +170,10 @@ export class EncounterComponent implements OnInit{
 		this.typeFilter = filter;
 	}
 	
+	private setAlignmentFilter(filter){
+		this.alignmentFilter = filter;
+	}
+	
 	private getNearestCR(cr: number): number{
 		if(cr >= 1){
 			return Math.floor(cr);
@@ -248,5 +195,6 @@ export class EncounterComponent implements OnInit{
 		);
 		
 		this.monsterService.getTypes().then(types => {this.types = types; this.types.sort();});
+		this.monsterService.getAlignments().then(alignments => {this.alignments = alignments;});
 	}
 }
