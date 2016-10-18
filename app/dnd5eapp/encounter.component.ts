@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
 import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers, intDictionary, Difficulty } from './encounterConstants';
+import { gaussianRandomNumberGenerator } from './gaussianNumberGenerator';
 
 @Component({
 	selector: 'encounter',
@@ -15,6 +16,9 @@ import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers, in
 		<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
 		<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
 	</div>
+	<span>
+		Type 
+	</span>
 	<select class="form-control" #selectedType style="display:inline; width: inherit" (change)="setFilter(selectedType.value)">
 		<option value="all"> All </option>
 		<ng-container *ngFor="let type of types">
@@ -75,9 +79,9 @@ export class EncounterComponent implements OnInit{
 	players: number[] = [];
 	monsters: Monster[] = [];
 	difficultyLevel: Difficulty = Difficulty.Easy;
-	typeFilter: string = "none";
+	typeFilter: string = "all";
 	types: String[];
-	constructor(private monsterService: MonsterService, private router: Router){}
+	constructor(private monsterService: MonsterService, private router: Router, private randGenerator: gaussianRandomNumberGenerator){}
 
 	private generateEncounter(){
 		if(this.players.length <= 0){
@@ -130,17 +134,17 @@ export class EncounterComponent implements OnInit{
 			let MAX_RESETS: number = 8;
 			while(!this.withinThreshold(currentXP, xpThreshold, 0.10)){
 				console.log("Current XP: " + currentXP);
-
-				let randIndex: number = Math.floor(Math.random() * filteredMonsters.length);
-				console.log(randIndex < filteredMonsters.length);
-				let monsterToExamine: Monster = filteredMonsters[randIndex];
+				
+				let monsterToExamine = this.getRandomMonster(filteredMonsters, maxCr);
 				console.log(monsterToExamine);
+				console.log(monsterToExamine.Name);
 				let monsterXP: number = crMap[monsterToExamine.CR];
 
 				let calculatedXP: number = 0;
 
 				calculatedXP = this.calculateXP(encounterMonsters.length+1, unmodifiedXP,monsterXP);
-
+				console.log("Calculated XP: " + calculatedXP);
+				
 				if(calculatedXP < xpThreshold){
 					encounterMonsters.push(monsterToExamine);
 					currentXP = calculatedXP;
@@ -150,9 +154,10 @@ export class EncounterComponent implements OnInit{
 					retries++;
 					totalRetries++;
 					if(retries > 5 && totalRetries % 5 < 4 && encounterMonsters.length > 0){
-						var monster = encounterMonsters.pop();
+						let monster: Monster = encounterMonsters.pop();
 						unmodifiedXP -= crMap[monster.CR];
-						currentXP =  this.calculateXP(encounterMonsters.length, unmodifiedXP,monsterXP);
+						currentXP =  this.calculateXP(encounterMonsters.length, unmodifiedXP,0);
+						console.log("unmod xp: " + unmodifiedXP);
 						console.log("Retrying. New XP: " + currentXP);
 						retries = 0;
 					}else if(retries > 5 && (totalRetries % 5 == 4 || encounterMonsters.length === 0)){
@@ -185,8 +190,20 @@ export class EncounterComponent implements OnInit{
 		var multiplier = encounterMultipliers[numMonsters]; 
 		if(isNaN(multiplier) && numMonsters > 0){
 			multiplier = encounterMultipliers.maxValue;
+		}else if(numMonsters = 0){
+			return 0;
 		}
 		return (unModifiedXP + newXP) * multiplier;
+	}
+	
+	private getRandomMonster(monsterList: Monster[], minLevel: number): Monster{
+		let cr = this.getNearestCR(this.randGenerator.generateGaussianNoise(minLevel / 2, minLevel / 4));
+		cr = Math.min(cr, minLevel);
+		console.log("CR: " + cr);
+		let filteredMonsters = monsterList.filter(monster => monster.CR === cr);
+		
+		let randIndex: number = Math.floor(Math.random() * filteredMonsters.length);
+		return filteredMonsters[randIndex];
 	}
 
 	private withinThreshold(currentNumber: number, maxNumber: number, thresholdPercentage: number): boolean{
@@ -207,9 +224,21 @@ export class EncounterComponent implements OnInit{
 	}
 	
 	private setFilter(filter){
-	console.log("setting filter");
 		this.typeFilter = filter;
-	console.log(this.typeFilter);
+	}
+	
+	private getNearestCR(cr: number): number{
+		if(cr >= 1){
+			return Math.floor(cr);
+		}else if(cr >= 0.5){
+			return 0.5;
+		}else if (cr >= 0.25){
+			return 0.25;
+		}else if (cr >= 0.125){
+			return 0.125;
+		}else{
+			return 0;
+		}
 	}
 	
 	ngOnInit(): void{

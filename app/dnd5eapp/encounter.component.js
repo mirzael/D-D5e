@@ -12,15 +12,17 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var monster_service_1 = require('./monster.service');
 var encounterConstants_1 = require('./encounterConstants');
+var gaussianNumberGenerator_1 = require('./gaussianNumberGenerator');
 var EncounterComponent = (function () {
-    function EncounterComponent(monsterService, router) {
+    function EncounterComponent(monsterService, router, randGenerator) {
         this.monsterService = monsterService;
         this.router = router;
+        this.randGenerator = randGenerator;
         this.difficultyEnum = encounterConstants_1.Difficulty;
         this.players = [];
         this.monsters = [];
         this.difficultyLevel = encounterConstants_1.Difficulty.Easy;
-        this.typeFilter = "none";
+        this.typeFilter = "all";
     }
     EncounterComponent.prototype.generateEncounter = function () {
         var _this = this;
@@ -72,13 +74,13 @@ var EncounterComponent = (function () {
             var MAX_RESETS = 8;
             while (!this.withinThreshold(currentXP, xpThreshold, 0.10)) {
                 console.log("Current XP: " + currentXP);
-                var randIndex = Math.floor(Math.random() * filteredMonsters.length);
-                console.log(randIndex < filteredMonsters.length);
-                var monsterToExamine = filteredMonsters[randIndex];
+                var monsterToExamine = this.getRandomMonster(filteredMonsters, maxCr);
                 console.log(monsterToExamine);
+                console.log(monsterToExamine.Name);
                 var monsterXP = encounterConstants_1.crMap[monsterToExamine.CR];
                 var calculatedXP = 0;
                 calculatedXP = this.calculateXP(encounterMonsters.length + 1, unmodifiedXP, monsterXP);
+                console.log("Calculated XP: " + calculatedXP);
                 if (calculatedXP < xpThreshold) {
                     encounterMonsters.push(monsterToExamine);
                     currentXP = calculatedXP;
@@ -89,9 +91,10 @@ var EncounterComponent = (function () {
                     retries++;
                     totalRetries++;
                     if (retries > 5 && totalRetries % 5 < 4 && encounterMonsters.length > 0) {
-                        var monster = encounterMonsters.pop();
-                        unmodifiedXP -= encounterConstants_1.crMap[monster.CR];
-                        currentXP = this.calculateXP(encounterMonsters.length, unmodifiedXP, monsterXP);
+                        var monster_1 = encounterMonsters.pop();
+                        unmodifiedXP -= encounterConstants_1.crMap[monster_1.CR];
+                        currentXP = this.calculateXP(encounterMonsters.length, unmodifiedXP, 0);
+                        console.log("unmod xp: " + unmodifiedXP);
                         console.log("Retrying. New XP: " + currentXP);
                         retries = 0;
                     }
@@ -126,7 +129,18 @@ var EncounterComponent = (function () {
         if (isNaN(multiplier) && numMonsters > 0) {
             multiplier = encounterConstants_1.encounterMultipliers.maxValue;
         }
+        else if (numMonsters = 0) {
+            return 0;
+        }
         return (unModifiedXP + newXP) * multiplier;
+    };
+    EncounterComponent.prototype.getRandomMonster = function (monsterList, minLevel) {
+        var cr = this.getNearestCR(this.randGenerator.generateGaussianNoise(minLevel / 2, minLevel / 4));
+        cr = Math.min(cr, minLevel);
+        console.log("CR: " + cr);
+        var filteredMonsters = monsterList.filter(function (monster) { return monster.CR === cr; });
+        var randIndex = Math.floor(Math.random() * filteredMonsters.length);
+        return filteredMonsters[randIndex];
     };
     EncounterComponent.prototype.withinThreshold = function (currentNumber, maxNumber, thresholdPercentage) {
         if (currentNumber == 0)
@@ -143,9 +157,24 @@ var EncounterComponent = (function () {
         this.difficultyLevel = diff;
     };
     EncounterComponent.prototype.setFilter = function (filter) {
-        console.log("setting filter");
         this.typeFilter = filter;
-        console.log(this.typeFilter);
+    };
+    EncounterComponent.prototype.getNearestCR = function (cr) {
+        if (cr >= 1) {
+            return Math.floor(cr);
+        }
+        else if (cr >= 0.5) {
+            return 0.5;
+        }
+        else if (cr >= 0.25) {
+            return 0.25;
+        }
+        else if (cr >= 0.125) {
+            return 0.125;
+        }
+        else {
+            return 0;
+        }
     };
     EncounterComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -156,10 +185,10 @@ var EncounterComponent = (function () {
         core_1.Component({
             selector: 'encounter',
             moduleId: module.id,
-            template: "\n\t<div class=\"btn group\">\n\t\t<button class=\"btn btn-info\" (click)=\"setDifficulty(difficultyEnum.Easy)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Easy}\"> Easy </button>\n\t\t<button class=\"btn btn-success\" (click)=\"setDifficulty(difficultyEnum.Medium)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Medium}\"> Medium </button>\n\t\t<button class=\"btn btn-warning\" (click)=\"setDifficulty(difficultyEnum.Hard)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Hard}\"> Hard </button>\n\t\t<button class=\"btn btn-danger\" (click)=\"setDifficulty(difficultyEnum.Deadly)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Deadly}\"> Deadly </button>\n\t</div>\n\t<select class=\"form-control\" #selectedType style=\"display:inline; width: inherit\" (change)=\"setFilter(selectedType.value)\">\n\t\t<option value=\"all\"> All </option>\n\t\t<ng-container *ngFor=\"let type of types\">\n\t\t\t<option [value]=\"type\">{{type}}</option>\n\t\t</ng-container>\n\t</select>\n\t<div class=\"dropdown pageButton\" style=\"width: 90%\">\n\t\t<button class=\"btn btn-primary dropdown-toogle\" type=\"button\" data-toggle=\"dropdown\">Add Player\n\t\t<span class=\"caret\"></span></button>\n\t\t<ul class=\"dropdown-menu\">\n\t\t\t<li><a (click)=\"addPlayer(1)\"> Level 01 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(2)\"> Level 02 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(3)\"> Level 03 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(4)\"> Level 04 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(5)\"> Level 05 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(6)\"> Level 06 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(7)\"> Level 07 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(8)\"> Level 08 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(9)\"> Level 09 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(10)\"> Level 10 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(11)\"> Level 11 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(12)\"> Level 12 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(13)\"> Level 13 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(14)\"> Level 14 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(15)\"> Level 15 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(16)\"> Level 16 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(17)\"> Level 17 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(18)\"> Level 18 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(19)\"> Level 19 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(20)\"> Level 20 </a></li>\t\t\n\t\t</ul>\n\t</div>\n\n\t<div class=\"panel panel-info\" *ngIf=\"players.length > 0\" style=\"width: 90%; margin: 0 auto;\">\n\t\t<div class=\"panel-heading\" >\n\t\t\t<h3 class=\"panel-title\">Players</h3>\n\t\t</div>\n\t\t<div class=\"container\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-sm-2 bg-success playerElement\" *ngFor=\"let player of players; let i = index;\">\n\t\t\t\t\t<button class=\"close\" style=\"margin-top: 7px\" (click)=\"removePlayer(i)\">x</button>Level {{player}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t\n\t<button class=\"btn btn-success pageButton\" (click)=\"generateEncounter()\">\n\t\tGENERATE ENCOUNTER\n\t</button>\n\t",
+            template: "\n\t<div class=\"btn group\">\n\t\t<button class=\"btn btn-info\" (click)=\"setDifficulty(difficultyEnum.Easy)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Easy}\"> Easy </button>\n\t\t<button class=\"btn btn-success\" (click)=\"setDifficulty(difficultyEnum.Medium)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Medium}\"> Medium </button>\n\t\t<button class=\"btn btn-warning\" (click)=\"setDifficulty(difficultyEnum.Hard)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Hard}\"> Hard </button>\n\t\t<button class=\"btn btn-danger\" (click)=\"setDifficulty(difficultyEnum.Deadly)\" [ngClass]=\"{'selectedButton': difficultyLevel === difficultyEnum.Deadly}\"> Deadly </button>\n\t</div>\n\t<span>\n\t\tType \n\t</span>\n\t<select class=\"form-control\" #selectedType style=\"display:inline; width: inherit\" (change)=\"setFilter(selectedType.value)\">\n\t\t<option value=\"all\"> All </option>\n\t\t<ng-container *ngFor=\"let type of types\">\n\t\t\t<option [value]=\"type\">{{type}}</option>\n\t\t</ng-container>\n\t</select>\n\t<div class=\"dropdown pageButton\" style=\"width: 90%\">\n\t\t<button class=\"btn btn-primary dropdown-toogle\" type=\"button\" data-toggle=\"dropdown\">Add Player\n\t\t<span class=\"caret\"></span></button>\n\t\t<ul class=\"dropdown-menu\">\n\t\t\t<li><a (click)=\"addPlayer(1)\"> Level 01 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(2)\"> Level 02 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(3)\"> Level 03 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(4)\"> Level 04 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(5)\"> Level 05 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(6)\"> Level 06 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(7)\"> Level 07 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(8)\"> Level 08 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(9)\"> Level 09 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(10)\"> Level 10 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(11)\"> Level 11 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(12)\"> Level 12 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(13)\"> Level 13 </a></li>\n\t\t\t<li><a (click)=\"addPlayer(14)\"> Level 14 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(15)\"> Level 15 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(16)\"> Level 16 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(17)\"> Level 17 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(18)\"> Level 18 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(19)\"> Level 19 </a></li>\t\t\t\n\t\t\t<li><a (click)=\"addPlayer(20)\"> Level 20 </a></li>\t\t\n\t\t</ul>\n\t</div>\n\n\t<div class=\"panel panel-info\" *ngIf=\"players.length > 0\" style=\"width: 90%; margin: 0 auto;\">\n\t\t<div class=\"panel-heading\" >\n\t\t\t<h3 class=\"panel-title\">Players</h3>\n\t\t</div>\n\t\t<div class=\"container\">\n\t\t\t<div class=\"row\">\n\t\t\t\t<div class=\"col-sm-2 bg-success playerElement\" *ngFor=\"let player of players; let i = index;\">\n\t\t\t\t\t<button class=\"close\" style=\"margin-top: 7px\" (click)=\"removePlayer(i)\">x</button>Level {{player}}\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n\t\n\t<button class=\"btn btn-success pageButton\" (click)=\"generateEncounter()\">\n\t\tGENERATE ENCOUNTER\n\t</button>\n\t",
             styleUrls: ["encounter.component.css"]
         }), 
-        __metadata('design:paramtypes', [monster_service_1.MonsterService, router_1.Router])
+        __metadata('design:paramtypes', [monster_service_1.MonsterService, router_1.Router, gaussianNumberGenerator_1.gaussianRandomNumberGenerator])
     ], EncounterComponent);
     return EncounterComponent;
 }());

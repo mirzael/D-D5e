@@ -19,6 +19,7 @@ var encounter_component_1 = require('./encounter.component');
 var monster_service_1 = require('./monster.service');
 var spell_service_1 = require('./spell.service');
 var app_routing_1 = require('../app.routing');
+var gaussianNumberGenerator_1 = require('./gaussianNumberGenerator');
 var DndApp = (function () {
     function DndApp() {
     }
@@ -38,7 +39,8 @@ var DndApp = (function () {
             ],
             providers: [
                 monster_service_1.MonsterService,
-                spell_service_1.SpellService
+                spell_service_1.SpellService,
+                gaussianNumberGenerator_1.gaussianRandomNumberGenerator
             ],
             bootstrap: [
                 dnd_component_1.DndComponent

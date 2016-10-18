@@ -12,6 +12,7 @@ import { EncounterComponent } from './encounter.component';
 import { MonsterService } from './monster.service';
 import { SpellService } from './spell.service';
 import { routing } from '../app.routing';
+import { gaussianRandomNumberGenerator } from './gaussianNumberGenerator';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { routing } from '../app.routing';
   ],
   providers: [
     MonsterService,
-	SpellService
+	SpellService,
+	gaussianRandomNumberGenerator
   ],
   bootstrap: [ 
     DndComponent

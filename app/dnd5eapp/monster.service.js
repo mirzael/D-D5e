@@ -30,7 +30,12 @@ var MonsterService = (function () {
         }
     };
     MonsterService.prototype.getMonstersByIds = function (ids) {
-        return this.monsters.filter(function (monster) { return ids.indexOf(monster.ID) !== -1; });
+        var monsters = [];
+        for (var _i = 0, ids_1 = ids; _i < ids_1.length; _i++) {
+            var id = ids_1[_i];
+            monsters.push(this.monsters.find(function (monster) { return monster.ID === id; }));
+        }
+        return monsters;
     };
     MonsterService.prototype.extractData = function (res) {
         var doc = JSON.parse(xml2json(res.text(), "  "));
@@ -100,7 +105,7 @@ var MonsterService = (function () {
     MonsterService.prototype.getTypes = function () {
         var _this = this;
         return new Promise(function (resolve) {
-            return setTimeout(resolve, 3000);
+            return setTimeout(resolve, 2000);
         })
             .then(function () { return _this.types; });
     };

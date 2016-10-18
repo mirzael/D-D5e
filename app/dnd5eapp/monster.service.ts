@@ -22,7 +22,11 @@ export class MonsterService{
 	}
 	
 	getMonstersByIds(ids: number[]): Monster[]{
-		return this.monsters.filter(monster => ids.indexOf(monster.ID) !== -1);
+		let monsters: Monster[] = [];
+		for(var id of ids){
+			monsters.push(this.monsters.find(monster => monster.ID === id));
+		}
+		return monsters;
 	}
 
 	private extractData(res: Response): Monster[]{
@@ -107,7 +111,7 @@ export class MonsterService{
 	
 	getTypes(): Promise<string[]>{
 		return new Promise<string[]>(resolve =>	
-			setTimeout(resolve, 3000))
+			setTimeout(resolve, 2000))
 		.then(() => this.types);
 	}
 
