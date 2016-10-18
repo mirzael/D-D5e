@@ -16,7 +16,7 @@ import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers, in
 		<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
 	</div>
 	<select class="form-control" #selectedType style="display:inline; width: inherit" (change)="setFilter(selectedType.value)">
-		<option value="none"> none </option>
+		<option value="all"> All </option>
 		<ng-container *ngFor="let type of types">
 			<option [value]="type">{{type}}</option>
 		</ng-container>
@@ -113,7 +113,7 @@ export class EncounterComponent implements OnInit{
 			let crMult: number = 1;
 			if(this.difficultyLevel === Difficulty.Deadly) crMult = 1.5;
 			
-			var filteredMonsters = this.monsters.filter(monster => monster.CR * crMult <= maxCr && (this.typeFilter === "none" || monster.Type.indexOf(this.typeFilter) > -1 ));
+			var filteredMonsters = this.monsters.filter(monster => monster.CR * crMult <= maxCr && (this.typeFilter === "all" || monster.Type.indexOf(this.typeFilter) > -1 ));
 			console.log(filteredMonsters);
 			if(filteredMonsters.length === 0){
 				console.error("There are no monsters of type: " + this.typeFilter + " that match the filter and players that you have selected. " );
