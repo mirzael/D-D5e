@@ -60,7 +60,17 @@ var EncounterComponent = (function () {
             var crMult_1 = 1;
             if (this.difficultyLevel === encounterConstants_1.Difficulty.Deadly)
                 crMult_1 = 1.5;
-            var filteredMonsters = this.monsters.filter(function (monster) { return monster.CR * crMult_1 <= maxCr && (_this.typeFilter === "all" || monster.Type.indexOf(_this.typeFilter) > -1) && (_this.alignmentFilter === "all" || monster.Align.indexOf(_this.alignmentFilter) > -1); });
+            var filteredMonsters = this.monsters.filter(function (monster) {
+                return monster.CR <= maxCr * crMult_1 &&
+                    (_this.typeFilter === "all" || monster.Type.indexOf(_this.typeFilter) > -1) &&
+                    (_this.alignmentFilter === "all" ||
+                        monster.Align === "any alignment" ||
+                        monster.Align.indexOf(_this.alignmentFilter) > -1) ||
+                    (_this.alignmentFilter.indexOf("evil") > -1 && monster.Align === "any evil alignment") ||
+                    (_this.alignmentFilter.indexOf("chaotic") > -1 && monster.Align === "any chaotic alignment") ||
+                    (_this.alignmentFilter.indexOf("good") === -1 && monster.Align === "any non-good alignment") ||
+                    (_this.alignmentFilter.indexOf("lawful") === -1 && monster.Align === "any non-lawful alignment");
+            });
             console.log(filteredMonsters);
             if (filteredMonsters.length === 0) {
                 console.error("There are no monsters of type: " + this.typeFilter + " that match the filter and players that you have selected. ");
@@ -75,7 +85,7 @@ var EncounterComponent = (function () {
             var MAX_RESETS = 8;
             while (!this.withinThreshold(currentXP, xpThreshold, 0.10)) {
                 console.log("Current XP: " + currentXP);
-                var monsterToExamine = this.getRandomMonster(filteredMonsters, maxCr);
+                var monsterToExamine = this.getRandomMonster(filteredMonsters, maxCr * crMult_1);
                 console.log(monsterToExamine);
                 console.log(monsterToExamine.Name);
                 var monsterXP = encounterConstants_1.crMap[monsterToExamine.CR];
@@ -135,11 +145,13 @@ var EncounterComponent = (function () {
         }
         return (unModifiedXP + newXP) * multiplier;
     };
-    EncounterComponent.prototype.getRandomMonster = function (monsterList, minLevel) {
-        var cr = this.getNearestCR(this.randGenerator.generateGaussianNoise(minLevel / 2, minLevel / 4));
-        cr = Math.min(cr, minLevel);
+    EncounterComponent.prototype.getRandomMonster = function (monsterList, maxCR) {
+        var cr = this.getNearestCR(this.randGenerator.generateGaussianNoise(maxCR / 2, maxCR / 4));
+        cr = Math.min(cr, maxCR);
         console.log("CR: " + cr);
         var filteredMonsters = monsterList.filter(function (monster) { return monster.CR === cr; });
+        if (filteredMonsters.length === 0)
+            return this.getRandomMonster(monsterList, maxCR);
         var randIndex = Math.floor(Math.random() * filteredMonsters.length);
         return filteredMonsters[randIndex];
     };

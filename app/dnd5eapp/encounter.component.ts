@@ -60,7 +60,16 @@ export class EncounterComponent implements OnInit{
 			let crMult: number = 1;
 			if(this.difficultyLevel === Difficulty.Deadly) crMult = 1.5;
 			
-			var filteredMonsters = this.monsters.filter(monster => monster.CR * crMult <= maxCr && (this.typeFilter === "all" || monster.Type.indexOf(this.typeFilter) > -1 ) && (this.alignmentFilter === "all" || monster.Align.indexOf(this.alignmentFilter) > -1 ));
+			var filteredMonsters = this.monsters.filter(monster => 
+				monster.CR <= maxCr * crMult && 
+				(this.typeFilter === "all" || monster.Type.indexOf(this.typeFilter) > -1 ) && 
+				(this.alignmentFilter === "all" ||
+					monster.Align === "any alignment" || 
+					monster.Align.indexOf(this.alignmentFilter) > -1) ||
+					(this.alignmentFilter.indexOf("evil") > -1 && monster.Align === "any evil alignment") ||
+					(this.alignmentFilter.indexOf("chaotic") > -1 && monster.Align === "any chaotic alignment") ||
+					(this.alignmentFilter.indexOf("good") === -1 && monster.Align === "any non-good alignment") ||
+					(this.alignmentFilter.indexOf("lawful") === -1 && monster.Align === "any non-lawful alignment"));
 			console.log(filteredMonsters);
 			if(filteredMonsters.length === 0){
 				console.error("There are no monsters of type: " + this.typeFilter + " that match the filter and players that you have selected. " );
@@ -78,7 +87,7 @@ export class EncounterComponent implements OnInit{
 			while(!this.withinThreshold(currentXP, xpThreshold, 0.10)){
 				console.log("Current XP: " + currentXP);
 				
-				let monsterToExamine = this.getRandomMonster(filteredMonsters, maxCr);
+				let monsterToExamine = this.getRandomMonster(filteredMonsters, maxCr * crMult);
 				console.log(monsterToExamine);
 				console.log(monsterToExamine.Name);
 				let monsterXP: number = crMap[monsterToExamine.CR];
@@ -139,11 +148,12 @@ export class EncounterComponent implements OnInit{
 		return (unModifiedXP + newXP) * multiplier;
 	}
 	
-	private getRandomMonster(monsterList: Monster[], minLevel: number): Monster{
-		let cr = this.getNearestCR(this.randGenerator.generateGaussianNoise(minLevel / 2, minLevel / 4));
-		cr = Math.min(cr, minLevel);
+	private getRandomMonster(monsterList: Monster[], maxCR: number): Monster{
+		let cr = this.getNearestCR(this.randGenerator.generateGaussianNoise(maxCR / 2, maxCR / 4));
+		cr = Math.min(cr, maxCR);
 		console.log("CR: " + cr);
 		let filteredMonsters = monsterList.filter(monster => monster.CR === cr);
+		if(filteredMonsters.length === 0) return this.getRandomMonster(monsterList, maxCR);
 		
 		let randIndex: number = Math.floor(Math.random() * filteredMonsters.length);
 		return filteredMonsters[randIndex];
