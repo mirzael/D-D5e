@@ -1,27 +1,39 @@
-<div class="btn group">
-	<button class="btn btn-info" (click)="setDifficulty(difficultyEnum.Easy)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Easy}"> Easy </button>
-	<button class="btn btn-success" (click)="setDifficulty(difficultyEnum.Medium)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Medium}"> Medium </button>
-	<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
-	<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
+
+<div class="container">
+	<div class="row">
+		<div class="btn group col-md-4">
+			<button class="btn btn-info" (click)="setDifficulty(difficultyEnum.Easy)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Easy}"> Easy </button>
+			<button class="btn btn-success" (click)="setDifficulty(difficultyEnum.Medium)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Medium}"> Medium </button>
+			<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
+			<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
+		</div>	
+		<span class="col-md-1" style="text-align: center; padding-top: 10px">
+			Type 
+		</span>
+		<div class="dropdown col-md-2">
+			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Type Filter
+			<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<ng-container *ngFor="let type of types">
+					<li><a (click)="addFilter(type)">{{type}}</a></li>
+				</ng-container>
+			</ul>
+		</div>
+		<span class="col-md-1" style="text-align: center; padding-top: 10px">
+			Alignment 
+		</span>
+		<div class="dropdown col-md-3">
+			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Alignment Filter
+			<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<ng-container *ngFor="let alignment of alignments">
+					<li><a (click)="addAlignmentFilter(alignment)">{{alignment}}</a></li>
+				</ng-container>
+			</ul>
+		</div>
+	</div>
 </div>
-<span>
-	Type 
-</span>
-<select class="form-control" #selectedType style="display:inline; width: inherit" (change)="setFilter(selectedType.value)">
-	<option value="all"> All </option>
-	<ng-container *ngFor="let type of types">
-		<option [value]="type">{{type}}</option>
-	</ng-container>
-</select>
-<span style="padding-left: 20px">
-	Alignment 
-</span>
-<select class="form-control" #selectedAlignment style="display:inline; width: inherit" (change)="setAlignmentFilter(selectedAlignment.value)">
-	<option value="all"> All </option>
-	<ng-container *ngFor="let alignment of alignments">
-		<option [value]="alignment">{{alignment}}</option>
-	</ng-container>
-</select>
+
 <div class="dropdown pageButton" style="width: 90%">
 	<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
 	<span class="caret"></span></button>
@@ -47,6 +59,32 @@
 		<li><a (click)="addPlayer(19)"> Level 19 </a></li>			
 		<li><a (click)="addPlayer(20)"> Level 20 </a></li>		
 	</ul>
+</div>
+
+<div class="panel panel-info" *ngIf="typeFilters.length > 0" style="width: 90%; margin: 0 auto;">
+	<div class="panel-heading" >
+		<h3 class="panel-title">Type Filters</h3>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-3 bg-success playerElement" *ngFor="let filter of typeFilters; let i = index;">
+				<button class="close" style="margin-top: 7px" (click)="removeFilter(i)">x</button>{{filter}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-info" *ngIf="alignmentFilters.length > 0" style="width: 90%; margin: 0 auto;">
+	<div class="panel-heading" >
+		<h3 class="panel-title">Alignment Filters</h3>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-2 bg-success playerElement" *ngFor="let filter of alignmentFilters; let i = index;">
+				<button class="close" style="margin-top: 7px" (click)="removeAlignmentFilter(i)">x</button>{{filter}}
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="panel panel-info" *ngIf="players.length > 0" style="width: 90%; margin: 0 auto;">

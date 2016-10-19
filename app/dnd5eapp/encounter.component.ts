@@ -20,8 +20,8 @@ export class EncounterComponent implements OnInit{
 	players: number[] = [];
 	monsters: Monster[] = [];
 	difficultyLevel: Difficulty = Difficulty.Easy;
-	typeFilter: string = "all";
-	alignmentFilter: string = "all";
+	typeFilters: string[]  = [];
+	alignmentFilters: string[] = [];
 	types: string[];
 	alignments: string[];
 	constructor(private monsterService: MonsterService, private router: Router, private randGenerator: gaussianRandomNumberGenerator){}
@@ -62,17 +62,17 @@ export class EncounterComponent implements OnInit{
 			
 			var filteredMonsters = this.monsters.filter(monster => 
 				monster.CR <= maxCr * crMult && 
-				(this.typeFilter === "all" || monster.Type.indexOf(this.typeFilter) > -1 ) && 
-				(this.alignmentFilter === "all" ||
+				(this.typeFilters.length === 0  || this.typeFilters.some(filter => monster.Type.indexOf(filter) > -1)) && 
+				(this.alignmentFilters.length === 0 ||
 					monster.Align === "any alignment" || 
-					monster.Align.indexOf(this.alignmentFilter) > -1) ||
-					(this.alignmentFilter.indexOf("evil") > -1 && monster.Align === "any evil alignment") ||
-					(this.alignmentFilter.indexOf("chaotic") > -1 && monster.Align === "any chaotic alignment") ||
-					(this.alignmentFilter.indexOf("good") === -1 && monster.Align === "any non-good alignment") ||
-					(this.alignmentFilter.indexOf("lawful") === -1 && monster.Align === "any non-lawful alignment"));
+					this.alignmentFilters.some(align => monster.Align.indexOf(align) > -1) ||
+					(this.alignmentFilters.some(align => align.indexOf("evil") > -1) && monster.Align === "any evil alignment") ||
+					(this.alignmentFilters.some(align => align.indexOf("chaotic") > -1) && monster.Align === "any chaotic alignment") ||
+					(this.alignmentFilters.some(align => align.indexOf("good") === -1) && monster.Align === "any non-good alignment") ||
+					(this.alignmentFilters.some(align => align.indexOf("lawful") === -1) && monster.Align === "any non-lawful alignment")));
 			console.log(filteredMonsters);
 			if(filteredMonsters.length === 0){
-				console.error("There are no monsters of type: " + this.typeFilter + " that match the filter and players that you have selected. " );
+				console.error("There are no monsters of types: " + this.typeFilters + " that match the filter and players that you have selected. " );
 				return;
 			}
 			
@@ -176,12 +176,24 @@ export class EncounterComponent implements OnInit{
 		this.difficultyLevel = diff;
 	}
 	
-	private setFilter(filter){
-		this.typeFilter = filter;
+	private addFilter(filter: string){
+		if(this.typeFilters.indexOf(filter) === -1){
+			this.typeFilters.push(filter);
+		}
 	}
 	
-	private setAlignmentFilter(filter){
-		this.alignmentFilter = filter;
+	private removeFilter(index){
+		this.typeFilters.splice(index,1);
+	}
+	
+	private addAlignmentFilter(filter){
+		if(this.alignmentFilters.indexOf(filter) === -1){
+			this.alignmentFilters.push(filter);
+		}
+	}
+	
+	private removeAlignmentFilter(index){
+		this.alignmentFilters.splice(index,1);
 	}
 	
 	private getNearestCR(cr: number): number{
