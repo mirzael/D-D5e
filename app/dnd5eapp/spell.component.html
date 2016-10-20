@@ -1,21 +1,27 @@
 <div class="container">
 	<div class="row">
-		<div class="col-md-1">
+		<div class="col-md-1" style="
+			padding-top: 10px;
+			text-align: center;
+			vertical-align: middle;">
 			Classes
 		</div>
-		<div class="col-md-5">
-			<select class="form-control" #selectedClass style="display:inline; width: inherit" (change)="setClassFilter(selectedClass.value)">
+		<div class="col-md-3">
+			<select class="form-control" #selectedClass style="display:inline;" (change)="setClassFilter(selectedClass.value)">
 				<option value="all"> All </option>
 				<ng-container *ngFor="let class of classes">
 					<option [value]="class">{{class}}</option>
 				</ng-container>
 			</select>
 		</div>
-		<div class="col-md-2">
+		<div class="col-md-2" style="
+			padding-top: 10px;
+			text-align: center;
+			vertical-align: middle;">
 			Spell Levels
 		</div>
-		<div class="col-md-4">
-			<select class="form-control" #selectedLevel style="display:inline; width: inherit" (change)="setLevelFilter(selectedLevel.value)">
+		<div class="col-md-2">
+			<select class="form-control" #selectedLevel style="display:inline;" (change)="setLevelFilter(selectedLevel.value)">
 				<option value="all"> All </option>
 				<ng-container *ngFor="let level of levels">
 					<option [value]="level">{{level}}</option>

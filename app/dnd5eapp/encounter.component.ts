@@ -24,15 +24,17 @@ export class EncounterComponent implements OnInit{
 	alignmentFilters: string[] = [];
 	types: string[];
 	alignments: string[];
+	encounterMonsters: Monster[] = [];
+	xp: number;
 	constructor(private monsterService: MonsterService, private router: Router, private randGenerator: gaussianRandomNumberGenerator){}
 
 	private generateEncounter(){
+		this.encounterMonsters = [];
 		if(this.players.length <= 0){
 			console.error("Cannot generate encounter with no players. Please add at least one player.");
 		}else{
 			var maxCr = Math.min(...this.players);
 			let xpThreshold: number = 0;
-			let encounterMonsters: Monster[] = [];
 
 			let map: intDictionary;
 
@@ -94,26 +96,26 @@ export class EncounterComponent implements OnInit{
 
 				let calculatedXP: number = 0;
 
-				calculatedXP = this.calculateXP(encounterMonsters.length+1, unmodifiedXP,monsterXP);
+				calculatedXP = this.calculateXP(this.encounterMonsters.length+1, unmodifiedXP,monsterXP);
 				console.log("Calculated XP: " + calculatedXP);
 				
 				if(calculatedXP < xpThreshold){
-					encounterMonsters.push(monsterToExamine);
+					this.encounterMonsters.push(monsterToExamine);
 					currentXP = calculatedXP;
 					unmodifiedXP += monsterXP;
 					console.log("New XP: " + currentXP);
 				}else{
 					retries++;
 					totalRetries++;
-					if(retries > 5 && totalRetries % 5 < 4 && encounterMonsters.length > 0){
-						let monster: Monster = encounterMonsters.pop();
+					if(retries > 5 && totalRetries % 5 < 4 && this.encounterMonsters.length > 0){
+						let monster: Monster = this.encounterMonsters.pop();
 						unmodifiedXP -= crMap[monster.CR];
-						currentXP =  this.calculateXP(encounterMonsters.length, unmodifiedXP,0);
+						currentXP =  this.calculateXP(this.encounterMonsters.length, unmodifiedXP);
 						console.log("unmod xp: " + unmodifiedXP);
 						console.log("Retrying. New XP: " + currentXP);
 						retries = 0;
-					}else if(retries > 5 && (totalRetries % 5 == 4 || encounterMonsters.length === 0)){
-						encounterMonsters = [];
+					}else if(retries > 5 && (totalRetries % 5 == 4 || this.encounterMonsters.length === 0)){
+						this.encounterMonsters = [];
 						unmodifiedXP = 0;
 						currentXP = 0;
 						resets++;
@@ -121,7 +123,7 @@ export class EncounterComponent implements OnInit{
 					}
 					
 					if(resets >= MAX_RESETS){
-						encounterMonsters = [];
+						this.encounterMonsters = [];
 						unmodifiedXP = 0;
 						currentXP = 0;
 						console.error("Could not generate encounter with given parameters");
@@ -129,23 +131,36 @@ export class EncounterComponent implements OnInit{
 					}
 				}
 			}
-
-			let monsterIds: number[] = [];
-			for(var monster of encounterMonsters){ monsterIds.push(monster.ID); }
-			console.log(encounterMonsters)
-			let link = ['/monsters', monsterIds.toString()];
-			this.router.navigate(link);
 		}
 	} 
+	
+	private navigateToDetailsPage(){
+		let monsterIds: number[] = [];
+		for(var monster of this.encounterMonsters){ monsterIds.push(monster.ID); }
+		console.log(this.encounterMonsters);
+		let link = ['/monsters', monsterIds.toString()];
+		this.router.navigate(link);
+	}
+	
+	private recalcXP(){
+		let unModXP = 0;
+		for(var monster of this.encounterMonsters) { unModXP += crMap[monster.CR];}
+		this.calculateXP(this.encounterMonsters.length, unModXP);
+	}
 
-	private calculateXP(numMonsters: number, unModifiedXP: number, newXP: number): number{
-		var multiplier = encounterMultipliers[numMonsters]; 
-		if(isNaN(multiplier) && numMonsters > 0){
+	private calculateXP(numMonsters: number, unModifiedXP: number, newXP?: number): number{
+		let calcMonsters = numMonsters;
+		if(newXP !== undefined) calcMonsters++;
+		else newXP = 0;
+		var multiplier = encounterMultipliers[calcMonsters]; 
+		if(isNaN(multiplier) && calcMonsters > 0){
 			multiplier = encounterMultipliers.maxValue;
-		}else if(numMonsters = 0){
+		}else if(calcMonsters = 0){
 			return 0;
 		}
-		return (unModifiedXP + newXP) * multiplier;
+		
+		this.xp = (unModifiedXP + newXP) * multiplier;
+		return this.xp;
 	}
 	
 	private getRandomMonster(monsterList: Monster[], maxCR: number): Monster{
@@ -194,6 +209,11 @@ export class EncounterComponent implements OnInit{
 	
 	private removeAlignmentFilter(index){
 		this.alignmentFilters.splice(index,1);
+	}
+	
+	private removeEncounterMonster(index){
+		this.encounterMonsters.splice(index,1);
+		this.recalcXP();
 	}
 	
 	private getNearestCR(cr: number): number{
