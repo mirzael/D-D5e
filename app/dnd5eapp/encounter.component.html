@@ -6,10 +6,7 @@
 			<button class="btn btn-success" (click)="setDifficulty(difficultyEnum.Medium)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Medium}"> Medium </button>
 			<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
 			<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
-		</div>	
-		<span class="col-md-1" style="text-align: center; padding-top: 10px">
-			Type 
-		</span>
+		</div>
 		<div class="dropdown col-md-2">
 			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Type Filter
 			<span class="caret"></span></button>
@@ -19,9 +16,6 @@
 				</ng-container>
 			</ul>
 		</div>
-		<span class="col-md-1" style="text-align: center; padding-top: 10px">
-			Alignment 
-		</span>
 		<div class="dropdown col-md-3">
 			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Alignment Filter
 			<span class="caret"></span></button>
@@ -31,34 +25,34 @@
 				</ng-container>
 			</ul>
 		</div>
+		
+		<div class="dropdown col-md-2">
+			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
+			<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a (click)="addPlayer(1)"> Level 01 </a></li>
+				<li><a (click)="addPlayer(2)"> Level 02 </a></li>
+				<li><a (click)="addPlayer(3)"> Level 03 </a></li>
+				<li><a (click)="addPlayer(4)"> Level 04 </a></li>			
+				<li><a (click)="addPlayer(5)"> Level 05 </a></li>			
+				<li><a (click)="addPlayer(6)"> Level 06 </a></li>			
+				<li><a (click)="addPlayer(7)"> Level 07 </a></li>			
+				<li><a (click)="addPlayer(8)"> Level 08 </a></li>			
+				<li><a (click)="addPlayer(9)"> Level 09 </a></li>			
+				<li><a (click)="addPlayer(10)"> Level 10 </a></li>
+				<li><a (click)="addPlayer(11)"> Level 11 </a></li>
+				<li><a (click)="addPlayer(12)"> Level 12 </a></li>
+				<li><a (click)="addPlayer(13)"> Level 13 </a></li>
+				<li><a (click)="addPlayer(14)"> Level 14 </a></li>			
+				<li><a (click)="addPlayer(15)"> Level 15 </a></li>			
+				<li><a (click)="addPlayer(16)"> Level 16 </a></li>			
+				<li><a (click)="addPlayer(17)"> Level 17 </a></li>			
+				<li><a (click)="addPlayer(18)"> Level 18 </a></li>			
+				<li><a (click)="addPlayer(19)"> Level 19 </a></li>			
+				<li><a (click)="addPlayer(20)"> Level 20 </a></li>		
+			</ul>
+		</div>
 	</div>
-</div>
-
-<div class="dropdown pageButton" style="width: 90%">
-	<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
-	<span class="caret"></span></button>
-	<ul class="dropdown-menu">
-		<li><a (click)="addPlayer(1)"> Level 01 </a></li>
-		<li><a (click)="addPlayer(2)"> Level 02 </a></li>
-		<li><a (click)="addPlayer(3)"> Level 03 </a></li>
-		<li><a (click)="addPlayer(4)"> Level 04 </a></li>			
-		<li><a (click)="addPlayer(5)"> Level 05 </a></li>			
-		<li><a (click)="addPlayer(6)"> Level 06 </a></li>			
-		<li><a (click)="addPlayer(7)"> Level 07 </a></li>			
-		<li><a (click)="addPlayer(8)"> Level 08 </a></li>			
-		<li><a (click)="addPlayer(9)"> Level 09 </a></li>			
-		<li><a (click)="addPlayer(10)"> Level 10 </a></li>
-		<li><a (click)="addPlayer(11)"> Level 11 </a></li>
-		<li><a (click)="addPlayer(12)"> Level 12 </a></li>
-		<li><a (click)="addPlayer(13)"> Level 13 </a></li>
-		<li><a (click)="addPlayer(14)"> Level 14 </a></li>			
-		<li><a (click)="addPlayer(15)"> Level 15 </a></li>			
-		<li><a (click)="addPlayer(16)"> Level 16 </a></li>			
-		<li><a (click)="addPlayer(17)"> Level 17 </a></li>			
-		<li><a (click)="addPlayer(18)"> Level 18 </a></li>			
-		<li><a (click)="addPlayer(19)"> Level 19 </a></li>			
-		<li><a (click)="addPlayer(20)"> Level 20 </a></li>		
-	</ul>
 </div>
 
 <div class="panel panel-danger infoPanel" *ngIf="typeFilters.length > 0">

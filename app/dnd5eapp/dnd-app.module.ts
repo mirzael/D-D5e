@@ -9,6 +9,7 @@ import { DndComponent } from './dnd.component';
 import { MonstersComponent } from './monsters.component';
 import { SpellsComponent } from './spell.component';
 import { EncounterComponent } from './encounter.component';
+import { ManualEncounterComponent } from './manualEncounter.component';
 import { MonsterService } from './monster.service';
 import { SpellService } from './spell.service';
 import { routing } from '../app.routing';
@@ -26,7 +27,8 @@ import { gaussianRandomNumberGenerator } from './gaussianNumberGenerator';
     DndComponent,
     MonstersComponent,
     EncounterComponent,
-	SpellsComponent
+	SpellsComponent, 
+	ManualEncounterComponent
   ],
   providers: [
     MonsterService,

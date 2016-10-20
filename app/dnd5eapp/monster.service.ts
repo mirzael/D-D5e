@@ -22,6 +22,16 @@ export class MonsterService{
 		"chaotic neutral",
 		"unaligned"
 	];
+	crs: number[] = [
+		0, 0.125, 0.25,	0.5,
+		1,  2,  3,  4,
+		5,  6,  7,  8,
+		9,  10, 11, 12,
+		13, 14,	15,	16,	17,
+		18,	19,	20,	21, 22,
+		23, 24,	25,	26,	27,
+		28,	29,	30
+	]
 
 	getMonsters(): Observable<Monster[]>{
 		if(this.monsters.length > 0){
@@ -129,6 +139,10 @@ export class MonsterService{
 	
 	getAlignments(): Promise<string[]>{
 		return Promise.resolve(this.alignments);
+	}
+	
+	getCRs(): Promise<number[]>{
+		return Promise.resolve(this.crs);
 	}
 
 	private processSingleMonsterProperty(property: any): MonsterProperty{
