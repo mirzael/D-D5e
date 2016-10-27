@@ -10,6 +10,10 @@
 	margin: 10px 0;
 }
 
+.monsterDeadRow{
+	background-color: #002322;
+}
+
 .monsterListDescription{
 	display: table;
 	margin: 0 auto;

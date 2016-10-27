@@ -6,6 +6,7 @@ export class Monster {
 	Align: string;
 	AC: number;
 	HP: string;
+	CurrentHP: number = null;
 	Speed: string;
 	Strength: number;
 	Dexterity: number;

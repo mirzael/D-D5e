@@ -14,12 +14,12 @@
 		<ng-container *ngFor="let monster of monsters; let firstTab = first;">
 			<div role="tabpanel" [ngClass]="{'active': firstTab}" class="tab-pane" id="{{monster.ID}}">
 				<div class="container">
-					<div class="panel panel-primary monsterContainer">
+					<div class="panel monsterContainer" [ngClass]="{'panel-primary': monster.CurrentHP === null || monster.CurrentHP > 0, 'panel-danger': monster.CurrentHP == 0, 'monsterDead': monster.CurrentHP == 0}">
 						<div class="panel-heading" >
 							<h3 class="panel-title">{{monster.Name}}</h3>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									CR
@@ -30,7 +30,7 @@
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Size
@@ -41,7 +41,7 @@
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Type
@@ -52,7 +52,7 @@
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Alignment
@@ -63,7 +63,7 @@
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									HP
@@ -71,10 +71,14 @@
 								<div class="col-md-3">
 									{{monster.HP}}
 								</div>
+								<div class="input-group col-md-5">
+									<span class="input-group-addon" id="basic-addon1">Current</span>
+									<input class="form-control" #currentHP (keyup)="monster.CurrentHP = +currentHP.value;" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="{{monster.HP}}" aria-describedby="basic-addon1" /> 
+								</div>
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									AC
@@ -85,7 +89,7 @@
 							</div>
 						</div>
 						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Senses.length > 0">
+						<div class="panel panel-success monsterHeader" *ngIf="monster.Senses.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow">
 								<div class="col-md-2">
 									Senses
@@ -98,7 +102,7 @@
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2 attributes"> 
 									Attributes
@@ -126,7 +130,7 @@
 							</div>
 						</div>
 						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Bonuses.length > 0">
+						<div class="panel panel-success monsterHeader" *ngIf="monster.Bonuses.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Skill Bonuses
@@ -139,7 +143,7 @@
 							</div>
 						</div>
 						
-						<div class="panel panel-success monsterHeader"  *ngIf="monster.Saves.length > 0">
+						<div class="panel panel-success monsterHeader"  *ngIf="monster.Saves.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Save Bonuses
@@ -152,7 +156,7 @@
 							</div>
 						</div>
 						
-						<div class="panel panel-success monsterHeader"  *ngIf="monster.Resistances.length > 0">
+						<div class="panel panel-success monsterHeader"  *ngIf="monster.Resistances.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Resistances
@@ -165,7 +169,7 @@
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Immunities.length > 0">
+						<div class="panel panel-success monsterHeader" *ngIf="monster.Immunities.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Immunities
@@ -178,7 +182,7 @@
 							</div>
 						</div>
 						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Vulnerabilities.length > 0">
+						<div class="panel panel-success monsterHeader" *ngIf="monster.Vulnerabilities.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Vulnerabilities
@@ -191,7 +195,7 @@
 							</div>
 						</div>
 
-						<div class="panel panel-success monsterHeader">
+						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Speed
@@ -202,7 +206,7 @@
 							</div>
 						</div>
 						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Spells.length > 0">
+						<div class="panel panel-success monsterHeader" *ngIf="monster.Spells.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="col-md-2">
 									Spells
@@ -220,7 +224,7 @@
 							Traits
 						</span>
 
-						<div class="panel panel-success monsterHeader" *ngFor="let trait of monster.Traits">
+						<div class="panel panel-success monsterHeader" *ngFor="let trait of monster.Traits" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="monsterRow"> {{trait.Name}} </div>
 								<div class="monsterRow"> 
@@ -237,7 +241,7 @@
 							Actions
 						</span>
 
-						<div class="panel panel-success monsterHeader" *ngFor="let action of monster.Actions">
+						<div class="panel panel-success monsterHeader" *ngFor="let action of monster.Actions" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="monsterRow"> {{action.Name}} </div>
 								<div class="monsterRow" *ngFor="let attack of action.Attacks">
@@ -262,7 +266,7 @@
 							Legendaries
 						</span>
 
-						<div class="panel panel-success monsterHeader" *ngFor="let legendary of monster.Legendaries">
+						<div class="panel panel-success monsterHeader" *ngFor="let legendary of monster.Legendaries" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="monsterRow"> {{legendary.Name}} </div>
 								<div class="monsterRow" *ngFor="let attack of legendary.Attacks">
@@ -285,7 +289,7 @@
 							Reactions
 						</span>
 
-						<div class="panel panel-success monsterHeader" *ngFor="let reaction of monster.Reactions">
+						<div class="panel panel-success monsterHeader" *ngFor="let reaction of monster.Reactions" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
 							<div class="panel-dark monsterRow" >
 								<div class="monsterRow"> {{reaction.Name}} </div>
 								<div class="monsterRow"> 
