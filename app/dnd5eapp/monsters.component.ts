@@ -19,6 +19,10 @@ export class MonstersComponent implements OnInit{
 	monsters: Monster[] = [];
 	totalXP: number = 0;
 	errorMessage: any;
+	
+	private getXP(cr: number): number{
+		return crMap[cr];
+	}
 
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
