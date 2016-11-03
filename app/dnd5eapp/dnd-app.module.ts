@@ -8,12 +8,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { DndComponent } from './dnd.component';
 import { MonstersComponent } from './monsters.component';
 import { SpellsComponent } from './spell.component';
-import { EncounterComponent } from './encounter.component';
-import { ManualEncounterComponent } from './manualEncounter.component';
+import { EncounterComponent } from './encounter/encounter.component';
+import { ManualEncounterComponent } from './encounter/manualEncounter.component';
 import { MonsterService } from './monster.service';
 import { SpellService } from './spell.service';
+import { EncounterService } from './encounter/encounter.service';
 import { routing } from '../app.routing';
-import { gaussianRandomNumberGenerator } from './gaussianNumberGenerator';
+import { GaussianRandomNumberGenerator } from './encounter/gaussianNumberGenerator';
 import { PagingComponent } from '../paging/paging.component';
 
 
@@ -35,7 +36,8 @@ import { PagingComponent } from '../paging/paging.component';
   providers: [
     MonsterService,
 	SpellService,
-	gaussianRandomNumberGenerator
+	GaussianRandomNumberGenerator,
+	EncounterService
   ],
   bootstrap: [ 
     DndComponent

@@ -5,7 +5,7 @@ import { SimplePageScroll } from 'ng2-simple-page-scroll';
 
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
-import { crMap, encounterMultipliers } from './encounterConstants';
+import { crMap, encounterMultipliers } from './encounter/encounterConstants';
 
 @Component ({
 	selector: 'monsters',

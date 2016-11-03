@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Monster } from './monster';
-import { MonsterService } from './monster.service';
-import { crMap, encounterMultipliers, intDictionary } from './encounterConstants';
-import { PagedList } from '../paging/pagingList';
+import { Monster } from '../monster';
+import { MonsterService } from '../monster.service';
+import { crMap, encounterMultipliers} from './encounterConstants';
+import { PagedList } from '../../paging/pagingList';
 
 @Component ({
 	selector: 'manual-encounter',

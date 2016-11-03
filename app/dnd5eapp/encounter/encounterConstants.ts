@@ -5,12 +5,12 @@ export enum Difficulty{
 	Deadly
 }
 
-export interface intDictionary{
+export interface numberMap{
 	[cr: number]: number;
 	maxValue: number;
 }
 
-export const crMap: intDictionary = {
+export const crMap: numberMap = {
 	0: 10,
 	0.125: 25,
 	0.25: 50,
@@ -48,7 +48,7 @@ export const crMap: intDictionary = {
 	maxValue: 155000
 };
 
-export const easyMap: intDictionary = {
+export const easyMap: numberMap = {
 	1: 25,
 	2: 50,
 	3: 75,
@@ -72,7 +72,7 @@ export const easyMap: intDictionary = {
 	maxValue: 2800
 }
 
-export const mediumMap: intDictionary = {
+export const mediumMap: numberMap = {
 	1: 50,
 	2: 100,
 	3: 150,
@@ -96,7 +96,7 @@ export const mediumMap: intDictionary = {
 	maxValue: 5700
 }
 
-export const hardMap: intDictionary = {
+export const hardMap: numberMap = {
 	1: 75,
 	2: 150,
 	3: 225,
@@ -120,7 +120,7 @@ export const hardMap: intDictionary = {
 	maxValue:8500
 }
 
-export const deadlyMap: intDictionary = {
+export const deadlyMap: numberMap = {
 	1: 100,
 	2: 200,
 	3: 400,
@@ -144,7 +144,7 @@ export const deadlyMap: intDictionary = {
 	maxValue: 12700
 }
 
-export const encounterMultipliers: intDictionary = {
+export const encounterMultipliers: numberMap = {
 	1: 1,
 	2: 1.5,
 	3: 2,

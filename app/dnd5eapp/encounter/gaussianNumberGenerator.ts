@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class gaussianRandomNumberGenerator{
+export class GaussianRandomNumberGenerator{
 	two_pi: number = 2.0*Math.PI;
 	epsilon: number = Number.MIN_VALUE;
 	generate: boolean;
