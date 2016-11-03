@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { SpellService } from './spell.service';
 import { Spell } from './spell';
+import { PagedList } from './pagingList';
 
 @Component({
 	selector: 'spells',
@@ -12,20 +13,20 @@ import { Spell } from './spell';
 })
 
 export class SpellsComponent implements OnInit{
-	spells: Spell[] = [];
 	classes: string[] = [];
 	levels: string[] = [];
 	
 	classFilter: string = "all";
 	levelFilter: string = "all";
-	spellFilter: string = "";
-	filteredSpells: Spell[] = [];
+	spellFilter: string = null;
+	pagedSpells: PagedList<Spell> = new PagedList<Spell>()
 	
 	constructor(private spellService: SpellService){}
 	
 	ngOnInit(): void{
 		this.spellService.getSpells().subscribe(
-			spells => {this.spells = spells; this.filteredSpells = spells;}
+			spells => {
+				this.pagedSpells.push(...spells);}
 		);
 		
 		this.spellService.getClasses().then((classes) => this.classes = classes);
@@ -48,11 +49,14 @@ export class SpellsComponent implements OnInit{
 	}
 	
 	filterSpells(){
-		this.filteredSpells = this.spells.filter(spell =>  
-			(this.classFilter === "all" || spell.classes.indexOf(this.classFilter) > -1)
-				&&
-			(this.levelFilter === "all" || spell.level.indexOf(this.levelFilter) > -1));
+		this.pagedSpells.applyFilter(this.filterFunc.bind(this));
 	}
 	
-	
+	private filterFunc(spell: Spell): boolean {
+		return (this.classFilter === "all" || spell.classes.indexOf(this.classFilter) > -1)
+				&&
+			(this.levelFilter === "all" || spell.level.indexOf(this.levelFilter) > -1)
+				&&
+			(this.spellFilter === null || this.spellFilter === "" || spell.name.indexOf(this.spellFilter) > -1);
+	}
 }

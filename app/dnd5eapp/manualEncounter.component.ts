@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
 import { crMap, encounterMultipliers, intDictionary } from './encounterConstants';
+import { PagedList } from './pagingList';
 
 @Component ({
 	selector: 'manual-encounter',
@@ -14,19 +15,19 @@ import { crMap, encounterMultipliers, intDictionary } from './encounterConstants
 
 export class ManualEncounterComponent implements OnInit {
 	types: string[] = [];
-	monsters: Monster[] = [];
 	alignments: string[] = [];
 	crs: number[] = [];
 	typeFilters: string[] = [];
 	crFilters: number[] = [];
 	alignmentFilters: string[] = [];
-	filteredMonsters: Monster[] = [];
+	nameFilter: string = "";
 	encounterMonsters: Monster[] =[];
+	pagedMonsters: PagedList<Monster> = new PagedList<Monster>();
 	xp: number;
 	constructor(private monsterService: MonsterService, private router: Router){}	
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
-			monsters => {this.monsters = monsters; this.filteredMonsters = monsters;},
+			monsters => {this.pagedMonsters.push(...monsters);},
 			error => console.error(error)
 		);
 		
@@ -35,10 +36,15 @@ export class ManualEncounterComponent implements OnInit {
 		this.monsterService.getCRs().then(crs => {this.crs = crs;});
 	}
 	
+	private setNameFilter(name: string){
+		this.nameFilter = name;
+		this.filterMonsters();
+	}
+	
 	private addTypeFilter(filter: string){
 		if(this.typeFilters.indexOf(filter) === -1){
 			this.typeFilters.push(filter);
-			this.filterMonsters()
+			this.filterMonsters();
 		}
 	}
 	
@@ -102,17 +108,25 @@ export class ManualEncounterComponent implements OnInit {
 		return this.xp;
 	}
 	
+	private getXP(cr: number): number {
+		return crMap[cr];
+	}
+	
 	private filterMonsters(){
-		this.filteredMonsters = this.monsters.filter(monster => 
-				(this.crFilters.length === 0 || this.crFilters.some(filter => monster.CR === filter)) &&
+		this.pagedMonsters.applyFilter(this.filterFunc.bind(this));
+	}
+	
+	private filterFunc(monster: Monster): boolean{
+		return (this.crFilters.length === 0 || this.crFilters.some(filter => monster.CR === filter)) &&
 				(this.typeFilters.length === 0  || this.typeFilters.some(filter => monster.Type.indexOf(filter) > -1)) && 
+				(this.nameFilter === null || this.nameFilter === "" || monster.Name.indexOf(this.nameFilter) > -1) &&
 				(this.alignmentFilters.length === 0 ||
 					monster.Align === "any alignment" || 
 					this.alignmentFilters.some(align => monster.Align.indexOf(align) > -1) ||
 					(this.alignmentFilters.some(align => align.indexOf("evil") > -1) && monster.Align === "any evil alignment") ||
 					(this.alignmentFilters.some(align => align.indexOf("chaotic") > -1) && monster.Align === "any chaotic alignment") ||
 					(this.alignmentFilters.some(align => align.indexOf("good") === -1) && monster.Align === "any non-good alignment") ||
-					(this.alignmentFilters.some(align => align.indexOf("lawful") === -1) && monster.Align === "any non-lawful alignment")));
+					(this.alignmentFilters.some(align => align.indexOf("lawful") === -1) && monster.Align === "any non-lawful alignment"));
 	}
 	
 	private navigateToDetailsPage(){

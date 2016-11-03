@@ -1,0 +1,5 @@
+<div>
+	<div class="btn-group">
+		<button class="btn btn-default" *ngFor="let page of pagedList.getPageNumbers()" (click)="pagedList.setPage(page)" [ngClass]="{'active': page === getCurrentPage()}" > {{page}} </button>
+	</div>
+</div>

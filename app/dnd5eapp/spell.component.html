@@ -28,8 +28,13 @@
 				</ng-container>
 			</select>
 		</div>
+		<div class="input-group col-md-3">
+			<span class="input-group-addon" id="basic-addon1">Spell Name</span>
+			<input class="form-control" #spellName (keyup)="setSpellFilter(spellName.value)" placeholder="" aria-describedby="basic-addon1" /> 
+		</div>
 	</div>
-	<div *ngFor="let spell of filteredSpells">
+	
+	<div *ngFor="let spell of pagedSpells.getElements()">
 		<div class="panel panel-primary monsterContainer">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{spell.name}}</h3>
@@ -160,3 +165,4 @@
 		</div>
 	</div>
 </div>
+<paging [pagedList]="pagedSpells"></paging>
