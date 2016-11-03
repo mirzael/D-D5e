@@ -10,9 +10,19 @@
 	<div class="bg-success xpDiv" style="padding:10px;">
 		Total XP: {{totalXP}}
 	</div>
+	<br />
 	<div class="tab-content">
-		<ng-container *ngFor="let monster of monsters; let firstTab = first;">
+		<ng-container *ngFor="let monster of monsters; let firstTab = first; let i = index;">
 			<div role="tabpanel" [ngClass]="{'active': firstTab}" class="tab-pane" id="{{monster.ID}}">
+				<div class="row">
+					<div class="col-md-2">
+						<button class="btn btn-default" (click)="monster.generateHP(); checkHP(monster);"> Generate HP </button>
+					</div>
+					<div class="input-group col-md-3">
+						<span class="input-group-addon" [id]="i">Current HP</span>
+						<input class="form-control" #hp (keyup)="monster.CurrentHP = hp.value; checkHP(monster);" [placeholder]="getHPText(monster)" [attr.aria-describedby]="i" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /> 
+					</div>
+				</div>
 				<stat-block>
 					<creature-heading>
 						<h1>{{monster.Name}}</h1>

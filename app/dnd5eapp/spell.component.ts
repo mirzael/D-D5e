@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { SpellService } from './spell.service';
 import { Spell } from './spell';
-import { PagedList } from './pagingList';
+import { PagedList } from '../paging/pagingList';
 
 @Component({
 	selector: 'spells',

@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
 import { crMap, encounterMultipliers, intDictionary } from './encounterConstants';
-import { PagedList } from './pagingList';
+import { PagedList } from '../paging/pagingList';
 
 @Component ({
 	selector: 'manual-encounter',

@@ -23,6 +23,21 @@ export class MonstersComponent implements OnInit{
 	private getXP(cr: number): number{
 		return crMap[cr];
 	}
+	
+	private checkHP(monster: Monster){
+		if(monster.CurrentHP.toString() === "" && monster.Name.indexOf("(DEAD)") === -1){
+			monster.Name += " (DEAD)"
+		}else if(monster.CurrentHP.toString() !== ""){
+			monster.Name = monster.Name.replace(" (DEAD)","");
+		}
+	}
+	
+	private getHPText(monster: Monster): string{
+		if(monster.CurrentHP.toString() === ""){
+			return "DEAD";
+		} 
+		return monster.CurrentHP.toString();
+	}
 
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
@@ -45,6 +60,8 @@ export class MonstersComponent implements OnInit{
 					}
 					
 					this.totalXP *= multiplier;
+					
+					this.monsters.forEach(monster => monster.generateHP());
 					
 					console.log(this.monsters);
 				});

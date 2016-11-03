@@ -14,7 +14,7 @@ import { MonsterService } from './monster.service';
 import { SpellService } from './spell.service';
 import { routing } from '../app.routing';
 import { gaussianRandomNumberGenerator } from './gaussianNumberGenerator';
-import { PagingComponent } from './paging.component';
+import { PagingComponent } from '../paging/paging.component';
 
 
 @NgModule({
