@@ -9,7 +9,7 @@ import { PagedList } from '../paging/pagingList';
 	selector: 'spells',
 	moduleId: module.id,
 	templateUrl: "spell.component.html",
-	styleUrls: ["monsters.component.css"]
+	styleUrls: ["spell.component.css"]
 })
 
 export class SpellsComponent implements OnInit{
