@@ -25,9 +25,9 @@ export class MonstersComponent implements OnInit{
 	}
 	
 	private checkHP(monster: Monster){
-		if(monster.CurrentHP.toString() === "" && monster.Name.indexOf("(DEAD)") === -1){
+		if(monster.CurrentHP == 0 && monster.Name.indexOf("(DEAD)") === -1){
 			monster.Name += " (DEAD)"
-		}else if(monster.CurrentHP.toString() !== ""){
+		}else if(monster.CurrentHP.toString() != 0){
 			monster.Name = monster.Name.replace(" (DEAD)","");
 		}
 	}

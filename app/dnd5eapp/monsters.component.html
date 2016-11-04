@@ -19,7 +19,7 @@
 					</div>
 					<div class="input-group col-md-3">
 						<span class="input-group-addon" [id]="i">Current HP</span>
-						<input class="form-control" #hp (keyup)="monster.CurrentHP = hp.value; checkHP(monster);" [placeholder]="getHPText(monster)" [attr.aria-describedby]="i" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /> 
+						<input class="form-control" #hp (keyup)="monster.CurrentHP = +hp.value; checkHP(monster);" [placeholder]="getHPText(monster)" [attr.aria-describedby]="i" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /> 
 					</div>
 				</div>
 				<stat-block>
