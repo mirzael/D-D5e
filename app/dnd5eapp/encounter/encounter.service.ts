@@ -17,6 +17,10 @@ export class EncounterService{
 		this.players = playerList;
 	}
 	
+	public getXP(monster: Monster): number{
+		return crMap[monster.CR];
+	}
+	
 	public calculateXP(monsters: Monster[]): number{
 		let unModXP = 0;
 		for(var monster of monsters) { unModXP += crMap[monster.CR];}
