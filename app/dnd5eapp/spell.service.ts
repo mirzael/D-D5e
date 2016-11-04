@@ -59,7 +59,7 @@ export class SpellService{
 			spell.range = jSpell.range;
 			spell.components = jSpell.components;
 			spell.material = jSpell.material;
-			spell.ritual = jSpell.ritual.toUpperCase();
+			spell.ritual = jSpell.ritual === "yes";
 			spell.duration = jSpell.duration;
 			spell.concentration = jSpell.concentration.toUpperCase();
 			spell.casting_time = jSpell.casting_time;

@@ -4,7 +4,7 @@ export class Spell {
 	range: string;
 	components: string;
 	material: string;
-	ritual: string;
+	ritual: boolean;
 	duration: string;
 	concentration: string;
 	casting_time: string;

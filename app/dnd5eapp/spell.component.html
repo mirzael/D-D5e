@@ -35,134 +35,40 @@
 	</div>
 	
 	<div *ngFor="let spell of pagedSpells.getElements()">
-		<div class="panel panel-primary monsterContainer">
-			<div class="panel-heading">
-				<h3 class="panel-title">{{spell.name}}</h3>
-			</div>
-
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Level
-					</div>
-					<div class="col-md-10">
-						{{spell.level}}
-					</div>
-				</div>
-			</div>
-
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Description
-					</div>
-					<div class="col-md-10" [innerHTML]="spell.description">
-					</div>
-				</div>
-			</div>
-
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Range
-					</div>
-					<div class="col-md-10" [innerHTML]="spell.range">
-					</div>
-				</div>
-			</div>
-
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Casting Time
-					</div>
-					<div class="col-md-10">
-						{{spell.casting_time}}
-					</div>
-				</div>
-			</div>
-
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Duration
-					</div>
-					<div class="col-md-10">
-						{{spell.duration}}
-					</div>
-				</div>
-			</div>
+		<stat-block style="padding: 15px 0">
+			<creature-heading>
+				<h1>{{spell.name}}</h1>
+				<h2>{{spell.level}} {{spell.school}} {{spell.ritual ? '(ritual)':''}}</h2>
+			</creature-heading>
 			
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Concentration
-					</div>
-					<div class="col-md-10">
-						{{spell.concentration}}
-					</div>
-				</div>
-			</div>
-
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Ritual
-					</div>
-					<div class="col-md-10">
-						{{spell.ritual}}
-					</div>
-				</div>
-			</div>
+			<top-stats>
+				<property-line>
+					<h4>Casting Time</h4>
+					<p>{{spell.casting_time}}</p>
+				</property-line>
+				<property-line>
+					<h4>Range</h4>
+					<p>{{spell.range}}</p>
+				</property-line>
+				<property-line>
+					<h4>Components</h4>
+					<p>{{spell.components}}</p>
+				</property-line>
+				<property-line>
+					<h4>Duration</h4>
+					<p>{{spell.duration}}</p>
+				</property-line>
+				<property-line>
+					<h4>Concentration</h4>
+					<p>{{spell.concentration}}</p>
+				</property-line>
+			</top-stats>
 			
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Components
-					</div>
-					<div class="col-md-10">
-						{{spell.components}}
-					</div>
-				</div>
-			</div>
-			
-			<div class="panel panel-success monsterHeader" *ngIf="spell.material != null">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Materials
-					</div>
-					<div class="col-md-10">
-						{{spell.material}}
-					</div>
-				</div>
-			</div>
-			
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						Classes
-					</div>
-					<div class="col-md-10">
-						<div *ngFor="let class of spell.classes">
-							{{class}}
-						</div>
-					</div>
-				</div>
-			</div>
-
-			
-			<div class="panel panel-success monsterHeader">
-				<div class="panel-dark monsterRow" >
-					<div class="col-md-2">
-						School
-					</div>
-					<div class="col-md-10">
-						{{spell.school}}
-					</div>
-				</div>
-			</div>
-
-		</div>
+			<property-block>
+				<p [innerHTML]="spell.description">
+				</p>
+			</property-block>
+		</stat-block>
 	</div>
 </div>
 <paging [pagedList]="pagedSpells"></paging>
