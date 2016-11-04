@@ -33,42 +33,46 @@
 			<input class="form-control" #spellName (keyup)="setSpellFilter(spellName.value)" placeholder="" aria-describedby="basic-addon1" /> 
 		</div>
 	</div>
-	
-	<div *ngFor="let spell of pagedSpells.getElements()">
-		<stat-block style="padding: 15px 0">
-			<creature-heading>
-				<h1>{{spell.name}}</h1>
-				<h2>{{spell.level}} {{spell.school}} {{spell.ritual ? '(ritual)':''}}</h2>
-			</creature-heading>
-			
-			<top-stats>
-				<property-line>
-					<h4>Casting Time</h4>
-					<p>{{spell.casting_time}}</p>
-				</property-line>
-				<property-line>
-					<h4>Range</h4>
-					<p>{{spell.range}}</p>
-				</property-line>
-				<property-line>
-					<h4>Components</h4>
-					<p>{{spell.components}}</p>
-				</property-line>
-				<property-line>
-					<h4>Duration</h4>
-					<p>{{spell.duration}}</p>
-				</property-line>
-				<property-line>
-					<h4>Concentration</h4>
-					<p>{{spell.concentration}}</p>
-				</property-line>
-			</top-stats>
-			
-			<property-block>
-				<p [innerHTML]="spell.description">
-				</p>
-			</property-block>
-		</stat-block>
+	<div class="row">
+		<ng-container *ngFor="let spell of pagedSpells.getElements(); let i = index;">
+			<div class="clearfix" *ngIf="i % 2 == 0"></div>
+			<div class="col-md-6">
+				<stat-block style="padding: 15px 0">
+					<creature-heading>
+						<h1>{{spell.name}}</h1>
+						<h2>{{spell.level}} {{spell.school}} {{spell.ritual ? '(ritual)':''}}</h2>
+					</creature-heading>
+					
+					<top-stats>
+						<property-line>
+							<h4>Casting Time</h4>
+							<p>{{spell.casting_time}}</p>
+						</property-line>
+						<property-line>
+							<h4>Range</h4>
+							<p>{{spell.range}}</p>
+						</property-line>
+						<property-line>
+							<h4>Components</h4>
+							<p>{{spell.components}}</p>
+						</property-line>
+						<property-line>
+							<h4>Duration</h4>
+							<p>{{spell.duration}}</p>
+						</property-line>
+						<property-line>
+							<h4>Concentration</h4>
+							<p>{{spell.concentration}}</p>
+						</property-line>
+					</top-stats>
+					
+					<property-block>
+						<p [innerHTML]="spell.description">
+						</p>
+					</property-block>
+				</stat-block>
+			</div>
+		</ng-container>
 	</div>
 </div>
 <paging [pagedList]="pagedSpells"></paging>
