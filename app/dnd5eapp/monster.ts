@@ -32,6 +32,7 @@ export class Monster {
 	
 	public generateHP(){
 		let generateString: string = this.HP.split("(")[1].replace(")","");
+		//7d6+5 (example HP string)
 		let diceInfo: string[] = generateString.replace(/(\d+)d(\d+)([\+\-]\d+)?/, "$1,$2,$3").split(",");
 		let numDice: number = +diceInfo[0];
 		let dieSides: number = +diceInfo[1];

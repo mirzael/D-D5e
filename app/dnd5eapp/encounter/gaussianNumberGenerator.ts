@@ -8,6 +8,7 @@ export class GaussianRandomNumberGenerator{
 	z0: number;
 	z1: number;
 
+	//Box–Muller transform algorithm
 	public generateGaussianNoise(mean: number, std: number): number{
 		this.generate = !this.generate;
 		
