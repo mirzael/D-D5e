@@ -25,8 +25,10 @@ To Run:
 
 [jQuery](https://jquery.com/)
 
+[Bootstrap 3](http://getbootstrap.com/)
+
 #### Third party libraries used
 
 [statblock5e](https://github.com/Valloric/statblock5e)
 
-[Bootstrap 3](http://getbootstrap.com/)
+[simple-page-scroll](https://github.com/bbottema/ng2-simple-page-scroll)
