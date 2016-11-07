@@ -13,4 +13,4 @@ const appRoutes: Routes = [
   { path: 'manual', component: ManualEncounterComponent }
 ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes, {useHash: true});

@@ -5,17 +5,17 @@ import { Component } from '@angular/core';
 	template: `
 		<nav class="navbar navbar-default">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="encounter">Random Encounter Generator </a>
+				<a class="navbar-brand" routerLink="/encounter" routerLinkActive="active">Random Encounter Generator </a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
 				<ul class="nav navbar-nav">
 					<li> 
-						<a href="spells"> Spell list </a>
+						<a routerLink="/spells" routerLinkActive="active"> Spell list </a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li> 
-						<a href="manual"> Monsters </a>
+						<a routerLink="/manual" routerLinkActive="active"> Monsters </a>
 					</li>
 				</ul>
 			</div>

@@ -1,8 +1,8 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA }      from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA,  HostBinding }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule }   from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { HostBinding } from '@angular/core';
+import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DndComponent } from './dnd.component';
@@ -37,7 +37,8 @@ import { PagingComponent } from '../paging/paging.component';
     MonsterService,
 	SpellService,
 	GaussianRandomNumberGenerator,
-	EncounterService
+	EncounterService,
+	[{provide: APP_BASE_HREF, useValue: '/app'}]
   ],
   bootstrap: [ 
     DndComponent
