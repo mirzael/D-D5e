@@ -14,13 +14,19 @@ To Run:
 ### Technologies Used
 
 [Node.js](https://nodejs.org/en/)
+
 [Typescript](https://www.typescriptlang.org/)
+
 [Angular 2](https://angular.io/)
+
 [lite-server](https://github.com/johnpapa/lite-server)
+
 [express](http://expressjs.com/)
+
 [jQuery](https://jquery.com/)
 
 #### Third party libraries used
 
 [statblock5e](https://github.com/Valloric/statblock5e)
+
 [Bootstrap 3](http://getbootstrap.com/)
