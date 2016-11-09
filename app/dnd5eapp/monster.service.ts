@@ -31,22 +31,23 @@ export class MonsterService{
 		18,	19,	20,	21, 22,
 		23, 24,	25,	26,	27,
 		28,	29,	30
-	]
+	];
+	private observed: Observable<Monster[]> = null;
 
 	getMonsters(): Observable<Monster[]>{
-		if(this.monsters.length > 0){
-			return Observable.fromPromise(Promise.resolve(this.monsters));
-		}else{
-			return this.http.get('/app/monsters.xml')
+		if(this.observed === null){
+			this.observed = this.http.get('/app/monsters.xml')
 				.map(response => this.extractData(response))
 				.catch(this.handleError);
 		}
+		
+		return this.observed;
 	}
 	
 	getMonstersByIds(ids: number[]): Monster[]{
 		let monsters: Monster[] = [];
 		for(var id of ids){
-			monsters.push(this.monsters.find(monster => monster.ID === id));
+			monsters.push(this.monsters.find(monster => monster.ID === id).copy());
 		}
 		return monsters;
 	}
@@ -62,11 +63,6 @@ export class MonsterService{
 			monster.Name = monsters[i].name;
 			monster.Size = monsters[i].size;
 			monster.Type = monsters[i].type.replace(", monster manual", "");
-			
-			var newType = monster.Type.replace(/\(.*\)/, "").trim();
-			if(this.types.indexOf(newType) === -1){
-				this.types.push(newType);
-			}
 			
 			monster.Align = monsters[i].alignment;
 			if(monsters[i].cr.indexOf("/") != -1) {
@@ -131,10 +127,21 @@ export class MonsterService{
 		return this.monsters;
 	}
 	
-	getTypes(): Promise<string[]>{
-		return new Promise<string[]>(resolve =>	
-			setTimeout(resolve, 2000))
-		.then(() => this.types);
+	getTypes(): Observable<string[]>{
+		let mappingFunction : (monsters: Monster[], index: number) => string[] = (monsters: Monster[], index: number) => {
+			monsters.forEach(this.addType.bind(this));
+			
+			return this.types;
+		};
+		
+		return this.getMonsters().map(mappingFunction);
+	}
+	
+	private addType(monster: Monster){
+		var newType = monster.Type.replace(/\(.*\)/, "").trim();
+		if(this.types.indexOf(newType) === -1){
+			this.types.push(newType);
+		}
 	}
 	
 	getAlignments(): Promise<string[]>{

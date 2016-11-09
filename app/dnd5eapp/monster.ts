@@ -26,7 +26,7 @@ export class Monster {
 	Traits: MonsterProperty[] = [];
 	Actions: MonsterProperty[] = [];
 	Legendaries: MonsterProperty[] = [];
-	Reactions: MonsterProperty[] = []
+	Reactions: MonsterProperty[] = [];
 	Description: string;
 	Spells: string[] = [];
 	
@@ -45,6 +45,43 @@ export class Monster {
 		
 		//Monster needs at least 1 HP
 		this.CurrentHP = Math.max(generatedHP,1);
+		console.log("MY HP: " + this.CurrentHP);
+	}
+	
+	public copy(): Monster{
+		let copy = new Monster();
+		
+		copy.ID = this.ID;
+		copy.Name = this.Name;
+		copy.Size = this.Size;
+		copy.Type = this.Type;
+		copy.Align = this.Align;
+		copy.AC = this.AC;
+		copy.HP = this.HP;
+		copy.Speed = this.Speed;
+		copy.Strength = this.Strength;
+		copy.Dexterity = this.Dexterity;
+		copy.Constitution = this.Constitution;
+		copy.Intelligence = this.Intelligence;
+		copy.Wisdom = this.Wisdom;
+		copy.Charisma = this.Charisma;
+		copy.Saves = this.Saves;
+		copy.Bonuses = this.Bonuses;
+		copy.Perception = this.Perception;
+		copy.Senses = this.Senses;
+		copy.Languages = this.Languages;
+		copy.Immunities = this.Immunities;
+		copy.Resistances = this.Resistances;
+		copy.Vulnerabilities = this.Vulnerabilities;
+		copy.CR = this.CR;
+		copy.Traits = this.Traits;
+		copy.Actions = this.Actions;
+		copy.Legendaries = this.Legendaries;
+		copy.Reactions = this.Reactions;
+		copy.Description = this.Description;
+		copy.Spells = this.Spells;
+		
+		return copy;
 	}
 }
 

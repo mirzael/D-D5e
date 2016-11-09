@@ -115,7 +115,11 @@ export class EncounterComponent implements OnInit{
 			error => console.error(error)
 		);
 		
-		this.monsterService.getTypes().then(types => {this.types = types; this.types.sort();});
+		this.monsterService.getTypes().subscribe(
+			types => {this.types = types; this.types.sort();}, 
+			err => console.log(err)
+		);
+		
 		this.monsterService.getAlignments().then(alignments => {this.alignments = alignments;});
 	}
 }

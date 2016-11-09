@@ -31,7 +31,7 @@ export class ManualEncounterComponent implements OnInit {
 			error => console.error(error)
 		);
 		
-		this.monsterService.getTypes().then(types => {this.types = types; this.types.sort();});
+		this.monsterService.getTypes().subscribe(types => {this.types = types; this.types.sort();});
 		this.monsterService.getAlignments().then(alignments => {this.alignments = alignments;});
 		this.monsterService.getCRs().then(crs => {this.crs = crs;});
 	}
