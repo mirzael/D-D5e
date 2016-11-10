@@ -20,29 +20,31 @@ export class SpellService{
 		"8th-level",
 		"9th-level"		
 	];
-	completedProcessing: boolean = false;
+	spellObserv: Observable<Spell[]>;
 	
 
 	getSpells(): Observable<Spell[]>{
-		if(this.spells.length > 0){
-			return Observable.fromPromise(Promise.resolve(this.spells));
-		}else{
-			return this.http.get('/app/spells.json')
+		if(this.spellObserv == undefined){
+			this.spellObserv = this.http.get('/app/spells.json')
 				.map(response => this.extractData(response))
 				.catch(this.handleError);
 		}
+		
+		return this.spellObserv;
 	}
 	
-	getClasses(): Promise<string[]>{
-		return new Promise<string[]>(resolve =>	
-			setTimeout(resolve, 1500))
-		.then(() => this.classes);
+	getClasses(): Observable<string[]>{
+		let mappingFunction : (spells: Spell[]) => string[] = (spells: Spell[]) => {
+			spells.forEach(this.addClasses.bind(this));
+			
+			return this.classes;
+		};
+		
+		return this.getSpells().map(mappingFunction);
 	}
 	
 	getLevels(): Promise<string[]>{
-		return new Promise<string[]>(resolve =>	
-			setTimeout(resolve, 1500))
-		.then(() => this.levels);
+		return Promise.resolve(this.levels);
 	}
 	
 	private extractData(resp: Response): Spell[]{
@@ -70,14 +72,10 @@ export class SpellService{
 			for(var i = spell.classes.length-1; i >= 0; i--){
 				spell.classes[i] = spell.classes[i].trim();
 			}
-			
-			this.addClasses(spell.classes);
-			this.addLevels(spell.level);
 
 			this.spells.push(spell);
 		}
 		
-		this.completedProcessing = true;
 		return this.spells;
 	}
 
@@ -86,17 +84,11 @@ export class SpellService{
 		  return Promise.reject(error.message || error);
 	}
 	
-	private addClasses(classes: string[]){
-		for(var cls of classes){
+	private addClasses(spell: Spell){		
+		for(var cls of spell.classes){
 			if(this.classes.indexOf(cls.trim()) === -1){
 				this.classes.push(cls.trim());
 			}
-		}
-	}
-	
-	private addLevels(level: string){
-		if(this.levels.indexOf(level.trim()) === -1){
-			this.levels.push(level.trim());
 		}
 	}
 }

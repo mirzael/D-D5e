@@ -29,7 +29,7 @@ export class SpellsComponent implements OnInit{
 				this.pagedSpells.push(...spells);}
 		);
 		
-		this.spellService.getClasses().then((classes) => this.classes = classes);
+		this.spellService.getClasses().subscribe(classes => this.classes = classes, err => console.log(err));
 		this.spellService.getLevels().then((levels) => this.levels = levels);
 	}
 	
