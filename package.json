@@ -7,7 +7,7 @@
     "start": "node ./bin/www",
     "startTSC": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lite": "lite-server",
-	"postinstall": "tsc"
+    "postinstall": "tsc",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings",
@@ -31,6 +31,7 @@
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.0-beta.12",
     "systemjs": "0.19.39",
+    "typescript": "^2.0.10",
     "zone.js": "^0.6.25"
   },
   "devDependencies": {
@@ -49,7 +50,7 @@
     "url": "https://github.com/mirzael/D-D5e/issues"
   },
   "homepage": "https://github.com/mirzael/D-D5e#readme",
-  "engines":{
-  	"node": "6.6.0"
+  "engines": {
+    "node": "6.6.0"
   }
 }
