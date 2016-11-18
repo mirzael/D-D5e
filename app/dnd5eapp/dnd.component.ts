@@ -12,8 +12,6 @@ import { Component } from '@angular/core';
 					<li> 
 						<a routerLink="/spells" routerLinkActive="active"> Spell list </a>
 					</li>
-				</ul>
-				<ul class="nav navbar-nav">
 					<li> 
 						<a routerLink="/manual" routerLinkActive="active"> Monsters </a>
 					</li>
