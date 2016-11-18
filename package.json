@@ -47,5 +47,8 @@
   "bugs": {
     "url": "https://github.com/mirzael/D-D5e/issues"
   },
-  "homepage": "https://github.com/mirzael/D-D5e#readme"
+  "homepage": "https://github.com/mirzael/D-D5e#readme",
+  "engines":{
+  	"node": "6.6.0"
+  }
 }
