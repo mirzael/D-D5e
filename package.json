@@ -7,6 +7,7 @@
     "start": "node ./bin/www",
     "startTSC": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lite": "lite-server",
+	"postinstall": "tsc"
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings",
