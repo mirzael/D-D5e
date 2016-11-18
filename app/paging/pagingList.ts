@@ -38,12 +38,10 @@ export class PagedList<T> extends Array<T> {
 		let numbers: number[] = [];
 		let i = 0;
 		
-		console.log(maxPages);
 		while(i < maxPages){
 			numbers.push(++i);
 		}
 		
-		console.log(numbers);
 		return numbers;
 	}
 }

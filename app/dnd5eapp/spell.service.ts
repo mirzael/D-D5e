@@ -48,13 +48,9 @@ export class SpellService{
 	}
 	
 	private extractData(resp: Response): Spell[]{
-		console.log(resp);
 		var data = resp.json();
-		console.log(data);
 
 		for(let jSpell of data){
-			console.log(jSpell.class);
-
 			let spell: Spell = new Spell;
 			spell.name = jSpell.name;
 			spell.description = jSpell.desc;
@@ -73,7 +69,9 @@ export class SpellService{
 				spell.classes[i] = spell.classes[i].trim();
 			}
 
-			this.spells.push(spell);
+			if(this.spells.find(sp => sp.name === spell.name) === undefined){
+				this.spells.push(spell);
+			}
 		}
 		
 		return this.spells;

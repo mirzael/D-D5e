@@ -123,8 +123,11 @@ export class MonsterService{
 				monsters.Senses = monsters[i].senses.split(/[;,]/);
 			}
 
-			this.monsters.push(monster);
+			if(this.monsters.find(mon => mon.ID === monster.ID) === undefined){
+				this.monsters.push(monster);
+			}
 		}
+		console.log("Length: " + this.monsters.length);
 		return this.monsters;
 	}
 	
