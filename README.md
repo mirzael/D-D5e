@@ -9,7 +9,9 @@ To Run:
 4. Run command **npm install -g lite-server**
 5. Run command **npm install -g concurrently**
 6. Close and Reopen your command line (this is for commands in package.json to be able to be found, as path does not update unless you close and reopen cmd)
-7. Run command **npm start**
+7. Run command **tsc**
+8. Run command **npm start**
+9. Open browser, navigate to **localhost:3000**
 
 ### Technologies Used
 
