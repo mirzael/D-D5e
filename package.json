@@ -4,7 +4,8 @@
   "description": "D&D website",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
+    "start": "node ./bin/www",
+    "startTSC": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lite": "lite-server",
     "postinstall": "typings install",
     "tsc": "tsc",
