@@ -10,6 +10,7 @@ import { MonstersComponent } from './monsters.component';
 import { SpellsComponent } from './spell.component';
 import { EncounterComponent } from './encounter/encounter.component';
 import { ManualEncounterComponent } from './encounter/manualEncounter.component';
+import { CharacterComponent } from './character/character.component';
 import { MonsterService } from './monster.service';
 import { SpellService } from './spell.service';
 import { EncounterService } from './encounter/encounter.service';
@@ -31,7 +32,8 @@ import { PagingComponent } from '../paging/paging.component';
     EncounterComponent,
 	SpellsComponent, 
 	ManualEncounterComponent,
-	PagingComponent
+	PagingComponent,
+	CharacterComponent
   ],
   providers: [
     MonsterService,
