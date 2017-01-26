@@ -35,7 +35,7 @@
 			</div>
 		</div>
 		
-		<div class="panel panel-danger infoPanel" *ngIf="typeFilters.length > 0">
+		<div class="panel panel-danger infoPanel">
 			<div class="panel-heading" >
 				<h3 class="panel-title">Type Filters</h3>
 			</div>
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 
-		<div class="panel panel-warning infoPanel" *ngIf="alignmentFilters.length > 0" >
+		<div class="panel panel-warning infoPanel">
 			<div class="panel-heading" >
 				<h3 class="panel-title">Alignment Filters</h3>
 			</div>
@@ -61,7 +61,7 @@
 			</div>
 		</div>
 		
-		<div class="panel panel-danger infoPanel" *ngIf="crFilters.length > 0">
+		<div class="panel panel-danger infoPanel">
 			<div class="panel-heading" >
 				<h3 class="panel-title">CR Filters</h3>
 			</div>
@@ -151,8 +151,8 @@
 						
 						<property-block *ngFor="let trait of monster.Traits">
 							<h4>{{trait.Name}}.</h4>
-							<p>
-								{{trait.Description.join()}}
+							<p *ngFor="let description of trait.Description">
+								{{description}}
 							</p>
 						</property-block>
 						
@@ -160,8 +160,8 @@
 						
 						<property-block *ngFor="let action of monster.Actions">
 							<h4>{{action.Name}}.</h4>
-							<p>
-								{{action.Description.join()}}
+							<p *ngFor="let description of action.Description">
+								{{description}}
 							</p>
 						</property-block>
 						
@@ -169,8 +169,8 @@
 						
 						<property-block *ngFor="let reaction of monster.Reactions">
 							<h4>{{reaction.Name}}.</h4>
-							<p>
-								{{reaction.Description.join()}}
+							<p *ngFor="let description of reaction.Description">
+								{{description}}
 							</p>
 						</property-block>
 						
@@ -178,8 +178,8 @@
 						
 						<property-block *ngFor="let legendary of monster.Legendaries">
 							<h4>{{legendary.Name}}.</h4>
-							<p>
-								{{legendary.Description.join()}}
+							<p *ngFor="let description of legendary.Description">
+								{{description}}
 							</p>
 						</property-block>
 					</stat-block>

@@ -119,14 +119,14 @@ export class ManualEncounterComponent implements OnInit {
 	private filterFunc(monster: Monster): boolean{
 		return (this.crFilters.length === 0 || this.crFilters.some(filter => monster.CR === filter)) &&
 				(this.typeFilters.length === 0  || this.typeFilters.some(filter => monster.Type.indexOf(filter) > -1)) && 
-				(this.nameFilter === null || this.nameFilter === "" || monster.Name.indexOf(this.nameFilter) > -1) &&
+				(this.nameFilter === null || this.nameFilter === "" || monster.Name.toLowerCase().indexOf(this.nameFilter.toLowerCase()) > -1) &&
 				(this.alignmentFilters.length === 0 ||
 					monster.Align === "any alignment" || 
-					this.alignmentFilters.some(align => monster.Align.indexOf(align) > -1) ||
-					(this.alignmentFilters.some(align => align.indexOf("evil") > -1) && monster.Align === "any evil alignment") ||
-					(this.alignmentFilters.some(align => align.indexOf("chaotic") > -1) && monster.Align === "any chaotic alignment") ||
-					(this.alignmentFilters.some(align => align.indexOf("good") === -1) && monster.Align === "any non-good alignment") ||
-					(this.alignmentFilters.some(align => align.indexOf("lawful") === -1) && monster.Align === "any non-lawful alignment"));
+					this.alignmentFilters.some(align => monster.Align.toLowerCase().indexOf(align.toLowerCase()) > -1) ||
+					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("evil") > -1) && monster.Align.toLowerCase() === "any evil alignment") ||
+					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("chaotic") > -1) && monster.Align.toLowerCase() === "any chaotic alignment") ||
+					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("good") === -1) && monster.Align.toLowerCase() === "any non-good alignment") ||
+					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("lawful") === -1) && monster.Align.toLowerCase() === "any non-lawful alignment"));
 	}
 	
 	private navigateToDetailsPage(){

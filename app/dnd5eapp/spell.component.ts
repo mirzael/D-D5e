@@ -57,6 +57,6 @@ export class SpellsComponent implements OnInit{
 				&&
 			(this.levelFilter === "all" || spell.level.indexOf(this.levelFilter) > -1)
 				&&
-			(this.spellFilter === null || this.spellFilter === "" || spell.name.indexOf(this.spellFilter) > -1);
+			(this.spellFilter === null || this.spellFilter === "" || spell.name.toLowerCase().indexOf(this.spellFilter.toLowerCase()) > -1);
 	}
 }

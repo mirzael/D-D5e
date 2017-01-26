@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/cor
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { PagedList } from './pagingList';
+import { SimplePageScroll } from 'ng2-simple-page-scroll';
 
 @Component ({
 	selector: 'paging',
