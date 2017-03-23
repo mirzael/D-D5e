@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { Monster, MonsterProperty, Attack } from './monster';
@@ -8,7 +8,12 @@ declare var xml2json: any;
 
 @Injectable()
 export class MonsterService{
-	constructor(private http: Http){}
+	constructor(private http: Http){
+		let mappingFunction : (response: Response) => Monster[] = this.extractData.bind(this);
+		this.observed = this.http.get('/app/monsters.xml').share().map(mappingFunction);
+	}
+	
+	processed : boolean = false;
 	monsters : Monster[] = [];
 	types: string[] = [];
 	alignments: string[] = [
@@ -36,12 +41,6 @@ export class MonsterService{
 	private observed: Observable<Monster[]> = null;
 
 	getMonsters(): Observable<Monster[]>{
-		if(this.observed === null){
-			this.observed = this.http.get('/app/monsters.xml')
-				.map(response => this.extractData(response))
-				.catch(this.handleError);
-		}
-		
 		return this.observed;
 	}
 	
@@ -54,11 +53,13 @@ export class MonsterService{
 	}
 
 	private extractData(res: Response): Monster[]{
+		if(this.processed){ return this.monsters; }
+		
 		let doc: any = JSON.parse(xml2json(res.text(), "  "));
 
 		let monsters = doc.compendium.monster;
-
-		for (var i = monsters.length - 1; i >= 0; i--) {
+	
+		for (var i = 0; i < monsters.length; i++) {
 			let monster: Monster = new Monster();
 			monster.ID = i+1;
 			monster.Name = monsters[i].name;
@@ -128,6 +129,7 @@ export class MonsterService{
 			}
 		}
 		console.log("Length: " + this.monsters.length);
+		this.processed = true;
 		return this.monsters;
 	}
 	
@@ -190,7 +192,7 @@ export class MonsterService{
 			}
 		}
 
-		return newProp
+		return newProp;
 	}
 
 	private processMonsterProperty(property: any): MonsterProperty[]{
