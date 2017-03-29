@@ -5,7 +5,12 @@ import { Spell } from './spell';
 
 @Injectable()
 export class SpellService{
-	constructor(private http: Http){}
+	constructor(private http: Http){
+		let mappingFunction : (response: Response) => Spell[] = this.extractData.bind(this);
+		this.spellObserv = this.http.get('/app/spells.json').share().map(mappingFunction);		
+	}
+	
+	processed : boolean = false;
 	spells : Spell[] = [];
 	classes: string[] = [];
 	levels: string[] = [
@@ -24,12 +29,6 @@ export class SpellService{
 	
 
 	getSpells(): Observable<Spell[]>{
-		if(this.spellObserv == undefined){
-			this.spellObserv = this.http.get('/app/spells.json')
-				.map(response => this.extractData(response))
-				.catch(this.handleError);
-		}
-		
 		return this.spellObserv;
 	}
 	
@@ -48,6 +47,7 @@ export class SpellService{
 	}
 	
 	private extractData(resp: Response): Spell[]{
+		if(this.processed){ return this.spells; }
 		var data = resp.json();
 
 		for(let jSpell of data){
@@ -68,12 +68,11 @@ export class SpellService{
 			for(var i = spell.classes.length-1; i >= 0; i--){
 				spell.classes[i] = spell.classes[i].trim();
 			}
-
-			if(this.spells.find(sp => sp.name === spell.name) === undefined){
-				this.spells.push(spell);
-			}
+			
+			this.spells.push(spell);
 		}
 		
+		this.processed = true;
 		return this.spells;
 	}
 

@@ -23,6 +23,6 @@ export class PagingComponent implements OnInit, OnChanges {
 	}
 	
 	public getCurrentPage(): number{
-		return this.pagedList.getCurrentPage();
+		return +this.pagedList.getCurrentPage();
 	}
 }

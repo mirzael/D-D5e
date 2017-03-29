@@ -22,11 +22,13 @@ export class PagedList<T> extends Array<T> {
 	}
 	
 	public setPage(pageNum: number): void {
-		this.currentPage = pageNum;
+		if(pageNum >= 1 && pageNum <= this.getMaxPages()) {
+			this.currentPage = pageNum;
+		}
 	}
 	
 	public getMaxPages(): number {
-		return this.filteredArray.length / this.elementsPerPage;
+		return Math.ceil(this.filteredArray.length / this.elementsPerPage);
 	}
 	
 	public getCurrentPage(): number {

@@ -123,11 +123,10 @@ export class MonsterService{
 			if(monsters[i].hasOwnProperty("senses")){
 				monsters.Senses = monsters[i].senses.split(/[;,]/);
 			}
-
-			if(this.monsters.find(mon => mon.ID === monster.ID) === undefined){
-				this.monsters.push(monster);
-			}
+			
+			this.monsters.push(monster);
 		}
+		
 		console.log("Length: " + this.monsters.length);
 		this.processed = true;
 		return this.monsters;
