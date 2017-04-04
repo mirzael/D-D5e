@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Monster } from '../monster';
-import { MonsterService } from '../monster.service';
+import { Monster } from '../monster/monster';
+import { MonsterService } from '../monster/monster.service';
+import { EncounterMonsterService } from './encounterMonsters.service';
 import { crMap, encounterMultipliers} from './encounterConstants';
 import { PagedList } from '../../paging/pagingList';
 
@@ -21,10 +22,9 @@ export class ManualEncounterComponent implements OnInit {
 	crFilters: number[] = [];
 	alignmentFilters: string[] = [];
 	nameFilter: string = "";
-	encounterMonsters: Monster[] =[];
 	pagedMonsters: PagedList<Monster> = new PagedList<Monster>();
 	xp: number;
-	constructor(private monsterService: MonsterService, private router: Router){}	
+	constructor(private monsterService: MonsterService, private router: Router, private encounterMonsters: EncounterMonsterService ){}	
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
 			monsters => {this.pagedMonsters.push(...monsters);},
@@ -78,35 +78,19 @@ export class ManualEncounterComponent implements OnInit {
 	}
 	
 	private addEncounterMonster(monster: Monster){
-		this.encounterMonsters.push(monster);
+		this.encounterMonsters.addMonster(monster);
 		this.recalcXP();
 	}
 	
 	private removeEncounterMonster(index: number){
-		this.encounterMonsters.splice(index, 1);
+		this.encounterMonsters.removeMonster(index);
 		this.recalcXP();
 	}
 	
 	private recalcXP(){
-		let unModXP = 0;
-		for(var monster of this.encounterMonsters) { unModXP += crMap[monster.CR];}
-		this.calculateXP(this.encounterMonsters.length, unModXP);
+		this.xp = this.encounterMonsters.calculateXP();
 	}
 
-	private calculateXP(numMonsters: number, unModifiedXP: number, newXP?: number): number{
-		let calcMonsters = numMonsters;
-		if(newXP !== undefined) calcMonsters++;
-		else newXP = 0;
-		var multiplier = encounterMultipliers[calcMonsters]; 
-		if(isNaN(multiplier) && calcMonsters > 0){
-			multiplier = encounterMultipliers.maxValue;
-		}else if(calcMonsters = 0){
-			return 0;
-		}
-		
-		this.xp = (unModifiedXP + newXP) * multiplier;
-		return this.xp;
-	}
 	
 	private getXP(cr: number): number {
 		return crMap[cr];
@@ -127,13 +111,5 @@ export class ManualEncounterComponent implements OnInit {
 					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("chaotic") > -1) && monster.Align.toLowerCase() === "any chaotic alignment") ||
 					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("good") === -1) && monster.Align.toLowerCase() === "any non-good alignment") ||
 					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("lawful") === -1) && monster.Align.toLowerCase() === "any non-lawful alignment"));
-	}
-	
-	private navigateToDetailsPage(){
-		let monsterIds: number[] = [];
-		for(var monster of this.encounterMonsters){ monsterIds.push(monster.ID); }
-		console.log(this.encounterMonsters);
-		let link = ['/monsters', monsterIds.toString()];
-		this.router.navigate(link);
 	}
 }

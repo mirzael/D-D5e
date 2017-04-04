@@ -87,7 +87,7 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-2 bg-success playerElement" *ngFor="let player of players; let i = index;">
+			<div class="col-sm-2 bg-success playerElement" *ngFor="let player of playerService.getPlayers(); let i = index;">
 				<button class="close" style="margin-top: 7px" (click)="removePlayer(i)">x</button>Level {{player}}
 			</div>
 		</div>
@@ -104,7 +104,7 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-4 bg-success playerElement" *ngFor="let monster of encounterMonsters; let i = index;">
+			<div class="col-sm-4 bg-success playerElement" *ngFor="let monster of encounterMonsterService.getMonsters(); let i = index;">
 				<button class="close" style="margin-top: 7px" (click)="removeEncounterMonster(i)">x</button>
 				<span style="float: left"> {{monster.Name}} </span>
 				<label> CR: {{monster.CR}} </label>
@@ -116,6 +116,6 @@
 	</div>
 </div>
 
-<button class="btn btn-success pageButton" (click)="navigateToDetailsPage()">
+<button class="btn btn-success pageButton" routerLink="/monsters">
 	GO TO DETAILS PAGE
 </button>

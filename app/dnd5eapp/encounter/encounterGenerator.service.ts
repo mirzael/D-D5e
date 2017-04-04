@@ -1,24 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Monster } from '../monster';
+import { Monster } from '../monster/monster';
 import { crMap, deadlyMap, easyMap, mediumMap, hardMap, encounterMultipliers, numberMap, Difficulty } from './encounterConstants';
 import { GaussianRandomNumberGenerator } from './gaussianNumberGenerator';
+import { PlayerService } from '../players/player.service';
 
 @Injectable()
-export class EncounterService{
+export class EncounterGeneratorService{
 	private difficulty: Difficulty = Difficulty.Easy;
 	private players: number[];
-	constructor(private rand: GaussianRandomNumberGenerator){}
+	constructor(private rand: GaussianRandomNumberGenerator, private playerService: PlayerService){}
 	
 	public setDifficulty(difficulty: Difficulty){
 		this.difficulty = difficulty;
-	}
-	
-	public setPlayers(playerList: number[]){
-		this.players = playerList;
-	}
-	
-	public getXP(monster: Monster): number{
-		return crMap[monster.CR];
 	}
 	
 	public calculateXP(monsters: Monster[]): number{
@@ -29,8 +22,8 @@ export class EncounterService{
 	
 	public generateEncounter(monsters: Monster[]): Monster[]{
 		var encounterMonsters: Monster[] = [];
-		var maxCr = Math.min(...this.players);
-		let xpThreshold: number = this.generateXPThreshold();
+		var maxCr = Math.min(...this.playerService.getPlayers());
+		let xpThreshold: number = this.playerService.generateXPThreshold(this.difficulty);
 		
 		let crMult: number = 1;
 		if(this.difficulty === Difficulty.Deadly) crMult = 1.5;
@@ -43,23 +36,18 @@ export class EncounterService{
 		let resets: number = 0;
 		let MAX_RESETS: number = 8;
 		while(!this.withinThreshold(currentXP, xpThreshold, 0.10)){
-			console.log("Current XP: " + currentXP);
 			
 			let monsterToExamine = this.getRandomMonster(monsters, maxCr * crMult);
-			console.log(monsterToExamine);
-			console.log(monsterToExamine.Name);
 			let monsterXP: number = crMap[monsterToExamine.CR];
 
 			let calculatedXP: number = 0;
 
 			calculatedXP = this._calculateXP(encounterMonsters.length+1, unmodifiedXP,monsterXP);
-			console.log("Calculated XP: " + calculatedXP);
 			
 			if(calculatedXP < xpThreshold){
 				encounterMonsters.push(monsterToExamine);
 				currentXP = calculatedXP;
 				unmodifiedXP += monsterXP;
-				console.log("New XP: " + currentXP);
 			}else{
 				retries++;
 				totalRetries++;
@@ -67,7 +55,6 @@ export class EncounterService{
 					let monster: Monster = encounterMonsters.pop();
 					unmodifiedXP -= crMap[monster.CR];
 					currentXP =  this._calculateXP(encounterMonsters.length, unmodifiedXP);
-					console.log("unmod xp: " + unmodifiedXP);
 					console.log("Retrying. New XP: " + currentXP);
 					retries = 0;
 				}else if(retries > 5 && (totalRetries % 5 == 4 || encounterMonsters.length === 0)){
@@ -91,38 +78,9 @@ export class EncounterService{
 		return encounterMonsters;
 	} 
 	
-	private generateXPThreshold(): number{
-			let map: numberMap;
-			let xpThreshold = 0;
-			
-			switch (this.difficulty) {
-				case Difficulty.Easy:
-					map = easyMap;
-					break;
-				case Difficulty.Medium:
-					map = mediumMap;
-					break;
-				case Difficulty.Hard:
-					map = hardMap;
-					break;
-				case Difficulty.Deadly:
-					map = deadlyMap;
-					break;
-				default:
-					console.log(this.difficulty);
-					console.error("Undefined Difficulty encountered. Not generating encounter.");
-					return NaN;
-			}
-
-			for (var level of this.players) { xpThreshold += map[level]; }
-			
-			return xpThreshold;
-	}
-	
 	private getRandomMonster(monsterList: Monster[], maxCR: number): Monster{
 		let cr = this.getNearestCR(this.rand.generateGaussianNoise(maxCR / 2, maxCR / 4));
 		cr = Math.min(cr, maxCR);
-		console.log("CR: " + cr);
 		let filteredMonsters = monsterList.filter(monster => monster.CR === cr);
 		if(filteredMonsters.length === 0) return this.getRandomMonster(monsterList, maxCR);
 		

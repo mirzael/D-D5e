@@ -22,6 +22,9 @@ import { Component } from '@angular/core';
 					<li> 
 						<a routerLink="/manual" routerLinkActive="active"> Monsters </a>
 					</li>
+					<li>
+						<a routerLink="/monsters" routerLinkActive="active"> Encounter </a>
+					</li>
 				</ul>
 			</div>
 		</nav>

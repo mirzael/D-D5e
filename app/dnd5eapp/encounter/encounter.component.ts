@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Monster } from '../monster';
-import { MonsterService } from '../monster.service';
-import { EncounterService } from './encounter.service';
+import { Monster } from '../monster/monster';
+import { MonsterService } from '../monster/monster.service';
+import { EncounterGeneratorService } from './encounterGenerator.service';
+import { EncounterMonsterService } from './encounterMonsters.service';
 import { Difficulty } from './encounterConstants';
+import { PlayerService } from '../players/player.service';
 
 @Component({
 	selector: 'encounter',
@@ -15,7 +17,6 @@ import { Difficulty } from './encounterConstants';
 
 export class EncounterComponent implements OnInit{
 	public difficultyEnum = Difficulty;
-	players: number[] = [];
 	monsters: Monster[] = [];
 	difficultyLevel: Difficulty = Difficulty.Easy;
 	typeFilters: string[]  = [];
@@ -24,15 +25,15 @@ export class EncounterComponent implements OnInit{
 	alignments: string[];
 	encounterMonsters: Monster[] = [];
 	xp: number;
-	constructor(private monsterService: MonsterService, private router: Router, private encounterService: EncounterService){}
+	constructor(private monsterService: MonsterService, private router: Router, private encounterService: EncounterGeneratorService, private playerService: PlayerService, private encounterMonsterService: EncounterMonsterService){}
 
 	private generateEncounter(){	
-		if(this.players.length <= 0){
+		if(this.playerService.length() <= 0){
 			console.error("Cannot generate encounter with no players. Please add at least one player.");
 			return;
 		}
 		
-		let maxCR = Math.min(...this.players);
+		let maxCR = Math.min(...this.playerService.getPlayers());
 		let crMult: number = 1;
 		if(this.difficultyLevel === Difficulty.Deadly) crMult = 1.5;
 		
@@ -52,29 +53,21 @@ export class EncounterComponent implements OnInit{
 			return;
 		}
 		
-		this.encounterMonsters = this.encounterService.generateEncounter(filteredMonsters);
+		this.encounterMonsterService.addMonsters(this.encounterService.generateEncounter(filteredMonsters));
 		this.recalcXP();
+		
+		console.log(this.encounterMonsterService.getMonsters());
 	} 
-	
-	private navigateToDetailsPage(){
-		let monsterIds: number[] = [];
-		for(var monster of this.encounterMonsters){ monsterIds.push(monster.ID); }
-		console.log(this.encounterMonsters);
-		let link = ['/monsters', monsterIds.toString()];
-		this.router.navigate(link);
+
+	private addPlayer(number : number){
+		this.playerService.addPlayer(number);
 	}
 
-	private addPlayer(number){
-		this.players.push(number);
-		this.encounterService.setPlayers(this.players);
+	private removePlayer(index: number){
+		this.playerService.removePlayer(index);
 	}
 
-	private removePlayer(index){
-		this.players.splice(index,1);
-		this.encounterService.setPlayers(this.players);
-	}
-
-	private setDifficulty(diff){
+	private setDifficulty(diff: Difficulty){
 		this.difficultyLevel = diff;
 		this.encounterService.setDifficulty(diff);
 	}
@@ -100,14 +93,13 @@ export class EncounterComponent implements OnInit{
 	}
 	
 	private removeEncounterMonster(index){
-		this.encounterMonsters.splice(index,1);
+		this.encounterMonsterService.removeMonster(index);
 		this.recalcXP();
 	}
 	
 	private recalcXP(){
-		this.xp = this.encounterService.calculateXP(this.encounterMonsters);
+		this.xp = this.encounterMonsterService.calculateXP();
 	}
-
 	
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(

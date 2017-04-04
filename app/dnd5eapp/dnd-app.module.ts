@@ -6,14 +6,16 @@ import { LocationStrategy, HashLocationStrategy, APP_BASE_HREF } from '@angular/
 import { Routes, RouterModule } from '@angular/router';
 
 import { DndComponent } from './dnd.component';
-import { MonstersComponent } from './monsters.component';
+import { MonstersComponent } from './monster/monsters.component';
 import { SpellsComponent } from './spell.component';
 import { EncounterComponent } from './encounter/encounter.component';
 import { ManualEncounterComponent } from './encounter/manualEncounter.component';
 import { CharacterComponent } from './character/character.component';
-import { MonsterService } from './monster.service';
+import { MonsterService } from './monster/monster.service';
 import { SpellService } from './spell.service';
-import { EncounterService } from './encounter/encounter.service';
+import { EncounterGeneratorService } from './encounter/encounterGenerator.service';
+import { EncounterMonsterService } from './encounter/encounterMonsters.service';
+import { PlayerService } from './players/player.service';
 import { routing } from '../app.routing';
 import { GaussianRandomNumberGenerator } from './encounter/gaussianNumberGenerator';
 import { PagingComponent } from '../paging/paging.component';
@@ -39,7 +41,9 @@ import { PagingComponent } from '../paging/paging.component';
     MonsterService,
 	SpellService,
 	GaussianRandomNumberGenerator,
-	EncounterService,
+	EncounterGeneratorService,
+	PlayerService,
+	EncounterMonsterService,
 	[{provide: APP_BASE_HREF, useValue: '/app'}]
   ],
   bootstrap: [ 

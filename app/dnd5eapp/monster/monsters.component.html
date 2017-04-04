@@ -1,17 +1,17 @@
 <div class="container">
 	<ul class="nav nav-pills" role="tablist">
-		<ng-container *ngFor="let monster of monsters; let firstTab = first; let i = index">
+		<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index">
 			<li role="presentation"  [ngClass]="{'active': firstTab}" >
 				<a simplePageScroll href="#{{i}}" data-toggle="tab">{{monster.Name}}</a>
 			</li>
 		</ng-container>
 	</ul>
 	<div class="bg-success xpDiv" style="padding:10px;">
-		Total XP: {{totalXP}}
+		Total XP: {{encounterMonsterService.calculateXP()}}
 	</div>
 	<br />
 	<div class="tab-content">
-		<ng-container *ngFor="let monster of monsters; let firstTab = first; let i = index;">
+		<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index;">
 			<div role="tabpanel" [ngClass]="{'active': firstTab}" class="tab-pane" id="{{i}}">
 				<div class="row">
 					<div class="col-md-2">
@@ -92,7 +92,7 @@
 						<property-line>
 							<h4>Challenge</h4>
 							<p>
-								{{monster.CR}} ({{encounterService.getXP(monster)}})
+								{{monster.CR}} ({{encounterMonsterService.getXP(i)}})
 							</p>
 						</property-line>
 					</top-stats>

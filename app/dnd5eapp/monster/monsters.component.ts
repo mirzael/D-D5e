@@ -5,8 +5,9 @@ import { SimplePageScroll } from 'ng2-simple-page-scroll';
 
 import { Monster } from './monster';
 import { MonsterService } from './monster.service';
-import { EncounterService } from './encounter/encounter.service';
-import { crMap, encounterMultipliers } from './encounter/encounterConstants';
+import { EncounterGeneratorService } from '../encounter/encounterGenerator.service';
+import { EncounterMonsterService } from '../encounter/encounterMonsters.service';
+import { crMap, encounterMultipliers } from '../encounter/encounterConstants';
 
 @Component ({
 	selector: 'monsters',
@@ -16,9 +17,8 @@ import { crMap, encounterMultipliers } from './encounter/encounterConstants';
 })
 
 export class MonstersComponent implements OnInit{
-	constructor(private monsterService: MonsterService, private route: ActivatedRoute, private location: Location, private encounterService: EncounterService){}
-	monsters: Monster[] = [];
-	totalXP: number = 0;
+	constructor(private monsterService: MonsterService, private route: ActivatedRoute, private location: Location, private encounterService: EncounterGeneratorService, private encounterMonsterService: EncounterMonsterService){}
+	
 	errorMessage: any;
 	
 	private checkHP(monster: Monster){
@@ -37,21 +37,8 @@ export class MonstersComponent implements OnInit{
 	}
 
 	ngOnInit(): void{
-		this.monsterService.getMonsters().subscribe(
-			monsters => {
-				this.route.params.forEach((params: Params) => {
-					let idArr = params['ids'];
-					let ids = idArr.split(',');
-					for(var i = 0; i<ids.length; i++){ ids[i] = +ids[i]; }
-					this.monsters = this.monsterService.getMonstersByIds(ids);
-
-					this.totalXP = this.encounterService.calculateXP(this.monsters);
-					
-					this.monsters.forEach(monster => monster.generateHP());
-				});
-			},
-			err => {
-				console.error(err)
-		});
+		for(var monster of this.encounterMonsterService.getMonsters()){
+			monster.generateHP();
+		}
 	}
 }
