@@ -4,8 +4,9 @@
     <title>5e Encounter Generator</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="app/bootstrap.css">
+    <!-- <link rel="stylesheet" href="app/bootstrap.css"> -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="semantic/dist/semantic.min.css">
 	<link rel="import" href="app/statblock5e/top-stats.html">
     <link rel="import" href="app/statblock5e/creature-heading.html">
     <link rel="import" href="app/statblock5e/abilities-block.html">
@@ -27,9 +28,10 @@
 	<script src="external/jquery-3.1.1.min.js"></script>
     <script src="external/xml2json.js"></script>
 	<script src="external/bootstrap.js"></script>
+	<script src="semantic/dist/semantic.min.js"></script>
   </head>
   <!-- 3. Display the application -->
-  <body>
+  <body class="theming pushable" ontouchstart style="color:white;">
     <dnd-app>Loading...</dnd-app>
   </body>
 </html>

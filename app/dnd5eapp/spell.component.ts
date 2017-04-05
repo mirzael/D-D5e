@@ -5,6 +5,8 @@ import { SpellService } from './spell.service';
 import { Spell } from './spell';
 import { PagedList } from '../paging/pagingList';
 
+declare var jQuery: any;
+
 @Component({
 	selector: 'spells',
 	moduleId: module.id,
@@ -29,8 +31,14 @@ export class SpellsComponent implements OnInit{
 				this.pagedSpells.push(...spells);}
 		);
 		
-		this.spellService.getClasses().subscribe(classes => this.classes = classes, err => console.log(err));
-		this.spellService.getLevels().then((levels) => this.levels = levels);
+		this.spellService.getClasses().subscribe(classes => {
+			this.classes = classes;
+			jQuery('.ui.dropdown').dropdown();
+		}, err => console.log(err));
+		this.spellService.getLevels().then((levels) => {
+			this.levels = levels;
+			jQuery('.ui.dropdown').dropdown();
+		});
 	}
 	
 	setClassFilter(classFilter: string){

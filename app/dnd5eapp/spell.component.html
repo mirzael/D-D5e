@@ -1,78 +1,85 @@
-<div class="container">
+<div class="ui grid">
 	<div class="row">
-		<div class="col-md-1" style="
-			padding-top: 10px;
-			text-align: center;
-			vertical-align: middle;">
+		<div class="two wide center column">
 			Classes
 		</div>
-		<div class="col-md-3">
-			<select class="form-control" #selectedClass style="display:inline;" (change)="setClassFilter(selectedClass.value)">
-				<option value="all"> All </option>
-				<ng-container *ngFor="let class of classes">
-					<option [value]="class">{{class}}</option>
-				</ng-container>
-			</select>
+		<div class="three wide column">
+			<div class="ui buttons">
+				<div class="ui inverted button"> {{classFilter}} </div>
+				<div class="ui inverted floating dropdown icon button" tabindex="0">
+					<i class="dropdown icon"></i>
+					<div class="menu transition hidden" tabindex="-1">
+						<ng-container *ngFor="let class of classes">
+							<div class="item" (click)="setClassFilter(class)">{{class}}</div>
+						</ng-container>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="col-md-2" style="
-			padding-top: 10px;
-			text-align: center;
-			vertical-align: middle;">
+		<div class="two wide center column">
 			Spell Levels
 		</div>
-		<div class="col-md-2">
-			<select class="form-control" #selectedLevel style="display:inline;" (change)="setLevelFilter(selectedLevel.value)">
-				<option value="all"> All </option>
-				<ng-container *ngFor="let level of levels">
-					<option [value]="level">{{level}}</option>
-				</ng-container>
-			</select>
-		</div>
-		<div class="input-group col-md-3">
-			<span class="input-group-addon" id="basic-addon1">Spell Name</span>
-			<input class="form-control" #spellName (keyup)="setSpellFilter(spellName.value)" placeholder="" aria-describedby="basic-addon1" /> 
-		</div>
-	</div>
-	<div class="row">
-		<ng-container *ngFor="let spell of pagedSpells.getElements(); let i = index;">
-			<div class="clearfix" *ngIf="i % 2 == 0"></div>
-			<div class="col-md-6">
-				<stat-block style="padding: 15px 0">
-					<creature-heading>
-						<h1>{{spell.name}}</h1>
-						<h2>{{spell.level}} {{spell.school}} {{spell.ritual ? '(ritual)':''}}</h2>
-					</creature-heading>
-					
-					<top-stats>
-						<property-line>
-							<h4>Casting Time</h4>
-							<p>{{spell.casting_time}}</p>
-						</property-line>
-						<property-line>
-							<h4>Range</h4>
-							<p>{{spell.range}}</p>
-						</property-line>
-						<property-line>
-							<h4>Components</h4>
-							<p>{{spell.components}}</p>
-						</property-line>
-						<property-line>
-							<h4>Duration</h4>
-							<p>{{spell.duration}}</p>
-						</property-line>
-						<property-line>
-							<h4>Concentration</h4>
-							<p>{{spell.concentration}}</p>
-						</property-line>
-					</top-stats>
-					
-					<property-block>
-						<p [innerHTML]="spell.description">
-						</p>
-					</property-block>
-				</stat-block>
+		<div class="three wide column">
+			<div class="ui buttons">
+				<div class="ui inverted button"> {{levelFilter}} </div>
+				<div class="ui inverted floating dropdown icon button" tabindex="0">
+					<i class="dropdown icon"></i>
+					<div class="menu transition hidden" tabindex="-1">
+						<ng-container *ngFor="let level of levels">
+							<div class="item" (click)="setLevelFilter(level)">{{level}}</div>
+						</ng-container>
+					</div>
+				</div>
 			</div>
-		</ng-container>
+		</div>
+		<div class="five wide column">
+			<div class="ui labeled input">
+				<a class="ui label">
+					Spell Name
+				</a>
+				<input class="text" #spellName (keyup)="setSpellFilter(spellName.value)" placeholder="Spell Name..." aria-describedby="basic-addon1" > 
+			</div>
+		</div>
 	</div>
+</div>
+<div class="ui equal width grid">
+	<ng-container *ngFor="let spell of pagedSpells.getElements(); let i = index;">
+		<div class="row">
+			<stat-block style="padding: 15px 0">
+				<creature-heading>
+					<h1>{{spell.name}}</h1>
+					<h2>{{spell.level}} {{spell.school}} {{spell.ritual ? '(ritual)':''}}</h2>
+				</creature-heading>
+				
+				<top-stats>
+					<property-line>
+						<h4>Casting Time</h4>
+						<p>{{spell.casting_time}}</p>
+					</property-line>
+					<property-line>
+						<h4>Range</h4>
+						<p>{{spell.range}}</p>
+					</property-line>
+					<property-line>
+						<h4>Components</h4>
+						<p>{{spell.components}}</p>
+					</property-line>
+					<property-line>
+						<h4>Duration</h4>
+						<p>{{spell.duration}}</p>
+					</property-line>
+					<property-line>
+						<h4>Concentration</h4>
+						<p>{{spell.concentration}}</p>
+					</property-line>
+				</top-stats>
+				
+				<property-block>
+					<p [innerHTML]="spell.description">
+					</p>
+				</property-block>
+			</stat-block>
+		</div>
+	</ng-container>
 </div>
 <paging [pagedList]="pagedSpells"></paging>

@@ -1,121 +1,129 @@
-
-<div class="container">
-	<div class="row">
-		<div class="btn-group col-md-5">
-			<button class="btn btn-info" (click)="setDifficulty(difficultyEnum.Easy)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Easy}"> Easy </button>
-			<button class="btn btn-success" (click)="setDifficulty(difficultyEnum.Medium)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Medium}"> Medium </button>
-			<button class="btn btn-warning" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
-			<button class="btn btn-danger" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'selectedButton': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
-		</div>
-		<div class="dropdown col-md-2">
-			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Type Filter
-			<span class="caret"></span></button>
-			<ul class="dropdown-menu">
-				<ng-container *ngFor="let type of types">
-					<li><a (click)="addFilter(type)">{{type}}</a></li>
-				</ng-container>
-			</ul>
-		</div>
-		<div class="dropdown col-md-3">
-			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Alignment Filter
-			<span class="caret"></span></button>
-			<ul class="dropdown-menu">
-				<ng-container *ngFor="let alignment of alignments">
-					<li><a (click)="addAlignmentFilter(alignment)">{{alignment}}</a></li>
-				</ng-container>
-			</ul>
-		</div>
-		
-		<div class="dropdown col-md-2">
-			<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Player
-			<span class="caret"></span></button>
-			<ul class="dropdown-menu">
-				<li><a (click)="addPlayer(1)"> Level 01 </a></li>
-				<li><a (click)="addPlayer(2)"> Level 02 </a></li>
-				<li><a (click)="addPlayer(3)"> Level 03 </a></li>
-				<li><a (click)="addPlayer(4)"> Level 04 </a></li>			
-				<li><a (click)="addPlayer(5)"> Level 05 </a></li>			
-				<li><a (click)="addPlayer(6)"> Level 06 </a></li>			
-				<li><a (click)="addPlayer(7)"> Level 07 </a></li>			
-				<li><a (click)="addPlayer(8)"> Level 08 </a></li>			
-				<li><a (click)="addPlayer(9)"> Level 09 </a></li>			
-				<li><a (click)="addPlayer(10)"> Level 10 </a></li>
-				<li><a (click)="addPlayer(11)"> Level 11 </a></li>
-				<li><a (click)="addPlayer(12)"> Level 12 </a></li>
-				<li><a (click)="addPlayer(13)"> Level 13 </a></li>
-				<li><a (click)="addPlayer(14)"> Level 14 </a></li>			
-				<li><a (click)="addPlayer(15)"> Level 15 </a></li>			
-				<li><a (click)="addPlayer(16)"> Level 16 </a></li>			
-				<li><a (click)="addPlayer(17)"> Level 17 </a></li>			
-				<li><a (click)="addPlayer(18)"> Level 18 </a></li>			
-				<li><a (click)="addPlayer(19)"> Level 19 </a></li>			
-				<li><a (click)="addPlayer(20)"> Level 20 </a></li>		
-			</ul>
-		</div>
-	</div>
+<div class="ui inverted segment">
+	<button class="ui inverted teal button" (click)="setDifficulty(difficultyEnum.Easy)" [ngClass]="{'active': difficultyLevel === difficultyEnum.Easy}"> Easy </button>
+	<button class="ui inverted green button" (click)="setDifficulty(difficultyEnum.Medium)" [ngClass]="{'active': difficultyLevel === difficultyEnum.Medium}"> Medium </button>
+	<button class="ui inverted orange button" (click)="setDifficulty(difficultyEnum.Hard)" [ngClass]="{'active': difficultyLevel === difficultyEnum.Hard}"> Hard </button>
+	<button class="ui inverted red button" (click)="setDifficulty(difficultyEnum.Deadly)" [ngClass]="{'active': difficultyLevel === difficultyEnum.Deadly}"> Deadly </button>
 </div>
-
-<div class="panel panel-danger infoPanel" >
-	<div class="panel-heading" >
-		<h3 class="panel-title">Type Filters</h3>
+<div class="ui stackable equal width grid">
+	<div class="column">
+		<div class="ui buttons">
+			<button class="ui inverted button" type="button"> Add Type Filter </button>
+			<div class="ui inverted floating dropdown icon button" tabindex="0">
+				<i class="dropdown icon"></i>
+				<div class="menu transition hidden" tabindex="-1">
+					<ng-container *ngFor="let type of types">
+						<div class="item" (click)="addFilter(type)">{{type}}</div>
+					</ng-container>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-3 bg-success playerElement" *ngFor="let filter of typeFilters; let i = index;">
-				<button class="close" style="margin-top: 7px" (click)="removeFilter(i)">x</button>{{filter}}
+	<div class="column">
+		<div class="ui buttons">
+			<button class="ui inverted button" type="button"> Add Alignment Filter </button>
+			<div class="ui inverted floating dropdown icon button" tabindex="0">
+				<i class="dropdown icon"></i>
+				<div class="menu transition hidden" tabindex="-1">
+					<ng-container *ngFor="let alignment of alignments">
+						<div class="item" (click)="addAlignmentFilter(alignment)">{{alignment}}</div>
+					</ng-container>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<div class="ui buttons">
+			<button class="ui inverted button" type="button"> Add Player  </button>
+			<div class="ui inverted floating dropdown icon button" tabindex="0">
+				<i class="dropdown icon"></i>
+				<div class="menu transition hidden" tabindex="-1">
+					<div class="item" (click)="addPlayer(1)"> Level 01 </div>
+					<div class="item" (click)="addPlayer(2)"> Level 02 </div>
+					<div class="item" (click)="addPlayer(3)"> Level 03 </div>
+					<div class="item" (click)="addPlayer(4)"> Level 04 </div>
+					<div class="item" (click)="addPlayer(5)"> Level 05 </div>
+					<div class="item" (click)="addPlayer(6)"> Level 06 </div>
+					<div class="item" (click)="addPlayer(7)"> Level 07 </div>
+					<div class="item" (click)="addPlayer(8)"> Level 08 </div>
+					<div class="item" (click)="addPlayer(9)"> Level 09 </div>
+					<div class="item" (click)="addPlayer(10)"> Level 10 </div>
+					<div class="item" (click)="addPlayer(11)"> Level 11 </div>
+					<div class="item" (click)="addPlayer(12)"> Level 12 </div>
+					<div class="item" (click)="addPlayer(13)"> Level 13 </div>
+					<div class="item" (click)="addPlayer(14)"> Level 14 </div>
+					<div class="item" (click)="addPlayer(15)"> Level 15 </div>
+					<div class="item" (click)="addPlayer(16)"> Level 16 </div>
+					<div class="item" (click)="addPlayer(17)"> Level 17 </div>
+					<div class="item" (click)="addPlayer(18)"> Level 18 </div>
+					<div class="item" (click)="addPlayer(19)"> Level 19 </div>
+					<div class="item" (click)="addPlayer(20)"> Level 20 </div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-<div class="panel panel-warning infoPanel" >
-	<div class="panel-heading" >
-		<h3 class="panel-title">Alignment Filters</h3>
-	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-2 bg-success playerElement" *ngFor="let filter of alignmentFilters; let i = index;">
-				<button class="close" style="margin-top: 7px" (click)="removeAlignmentFilter(i)">x</button>{{filter}}
+<div class="ui container">
+	<div class="ui grid">
+		<div class="sixteen wide column">
+			<h3 class="ui centered dividing header" style="color: white;"> Type Filters </h3>
+		</div>
+		<div class="four wide column" *ngFor="let filter of typeFilters; let i = index;">
+			<div class="ui labeled button" tabindex="0">
+				<div class="ui basic teal button" (click)="removeFilter(i)">x</div>
+				<a class="ui inverted teal label">{{filter}}</a>
 			</div>
 		</div>
 	</div>
-</div>
-
-<div class="panel panel-info infoPanel" >
-	<div class="panel-heading" >
-		<h3 class="panel-title">Players</h3>
-	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-2 bg-success playerElement" *ngFor="let player of playerService.getPlayers(); let i = index;">
-				<button class="close" style="margin-top: 7px" (click)="removePlayer(i)">x</button>Level {{player}}
+	
+	<div class="ui grid">
+		<div class="sixteen wide column">
+			<h3 class="ui centered dividing header" style="color: white;"> Alignment Filters </h3>
+		</div>
+		<div class="four wide column" *ngFor="let filter of alignmentFilters; let i = index;">
+			<div class="ui labeled button" tabindex="0">
+				<div class="ui basic orange button" (click)="removeAlignmentFilter(i)">x</div>
+				<a class="ui inverted orange label">{{filter}}</a>
 			</div>
 		</div>
 	</div>
-</div>
-
-<button class="btn btn-success pageButton" (click)="generateEncounter()">
-	GENERATE ENCOUNTER
-</button>
-
-<div class="panel panel-info infoPanel" >
-	<div class="panel-heading" >
-		<h3 class="panel-title">Encounter</h3>
-	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-4 bg-success playerElement" *ngFor="let monster of encounterMonsterService.getMonsters(); let i = index;">
-				<button class="close" style="margin-top: 7px" (click)="removeEncounterMonster(i)">x</button>
-				<span style="float: left"> {{monster.Name}} </span>
-				<label> CR: {{monster.CR}} </label>
+	
+	<div class="ui grid">
+		<div class="sixteen wide column">
+			<h3 class="ui centered dividing header" style="color: white;"> Players </h3>
+		</div>
+		<div class="four wide column" *ngFor="let player of playerService.getPlayers(); let i = index;">
+			<div class="ui labeled button" tabindex="0">
+				<div class="ui basic olive button" (click)="removePlayer(i)">x</div>
+				<a class="ui inverted olive label">Level {{player}}</a>
 			</div>
 		</div>
 	</div>
-	<div class="panel-footer">
-		Total XP: {{xp}}
-	</div>
-</div>
+	
+	<button class="ui inverted green button" (click)="generateEncounter()">
+		GENERATE ENCOUNTER
+	</button>
 
-<button class="btn btn-success pageButton" routerLink="/monsters">
-	GO TO DETAILS PAGE
-</button>
+	<div class="ui grid">
+		<div class="sixteen wide column">
+			<h3 class="ui centered dividing header" style="color: white;"> Encounter </h3>
+		</div>
+		<div class="six wide column" *ngFor="let monster of encounterMonsterService.getMonsters(); let i = index;">
+			<div class="ui labeled button" tabindex="0">
+				<div class="ui basic blue button" (click)="removeEncounterMonster(i)">x</div>
+				<a class="ui inverted blue label">
+					<span style="float: left;"> {{monster.Name}} </span>
+					<label> CR: {{monster.CR }} </label>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="sixteen wide column">
+				<h3> Total XP: {{xp}} </h3>
+			</div>
+		</div>
+	</div>
+	
+	<button class="ui inverted green button" routerLink="/monsters">
+		GO TO DETAILS PAGE
+	</button>
+</div>

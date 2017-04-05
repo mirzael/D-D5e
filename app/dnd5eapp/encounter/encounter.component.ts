@@ -8,6 +8,8 @@ import { EncounterMonsterService } from './encounterMonsters.service';
 import { Difficulty } from './encounterConstants';
 import { PlayerService } from '../players/player.service';
 
+declare var jQuery: any;
+
 @Component({
 	selector: 'encounter',
 	moduleId: module.id,
@@ -108,10 +110,12 @@ export class EncounterComponent implements OnInit{
 		);
 		
 		this.monsterService.getTypes().subscribe(
-			types => {this.types = types; this.types.sort();}, 
+			types => {this.types = types; this.types.sort(); jQuery('.ui.dropdown').dropdown();}, 
 			err => console.log(err)
 		);
 		
-		this.monsterService.getAlignments().then(alignments => {this.alignments = alignments;});
+		this.monsterService.getAlignments().then(alignments => {this.alignments = alignments;
+		jQuery('.ui.dropdown').dropdown();
+		});
 	}
 }
