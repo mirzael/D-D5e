@@ -23,6 +23,10 @@ export class EncounterMonsterService implements OnInit{
 		}
 	}
 	
+	public clearMonsters(): void{
+		this.monsters = [];
+	}
+	
 	public getMonsters(): Monster[]{
 		return this.monsters;
 	} 

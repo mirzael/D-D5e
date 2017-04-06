@@ -1,212 +1,227 @@
-<div class="container">
-	<div class="row col-lg-10">
-		<div class="row">
-		<!-- FILTERS -->
-			<div class="dropdown col-md-2">
-				<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Type Filter
-				<span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<ng-container *ngFor="let type of types">
-						<li><a (click)="addTypeFilter(type)">{{type}}</a></li>
-					</ng-container>
-				</ul>
-			</div>
-			<div class="dropdown col-md-3">
-				<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add Alignment Filter
-				<span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<ng-container *ngFor="let alignment of alignments">
-						<li><a (click)="addAlignmentFilter(alignment)">{{alignment}}</a></li>
-					</ng-container>
-				</ul>
-			</div>
-			<div class="dropdown col-md-3">
-				<button class="btn btn-primary dropdown-toogle" type="button" data-toggle="dropdown">Add CR Filter
-				<span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<ng-container *ngFor="let cr of crs">
-						<li><a (click)="addCRFilter(cr)">{{cr}}</a></li>
-					</ng-container>
-				</ul>
-			</div>
-			<div class="input-group col-md-3">
-				<span class="input-group-addon" id="basic-addon1">Monster Name</span>
-				<input class="form-control" #monsterName (keyup)="setNameFilter(monsterName.value)" placeholder="" aria-describedby="basic-addon1" /> 
-			</div>
+<button class="ui inverted launch button" style="
+    position: fixed;
+    top: 80px;
+    left: 80%;
+    width: 70px;
+	z-index: 2;
+"><i class="fa fa-bars" aria-hidden="true"></i></button>
+<div class="ui hidden monsters">
+	<div class="item" *ngFor="let monster of encounterMonsters.getMonsters(); let i = index;">
+		<div class="ui labeled button" tabindex="0">
+			<div class="ui basic teal button" (click)="removeEncounterMonster(i)">x</div>
+			<a class="ui inverted teal label">{{monster.Name}}</a>
 		</div>
-		
-		<div class="panel panel-danger infoPanel">
-			<div class="panel-heading" >
-				<h3 class="panel-title">Type Filters</h3>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-3 bg-success playerElement" *ngFor="let filter of typeFilters; let i = index;">
-						<button class="close" style="margin-top: 7px" (click)="removeTypeFilter(i)">x</button>{{filter}}
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="panel panel-warning infoPanel">
-			<div class="panel-heading" >
-				<h3 class="panel-title">Alignment Filters</h3>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-2 bg-success playerElement" *ngFor="let filter of alignmentFilters; let i = index;">
-						<button class="close" style="margin-top: 7px" (click)="removeAlignmentFilter(i)">x</button>{{filter}}
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="panel panel-danger infoPanel">
-			<div class="panel-heading" >
-				<h3 class="panel-title">CR Filters</h3>
-			</div>
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-3 bg-success playerElement" *ngFor="let filter of crFilters; let i = index;">
-						<button class="close" style="margin-top: 7px" (click)="removeCRFilter(i)">x</button>{{filter}}
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--- MONSTERS -->
-		<div class="row">
-			<ng-container *ngFor="let monster of pagedMonsters.getElements()">
-				<div class="col-md-7">
-					<stat-block>
-						<creature-heading>
-							<h1>{{monster.Name}}</h1> 
-							<h2>{{monster.Type}}, {{monster.Align}}</h2>
-						</creature-heading>
-						
-						<top-stats>
-							<property-line>
-								<h4>Armor Class</h4>
-								<p> {{monster.AC}} </p>
-							</property-line>
-							
-							<property-line>
-								<h4>Hit Points</h4>
-								<p>{{monster.HP}}</p>
-							</property-line>
-							
-							<property-line>
-								<h4>Speed</h4>
-								<p>{{monster.Speed}}</p>
-							</property-line>
-							
-						   <abilities-block [attr.data-str]="monster.Strength"
-							[attr.data-dex]="monster.Dexterity"
-							[attr.data-con]="monster.Constitution"
-							[attr.data-int]="monster.Intelligence"
-							[attr.data-wis]="monster.Wisdom"
-							[attr.data-cha]="monster.Charisma"></abilities-block>
-							
-							<property-line *ngIf="monster.Immunities.length	> 0">
-								<h4>Immunities</h4>
-								<p>
-									{{monster.Immunities.join()}}
-								</p>
-							</property-line>
-							
-							<property-line *ngIf="monster.Resistances.length > 0">
-								<h4>Resistances</h4>
-								<p>
-									{{monster.Resistances.join()}}
-								</p>
-							</property-line>
-							
-							<property-line *ngIf="monster.Vulnerabilities.length > 0">
-								<h4>Vulnerabilities</h4>
-								<p>
-									{{monster.Vulnerabilities.join()}}
-								</p>
-							</property-line>
-							
-							<property-line *ngIf="monster.Senses.length	> 0">
-								<h4>Senses</h4>
-								<p>
-									{{monster.Senses.join()}}
-								</p>
-							</property-line>
-							
-							<property-line *ngIf="monster.Languages.length > 0">
-								<h4>Languages</h4>
-								<p>
-									{{monster.Languages.join()}}
-								</p>
-							</property-line>
-							
-							<property-line>
-								<h4>Challenge</h4>
-								<p>
-									{{monster.CR}} ({{getXP(monster.CR)}})
-								</p>
-							</property-line>
-						</top-stats>
-						
-						<property-block *ngFor="let trait of monster.Traits">
-							<h4>{{trait.Name}}.</h4>
-							<p *ngFor="let description of trait.Description">
-								{{description}}
-							</p>
-						</property-block>
-						
-						<h3> Actions </h3>
-						
-						<property-block *ngFor="let action of monster.Actions">
-							<h4>{{action.Name}}.</h4>
-							<p *ngFor="let description of action.Description">
-								{{description}}
-							</p>
-						</property-block>
-						
-						<h3 *ngIf="monster.Reactions.length > 0"> Reactions </h3>
-						
-						<property-block *ngFor="let reaction of monster.Reactions">
-							<h4>{{reaction.Name}}.</h4>
-							<p *ngFor="let description of reaction.Description">
-								{{description}}
-							</p>
-						</property-block>
-						
-						<h3 *ngIf="monster.Legendaries.length > 0"> Legendaries </h3>
-						
-						<property-block *ngFor="let legendary of monster.Legendaries">
-							<h4>{{legendary.Name}}.</h4>
-							<p *ngFor="let description of legendary.Description">
-								{{description}}
-							</p>
-						</property-block>
-					</stat-block>
-				</div>
-				<div class="col-md-1">
-					<button class="btn btn-primary" (click)="addEncounterMonster(monster)"> ADD MONSTER </button>
-				</div>
-			</ng-container>
+		<b>CR: {{monster.CR}}</b>
+	</div>
+	
+	<div class="item">
+		<div class="ui labeled button" tabindex="0">
+			<div class="ui basic teal button">Total XP</div>
+			<a class="ui inverted teal label">{{xp}}</a>
 		</div>
 	</div>
-	<div class="panel panel-primary"
-		*ngIf="encounterMonsters.length() > 0" 
-		style="position: fixed; top: 10%; left: 78%; width: 20%; height:400px">
-		<div class="panel-heading" >
-			<h3 class="panel-title">Encounter</h3>
-		</div>
-			<div class="panel-content" style="height: 272px;overflow-y:auto">
-				<div class="playerElement" *ngFor="let monster of encounterMonsters.getMonsters(); let i = index;" style='background-color: #2f542f'>
-					<button class="close" style="margin-top: 7px" (click)="removeEncounterMonster(i)">x</button>
-					<span style="float: left"> {{monster.Name}} </span>
-					<label> CR: {{monster.CR}} </label>
+	<div class="item">
+		<button class="ui inverted green button" routerLink="/monsters" (click)="internalJQuery('.ui.sidebar').sidebar('hide')"> Go To Details </button>
+	</div>
+</div>
+<div class="ui stackable equal width grid">
+	<div class="column">
+		<div class="ui buttons">
+			<button class="ui inverted button" type="button"> Add Type Filter </button>
+			<div class="ui inverted floating dropdown icon button" tabindex="0">
+				<i class="dropdown icon"></i>
+				<div class="menu transition hidden" tabindex="-1">
+					<ng-container *ngFor="let type of types">
+						<div class="item" (click)="addTypeFilter(type)">{{type}}</div>
+					</ng-container>
 				</div>
 			</div>
-		<div class="panel-footer">
-			Total XP: {{xp}}
-			<button class="btn" style="background-color: #2f542f" routerLink="/monsters"> Go To Details </button>
 		</div>
+	</div>
+	<div class="column">
+		<div class="ui buttons">
+			<button class="ui inverted button" type="button"> Add Alignment Filter </button>
+			<div class="ui inverted floating dropdown icon button" tabindex="0">
+				<i class="dropdown icon"></i>
+				<div class="menu transition hidden" tabindex="-1">
+					<ng-container *ngFor="let alignment of alignments">
+						<div class="item" (click)="addAlignmentFilter(alignment)">{{alignment}}</div>
+					</ng-container>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<div class="ui buttons">
+			<button class="ui inverted button" type="button"> Add CR Filter </button>
+			<div class="ui inverted floating dropdown icon button" tabindex="0">
+				<i class="dropdown icon"></i>
+				<div class="menu transition hidden" tabindex="-1">
+					<ng-container *ngFor="let cr of crs">
+						<div class="item" (click)="addCRFilter(cr)">{{cr}}</div>
+					</ng-container>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<div class="ui labeled input">
+			<a class="ui label">
+				Monster Name
+			</a>
+			<input class="text" #monsterName (keyup)="setNameFilter(monsterName.value)" placeholder="" aria-describedby="basic-addon1" /> 
+		</div>
+	</div>
+</div>
+<div class="ui container">
+	<div class="ui grid">
+		<div class="sixteen wide column">
+			<h3 class="ui centered dividing header" style="color: white;"> Type Filters </h3>
+		</div>
+		<div class="four wide column" *ngFor="let filter of typeFilters; let i = index;">
+			<div class="ui labeled button" tabindex="0">
+				<div class="ui basic teal button" (click)="removeTypeFilter(i)">x</div>
+				<a class="ui inverted teal label">{{filter}}</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="ui grid">
+		<div class="sixteen wide column">
+			<h3 class="ui centered dividing header" style="color: white;"> Alignment Filters </h3>
+		</div>
+		<div class="four wide column" *ngFor="let filter of alignmentFilters; let i = index;">
+			<div class="ui labeled button" tabindex="0">
+				<div class="ui basic orange button" (click)="removeAlignmentFilter(i)">x</div>
+				<a class="ui inverted orange label">{{filter}}</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="ui grid">
+		<div class="sixteen wide column">
+			<h3 class="ui centered dividing header" style="color: white;"> CR Filters </h3>
+		</div>
+		<div class="four wide column" *ngFor="let filter of crFilters; let i = index;">
+			<div class="ui labeled button" tabindex="0">
+				<div class="ui basic olive button" (click)="removeCRFilter(i)">x</div>
+				<a class="ui inverted olive label">{{filter}}</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="ui grid">
+		<ng-container *ngFor="let monster of pagedMonsters.getElements()">
+			<div class="row">
+				<stat-block>
+					<creature-heading>
+						<h1>{{monster.Name}}</h1> 
+						<h2>{{monster.Type}}, {{monster.Align}}</h2>
+					</creature-heading>
+					
+					<top-stats>
+						<property-line>
+							<h4>Armor Class</h4>
+							<p> {{monster.AC}} </p>
+						</property-line>
+						
+						<property-line>
+							<h4>Hit Points</h4>
+							<p>{{monster.HP}}</p>
+						</property-line>
+						
+						<property-line>
+							<h4>Speed</h4>
+							<p>{{monster.Speed}}</p>
+						</property-line>
+						
+					   <abilities-block [attr.data-str]="monster.Strength"
+						[attr.data-dex]="monster.Dexterity"
+						[attr.data-con]="monster.Constitution"
+						[attr.data-int]="monster.Intelligence"
+						[attr.data-wis]="monster.Wisdom"
+						[attr.data-cha]="monster.Charisma"></abilities-block>
+						
+						<property-line *ngIf="monster.Immunities.length	> 0">
+							<h4>Immunities</h4>
+							<p>
+								{{monster.Immunities.join()}}
+							</p>
+						</property-line>
+						
+						<property-line *ngIf="monster.Resistances.length > 0">
+							<h4>Resistances</h4>
+							<p>
+								{{monster.Resistances.join()}}
+							</p>
+						</property-line>
+						
+						<property-line *ngIf="monster.Vulnerabilities.length > 0">
+							<h4>Vulnerabilities</h4>
+							<p>
+								{{monster.Vulnerabilities.join()}}
+							</p>
+						</property-line>
+						
+						<property-line *ngIf="monster.Senses.length	> 0">
+							<h4>Senses</h4>
+							<p>
+								{{monster.Senses.join()}}
+							</p>
+						</property-line>
+						
+						<property-line *ngIf="monster.Languages.length > 0">
+							<h4>Languages</h4>
+							<p>
+								{{monster.Languages.join()}}
+							</p>
+						</property-line>
+						
+						<property-line>
+							<h4>Challenge</h4>
+							<p>
+								{{monster.CR}} ({{getXP(monster.CR)}})
+							</p>
+						</property-line>
+					</top-stats>
+					
+					<property-block *ngFor="let trait of monster.Traits">
+						<h4>{{trait.Name}}.</h4>
+						<p *ngFor="let description of trait.Description">
+							{{description}}
+						</p>
+					</property-block>
+					
+					<h3> Actions </h3>
+					
+					<property-block *ngFor="let action of monster.Actions">
+						<h4>{{action.Name}}.</h4>
+						<p *ngFor="let description of action.Description">
+							{{description}}
+						</p>
+					</property-block>
+					
+					<h3 *ngIf="monster.Reactions.length > 0"> Reactions </h3>
+					
+					<property-block *ngFor="let reaction of monster.Reactions">
+						<h4>{{reaction.Name}}.</h4>
+						<p *ngFor="let description of reaction.Description">
+							{{description}}
+						</p>
+					</property-block>
+					
+					<h3 *ngIf="monster.Legendaries.length > 0"> Legendaries </h3>
+					
+					<property-block *ngFor="let legendary of monster.Legendaries">
+						<h4>{{legendary.Name}}.</h4>
+						<p *ngFor="let description of legendary.Description">
+							{{description}}
+						</p>
+					</property-block>
+				</stat-block>
+			</div>
+			<button class="ui inverted green button" (click)="addEncounterMonster(monster)"> ADD MONSTER </button>
+		</ng-container>
 	</div>
 </div>
 <paging [pagedList]="pagedMonsters"> </paging>

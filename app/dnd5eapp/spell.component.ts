@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { SpellService } from './spell.service';
@@ -14,14 +14,14 @@ declare var jQuery: any;
 	styleUrls: ["spell.component.css"]
 })
 
-export class SpellsComponent implements OnInit{
+export class SpellsComponent implements OnInit, AfterViewInit{
 	classes: string[] = [];
 	levels: string[] = [];
 	
-	classFilter: string = "all";
-	levelFilter: string = "all";
+	classFilter: string = "All";
+	levelFilter: string = "All";
 	spellFilter: string = null;
-	pagedSpells: PagedList<Spell> = new PagedList<Spell>()
+	pagedSpells: PagedList<Spell> = new PagedList<Spell>();
 	
 	constructor(private spellService: SpellService){}
 	
@@ -33,10 +33,14 @@ export class SpellsComponent implements OnInit{
 		
 		this.spellService.getClasses().subscribe(classes => {
 			this.classes = classes;
-			jQuery('.ui.dropdown').dropdown();
 		}, err => console.log(err));
 		this.spellService.getLevels().then((levels) => {
 			this.levels = levels;
+		});
+	}
+	
+	ngAfterViewInit(): void{
+		jQuery( document ).ready(function() {
 			jQuery('.ui.dropdown').dropdown();
 		});
 	}
@@ -61,9 +65,9 @@ export class SpellsComponent implements OnInit{
 	}
 	
 	private filterFunc(spell: Spell): boolean {
-		return (this.classFilter === "all" || spell.classes.indexOf(this.classFilter) > -1)
+		return (this.classFilter === "All" || spell.classes.indexOf(this.classFilter) > -1)
 				&&
-			(this.levelFilter === "all" || spell.level.indexOf(this.levelFilter) > -1)
+			(this.levelFilter === "All" || spell.level.indexOf(this.levelFilter) > -1)
 				&&
 			(this.spellFilter === null || this.spellFilter === "" || spell.name.toLowerCase().indexOf(this.spellFilter.toLowerCase()) > -1);
 	}

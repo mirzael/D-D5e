@@ -55,6 +55,7 @@ export class EncounterComponent implements OnInit{
 			return;
 		}
 		
+		this.encounterMonsterService.clearMonsters();
 		this.encounterMonsterService.addMonsters(this.encounterService.generateEncounter(filteredMonsters));
 		this.recalcXP();
 		

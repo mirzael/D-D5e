@@ -1,3 +1,147 @@
+<div class="ui inverted stackable tabular menu">
+	<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index">
+		<a class="item"  [ngClass]="{'active': firstTab}"  [attr.data-tab]="i" >
+			{{monster.Name}}
+		</a>
+	</ng-container>
+</div>
+<div class="ui divider"></div>
+	<div class="ui labeled button" tabindex="0">
+		<div class="ui basic blue button">Total XP</div>
+		<a class="ui inverted blue label">
+			{{encounterMonsterService.calculateXP()}}
+		</a>
+	</div>
+<div class="ui divider"></div>
+
+<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index">
+	<div class="ui tab" [ngClass]="{'active': firstTab}" [attr.data-tab]="i">
+		<div class="ui grid">
+			<div class="row">
+				<button class="ui inverted green button" (click)="monster.generateHP()">
+					Generate HP
+				</button>
+			</div>
+			<div class="row">
+				<div class="ui labeled input">
+					<a class="ui label">
+						Current HP
+					</a>									<input #hp
+					class="text" [attr.aria-describedby]="i" onkeypress='return event.charCode >= 48 && event.charCode <= 57' 
+					[value]="monster.CurrentHP"
+					(keyup)="monster.CurrentHP=hp.value; checkHP(monster);" />
+				</div>
+			</div>
+		</div>
+		<stat-block>
+			<creature-heading>
+				<h1>{{monster.Name}}</h1>
+				<h2>{{monster.Type}}, {{monster.Align}}</h2>
+			</creature-heading>
+			
+			<top-stats>
+				<property-line>
+					<h4>Armor Class</h4>
+					<p> {{monster.AC}} </p>
+				</property-line>
+				
+				<property-line>
+					<h4>Hit Points</h4>
+					<p>{{monster.HP}}</p>
+				</property-line>
+				
+				<property-line>
+					<h4>Speed</h4>
+					<p>{{monster.Speed}}</p>
+				</property-line>
+				
+			   <abilities-block [attr.data-str]="monster.Strength"
+				[attr.data-dex]="monster.Dexterity"
+				[attr.data-con]="monster.Constitution"
+				[attr.data-int]="monster.Intelligence"
+				[attr.data-wis]="monster.Wisdom"
+				[attr.data-cha]="monster.Charisma"></abilities-block>
+				
+				<property-line *ngIf="monster.Immunities.length	> 0">
+					<h4>Immunities</h4>
+					<p>
+						{{monster.Immunities.join()}}
+					</p>
+				</property-line>
+				
+				<property-line *ngIf="monster.Resistances.length > 0">
+					<h4>Resistances</h4>
+					<p>
+						{{monster.Resistances.join()}}
+					</p>
+				</property-line>
+				
+				<property-line *ngIf="monster.Vulnerabilities.length > 0">
+					<h4>Vulnerabilities</h4>
+					<p>
+						{{monster.Vulnerabilities.join()}}
+					</p>
+				</property-line>
+				
+				<property-line *ngIf="monster.Senses.length	> 0">
+					<h4>Senses</h4>
+					<p>
+						{{monster.Senses.join()}}
+					</p>
+				</property-line>
+				
+				<property-line *ngIf="monster.Languages.length > 0">
+					<h4>Languages</h4>
+					<p>
+						{{monster.Languages.join()}}
+					</p>
+				</property-line>
+				
+				<property-line>
+					<h4>Challenge</h4>
+					<p>
+						{{monster.CR}} ({{encounterMonsterService.getXP(i)}})
+					</p>
+				</property-line>
+			</top-stats>
+			
+			<property-block *ngFor="let trait of monster.Traits">
+				<h4>{{trait.Name}}.</h4>
+				<p>
+					{{trait.Description.join()}}
+				</p>
+			</property-block>
+			
+			<h3> Actions </h3>
+			
+			<property-block *ngFor="let action of monster.Actions">
+				<h4>{{action.Name}}.</h4>
+				<p>
+					{{action.Description.join()}}
+				</p>
+			</property-block>
+			
+			<h3 *ngIf="monster.Reactions.length > 0"> Reactions </h3>
+			
+			<property-block *ngFor="let reaction of monster.Reactions">
+				<h4>{{reaction.Name}}.</h4>
+				<p>
+					{{reaction.Description.join()}}
+				</p>
+			</property-block>
+			
+			<h3 *ngIf="monster.Legendaries.length > 0"> Legendaries </h3>
+			
+			<property-block *ngFor="let legendary of monster.Legendaries">
+				<h4>{{legendary.Name}}.</h4>
+				<p>
+					{{legendary.Description.join()}}
+				</p>
+			</property-block>
+		</stat-block>
+	</div>
+</ng-container>
+<!--
 <div class="container">
 	<ul class="nav nav-pills" role="tablist">
 		<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index">
@@ -131,298 +275,8 @@
 						</p>
 					</property-block>
 				</stat-block>
-				<!--
-				<div class="container">
-					<div class="panel monsterContainer" [ngClass]="{'panel-primary': monster.CurrentHP === null || monster.CurrentHP > 0, 'panel-danger': monster.CurrentHP == 0, 'monsterDead': monster.CurrentHP == 0}">
-						<div class="panel-heading" >
-							<h3 class="panel-title">{{monster.Name}}</h3>
-						</div>
 
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									CR
-								</div>
-								<div class="col-md-3">
-									{{monster.CR}}
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Size
-								</div>
-								<div class="col-md-3">
-									{{monster.Size}}
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Type
-								</div>
-								<div class="col-md-3">
-									{{monster.Type}}
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Alignment
-								</div>
-								<div class="col-md-3">
-									{{monster.Align}}
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									HP
-								</div>
-								<div class="col-md-3">
-									{{monster.HP}}
-								</div>
-								<div class="input-group col-md-5">
-									<span class="input-group-addon" id="basic-addon1">Current</span>
-									<input class="form-control" #currentHP (keyup)="monster.CurrentHP = +currentHP.value;" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="{{monster.HP}}" aria-describedby="basic-addon1" /> 
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									AC
-								</div>
-								<div class="col-md-3">
-									{{monster.AC}}
-								</div>
-							</div>
-						</div>
-						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Senses.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow">
-								<div class="col-md-2">
-									Senses
-								</div>
-								<div class="col-md-3">
-									<div *ngFor="let sense of monster.Senses">
-										{{sense}}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2 attributes"> 
-									Attributes
-								</div>
-								<div class="col-md-3 attributesDef" >
-									<div [ngClass]="{'text-success': monster.Strength > 15, 'text-muted': monster.Strength < 10}"> 
-										STR: {{ monster.Strength }} 
-									</div>
-									<div [ngClass]="{'text-success': monster.Dexterity > 15, 'text-muted': monster.Dexterity < 10}"> 
-										DEX: {{ monster.Dexterity }} 
-									</div>
-									<div [ngClass]="{'text-success': monster.Wisdom > 15, 'text-muted': monster.Wisdom < 10}"> 
-										WIS: {{ monster.Wisdom }} 
-									</div>
-									<div [ngClass]="{'text-success': monster.Intelligence > 15, 'text-muted': monster.Intelligence < 10}"> 
-										INT: {{ monster.Intelligence }} 
-									</div>
-									<div [ngClass]="{'text-success': monster.Charisma > 15, 'text-muted': monster.Charisma < 10}"> 
-										CHA: {{ monster.Charisma }} 
-									</div>
-									<div [ngClass]="{'text-success': monster.Constitution > 15, 'text-muted': monster.Constitution < 10}"> 
-										CON: {{ monster.Constitution }} 
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Bonuses.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Skill Bonuses
-								</div>
-								<div class="col-md-3">
-									<div *ngFor="let bonus of monster.Bonuses">
-										{{bonus}}
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="panel panel-success monsterHeader"  *ngIf="monster.Saves.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Save Bonuses
-								</div>
-								<div class="col-md-3">
-									<div *ngFor="let save of monster.Saves">
-										{{save}}
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="panel panel-success monsterHeader"  *ngIf="monster.Resistances.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Resistances
-								</div>
-								<div class="col-md-4">
-									<div *ngFor="let resistance of monster.Resistances">
-										{{resistance}}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Immunities.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Immunities
-								</div>
-								<div class="col-md-4">
-									<div *ngFor="let immunity of monster.Immunities">
-										{{immunity}}
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Vulnerabilities.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Vulnerabilities
-								</div>
-								<div class="col-md-4">
-									<div *ngFor="let vulnerable of monster.Vulnerabilities">
-										{{vulnerable}}
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="panel panel-success monsterHeader" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Speed
-								</div>
-								<div class="col-md-3">
-									{{monster.Speed}}
-								</div>
-							</div>
-						</div>
-						
-						<div class="panel panel-success monsterHeader" *ngIf="monster.Spells.length > 0" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="col-md-2">
-									Spells
-								</div>
-								<div class="col-md-4">
-									<div *ngFor="let spell of monster.Spells">
-										{{spell}}
-									</div>
-								</div>
-							</div>
-						</div>
-						
-
-						<span class="monsterListDescription" *ngIf="monster.Traits.length > 0">
-							Traits
-						</span>
-
-						<div class="panel panel-success monsterHeader" *ngFor="let trait of monster.Traits" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="monsterRow"> {{trait.Name}} </div>
-								<div class="monsterRow"> 
-									<span style="display: inline-block" *ngFor="let description of trait.Description">
-										{{description}}
-										<br/>
-									</span>
-								</div>
-							</div>
-						</div>
-
-
-						<span  class="monsterListDescription" *ngIf="monster.Actions.length > 0">
-							Actions
-						</span>
-
-						<div class="panel panel-success monsterHeader" *ngFor="let action of monster.Actions" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="monsterRow"> {{action.Name}} </div>
-								<div class="monsterRow" *ngFor="let attack of action.Attacks">
-									<label *ngIf="action.Attacks.length > 1">
-									{{attack.Name}}
-									</label>
-									<br/>
-									Bonus: +{{attack.ToHitBonus}}
-									<br/>
-									Damage: {{attack.Damage}}
-								</div>
-								<div class="monsterRow"> 
-									<span style="display: inline-block" *ngFor="let description of action.Description">
-										{{description}}
-										<br/>
-									</span>
-								</div>
-							</div>
-						</div>
-						
-						<span  class="monsterListDescription" *ngIf="monster.Legendaries.length > 0">
-							Legendaries
-						</span>
-
-						<div class="panel panel-success monsterHeader" *ngFor="let legendary of monster.Legendaries" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="monsterRow"> {{legendary.Name}} </div>
-								<div class="monsterRow" *ngFor="let attack of legendary.Attacks">
-									{{attack.Name}}
-									<br/>
-									Bonus: +{{attack.ToHitBonus}}
-									<br/>
-									Damage: {{attack.Damage}}
-								</div>
-								<div class="monsterRow"> 
-									<span style="display: inline-block" *ngFor="let description of legendary.Description">
-										{{description}}
-										<br/>
-									</span>
-								</div>
-							</div>
-						</div>
-						
-						<span class="monsterListDescription" *ngIf="monster.Reactions.length > 0">
-							Reactions
-						</span>
-
-						<div class="panel panel-success monsterHeader" *ngFor="let reaction of monster.Reactions" [ngClass]="{'monsterDead': monster.CurrentHP == 0}">
-							<div class="panel-dark monsterRow" >
-								<div class="monsterRow"> {{reaction.Name}} </div>
-								<div class="monsterRow"> 
-									<span style="display: inline-block" *ngFor="let description of reaction.Description">
-										{{description}}
-										<br/>
-									</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				-->
 			</div>
 		</ng-container>
 	</div>
-</div>
+</div> -->

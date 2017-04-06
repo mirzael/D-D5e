@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Monster } from '../monster/monster';
@@ -7,6 +7,8 @@ import { EncounterMonsterService } from './encounterMonsters.service';
 import { crMap, encounterMultipliers} from './encounterConstants';
 import { PagedList } from '../../paging/pagingList';
 
+declare var jQuery: any;
+
 @Component ({
 	selector: 'manual-encounter',
 	moduleId: module.id,
@@ -14,7 +16,7 @@ import { PagedList } from '../../paging/pagingList';
 	styleUrls: ["manualEncounter.component.css"]
 })
 
-export class ManualEncounterComponent implements OnInit {
+export class ManualEncounterComponent implements OnInit, AfterViewInit {
 	types: string[] = [];
 	alignments: string[] = [];
 	crs: number[] = [];
@@ -23,7 +25,8 @@ export class ManualEncounterComponent implements OnInit {
 	alignmentFilters: string[] = [];
 	nameFilter: string = "";
 	pagedMonsters: PagedList<Monster> = new PagedList<Monster>();
-	xp: number;
+	internalJQuery: any = jQuery;
+	xp: number = 0;
 	constructor(private monsterService: MonsterService, private router: Router, private encounterMonsters: EncounterMonsterService ){}	
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
@@ -34,6 +37,22 @@ export class ManualEncounterComponent implements OnInit {
 		this.monsterService.getTypes().subscribe(types => {this.types = types; this.types.sort();});
 		this.monsterService.getAlignments().then(alignments => {this.alignments = alignments;});
 		this.monsterService.getCRs().then(crs => {this.crs = crs;});
+	}
+	
+	ngAfterViewInit(){
+		jQuery( document ).ready(function() {
+			jQuery('.ui.sidebar').sidebar('attach events', '.launch.button');
+			
+			jQuery('.ui.dropdown').dropdown();
+			
+			jQuery('.ui.sidebar').empty();
+			jQuery('.ui.sidebar').append( jQuery('.ui.monsters'));
+		});
+	}
+	
+	private updateSidebar(): void{
+		jQuery('.ui.sidebar').empty();
+		jQuery('.ui.sidebar').append( jQuery('.ui.monsters'));
 	}
 	
 	private setNameFilter(name: string){

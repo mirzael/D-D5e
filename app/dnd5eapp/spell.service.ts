@@ -12,8 +12,9 @@ export class SpellService{
 	
 	processed : boolean = false;
 	spells : Spell[] = [];
-	classes: string[] = [];
+	classes: string[] = ["All"];
 	levels: string[] = [
+		"All",
 		"Cantrip",
 		"1st-level",
 		"2nd-level",

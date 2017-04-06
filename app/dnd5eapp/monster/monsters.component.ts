@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 import { SimplePageScroll } from 'ng2-simple-page-scroll';
@@ -9,6 +9,8 @@ import { EncounterGeneratorService } from '../encounter/encounterGenerator.servi
 import { EncounterMonsterService } from '../encounter/encounterMonsters.service';
 import { crMap, encounterMultipliers } from '../encounter/encounterConstants';
 
+declare var jQuery: any;
+
 @Component ({
 	selector: 'monsters',
 	moduleId: module.id,
@@ -16,7 +18,7 @@ import { crMap, encounterMultipliers } from '../encounter/encounterConstants';
 	styleUrls: ["monsters.component.css"]
 })
 
-export class MonstersComponent implements OnInit{
+export class MonstersComponent implements OnInit, AfterViewInit{
 	constructor(private monsterService: MonsterService, private route: ActivatedRoute, private location: Location, private encounterService: EncounterGeneratorService, private encounterMonsterService: EncounterMonsterService){}
 	
 	errorMessage: any;
@@ -40,5 +42,11 @@ export class MonstersComponent implements OnInit{
 		for(var monster of this.encounterMonsterService.getMonsters()){
 			monster.generateHP();
 		}
+	}
+	
+	ngAfterViewInit(){
+		jQuery( document ).ready(function() {
+			jQuery('.tabular.menu .item').tab();
+		});
 	}
 }
