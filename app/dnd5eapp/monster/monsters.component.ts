@@ -7,7 +7,7 @@ import { Monster } from './monster';
 import { MonsterService } from './monster.service';
 import { EncounterGeneratorService } from '../encounter/encounterGenerator.service';
 import { EncounterMonsterService } from '../encounter/encounterMonsters.service';
-import { crMap, encounterMultipliers } from '../encounter/encounterConstants';
+import { crMap, encounterMultipliers, Difficulty } from '../encounter/encounterConstants';
 
 declare var jQuery: any;
 
@@ -22,6 +22,7 @@ export class MonstersComponent implements OnInit, AfterViewInit{
 	constructor(private monsterService: MonsterService, private route: ActivatedRoute, private location: Location, private encounterService: EncounterGeneratorService, private encounterMonsterService: EncounterMonsterService){}
 	
 	errorMessage: any;
+	difficulty: Difficulty = Difficulty;
 	
 	private checkHP(monster: Monster){
 		if(monster.CurrentHP == 0 && monster.Name.indexOf("(DEAD)") === -1){

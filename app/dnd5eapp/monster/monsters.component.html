@@ -7,8 +7,10 @@
 </div>
 <div class="ui divider"></div>
 	<div class="ui labeled button" tabindex="0">
-		<div class="ui basic blue button">Total XP</div>
-		<a class="ui inverted blue label">
+		<div class="ui basic button" [ngClass]="{'blue': encounterMonsterService.getDifficulty() == difficulty.Easy, 'green': encounterMonsterService.getDifficulty() == difficulty.Medium, 'orange': encounterMonsterService.getDifficulty() == difficulty.Hard, 'red':
+		encounterMonsterService.getDifficulty() == difficulty.Deadly}">Total XP</div>
+		<a class="ui inverted label" [ngClass]="{'blue': encounterMonsterService.getDifficulty() == difficulty.Easy, 'green': encounterMonsterService.getDifficulty() == difficulty.Medium, 'orange': encounterMonsterService.getDifficulty() == difficulty.Hard, 'red':
+		encounterMonsterService.getDifficulty() == difficulty.Deadly}">
 			{{encounterMonsterService.calculateXP()}}
 		</a>
 	</div>

@@ -54,5 +54,4 @@ export class PlayerService implements OnInit{
 		
 		return xpThreshold;
 	}
-
 }

@@ -1,10 +1,13 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Monster } from '../monster/monster'
-import { crMap, encounterMultipliers } from './encounterConstants';
+import { Monster } from '../monster/monster';
+import { PlayerService } from '../players/player.service'
+import { crMap, encounterMultipliers, Difficulty } from './encounterConstants';
 
 @Injectable()
 export class EncounterMonsterService implements OnInit{
 	monsters: Monster[] = [];
+	
+	public constructor(private playerService: PlayerService){}
 	
 	ngOnInit(): void {
 	}
@@ -52,5 +55,19 @@ export class EncounterMonsterService implements OnInit{
 
 		console.log(this.monsters);
 		return unModXP * multiplier;
+	}
+	
+	public getDifficulty(): Difficulty {
+		let encounterXP = this.calculateXP();
+		
+		if(encounterXP <= this.playerService.generateXPThreshold(Difficulty.Easy)){
+			return Difficulty.Easy;
+		}else if(encounterXP <= this.playerService.generateXPThreshold(Difficulty.Medium)){
+			return Difficulty.Medium;
+		}else if(encounterXP <= this.playerService.generateXPThreshold(Difficulty.Hard)){
+			return Difficulty.Hard;
+		}else{
+			return Difficulty.Deadly;
+		}
 	}
 }
