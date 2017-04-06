@@ -27,7 +27,7 @@ To Run:
 
 [jQuery](https://jquery.com/)
 
-[Bootstrap 3](http://getbootstrap.com/)
+[Semantic UI](https://semantic-ui.com/)
 
 #### Third party libraries used
 
