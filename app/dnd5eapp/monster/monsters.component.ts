@@ -22,7 +22,7 @@ export class MonstersComponent implements OnInit, AfterViewInit{
 	constructor(private monsterService: MonsterService, private route: ActivatedRoute, private location: Location, private encounterService: EncounterGeneratorService, private encounterMonsterService: EncounterMonsterService){}
 	
 	errorMessage: any;
-	difficulty: Difficulty = Difficulty;
+	difficulty: Difficulty;
 	
 	private checkHP(monster: Monster){
 		if(monster.CurrentHP == 0 && monster.Name.indexOf("(DEAD)") === -1){
@@ -43,11 +43,33 @@ export class MonstersComponent implements OnInit, AfterViewInit{
 		for(var monster of this.encounterMonsterService.getMonsters()){
 			monster.generateHP();
 		}
+		
+		this.difficulty = this.encounterMonsterService.getDifficulty();
 	}
 	
 	ngAfterViewInit(){
 		jQuery( document ).ready(function() {
 			jQuery('.tabular.menu .item').tab();
 		});
+	}
+	
+	private isEasyEncounter(): boolean{
+		return this.difficulty === Difficulty.Easy;
+	}
+	
+	private isMediumEncounter(): boolean{
+		return this.difficulty === Difficulty.Medium;
+	}
+	
+	private isHardEncounter(): boolean{
+		return this.difficulty === Difficulty.Hard;
+	}
+	
+	private isDeadlyEncounter(): boolean{
+		return this.difficulty === Difficulty.Deadly;
+	}
+	
+	private getDifficultyString(): string{
+		return Difficulty[this.difficulty]; 
 	}
 }
