@@ -14,269 +14,132 @@
 	</div>
 <div class="ui divider"></div>
 
-<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index">
-	<div class="ui tab" [ngClass]="{'active': firstTab}" [attr.data-tab]="i">
-		<div class="ui grid">
-			<div class="row">
-				<button class="ui inverted green button" (click)="monster.generateHP()">
-					Generate HP
-				</button>
-			</div>
-			<div class="row">
-				<div class="ui labeled input">
-					<a class="ui label">
-						Current HP
-					</a>									<input #hp
-					class="text" [attr.aria-describedby]="i" onkeypress='return event.charCode >= 48 && event.charCode <= 57' 
-					[value]="monster.CurrentHP"
-					(keyup)="monster.CurrentHP=hp.value; checkHP(monster);" />
-				</div>
-			</div>
-		</div>
-		<stat-block>
-			<creature-heading>
-				<h1>{{monster.Name}}</h1>
-				<h2>{{monster.Type}}, {{monster.Align}}</h2>
-			</creature-heading>
-			
-			<top-stats>
-				<property-line>
-					<h4>Armor Class</h4>
-					<p> {{monster.AC}} </p>
-				</property-line>
-				
-				<property-line>
-					<h4>Hit Points</h4>
-					<p>{{monster.HP}}</p>
-				</property-line>
-				
-				<property-line>
-					<h4>Speed</h4>
-					<p>{{monster.Speed}}</p>
-				</property-line>
-				
-			   <abilities-block [attr.data-str]="monster.Strength"
-				[attr.data-dex]="monster.Dexterity"
-				[attr.data-con]="monster.Constitution"
-				[attr.data-int]="monster.Intelligence"
-				[attr.data-wis]="monster.Wisdom"
-				[attr.data-cha]="monster.Charisma"></abilities-block>
-				
-				<property-line *ngIf="monster.Immunities.length	> 0">
-					<h4>Immunities</h4>
-					<p>
-						{{monster.Immunities.join()}}
-					</p>
-				</property-line>
-				
-				<property-line *ngIf="monster.Resistances.length > 0">
-					<h4>Resistances</h4>
-					<p>
-						{{monster.Resistances.join()}}
-					</p>
-				</property-line>
-				
-				<property-line *ngIf="monster.Vulnerabilities.length > 0">
-					<h4>Vulnerabilities</h4>
-					<p>
-						{{monster.Vulnerabilities.join()}}
-					</p>
-				</property-line>
-				
-				<property-line *ngIf="monster.Senses.length	> 0">
-					<h4>Senses</h4>
-					<p>
-						{{monster.Senses.join()}}
-					</p>
-				</property-line>
-				
-				<property-line *ngIf="monster.Languages.length > 0">
-					<h4>Languages</h4>
-					<p>
-						{{monster.Languages.join()}}
-					</p>
-				</property-line>
-				
-				<property-line>
-					<h4>Challenge</h4>
-					<p>
-						{{monster.CR}} ({{encounterMonsterService.getXP(i)}})
-					</p>
-				</property-line>
-			</top-stats>
-			
-			<property-block *ngFor="let trait of monster.Traits">
-				<h4>{{trait.Name}}.</h4>
-				<p>
-					{{trait.Description.join()}}
-				</p>
-			</property-block>
-			
-			<h3> Actions </h3>
-			
-			<property-block *ngFor="let action of monster.Actions">
-				<h4>{{action.Name}}.</h4>
-				<p>
-					{{action.Description.join()}}
-				</p>
-			</property-block>
-			
-			<h3 *ngIf="monster.Reactions.length > 0"> Reactions </h3>
-			
-			<property-block *ngFor="let reaction of monster.Reactions">
-				<h4>{{reaction.Name}}.</h4>
-				<p>
-					{{reaction.Description.join()}}
-				</p>
-			</property-block>
-			
-			<h3 *ngIf="monster.Legendaries.length > 0"> Legendaries </h3>
-			
-			<property-block *ngFor="let legendary of monster.Legendaries">
-				<h4>{{legendary.Name}}.</h4>
-				<p>
-					{{legendary.Description.join()}}
-				</p>
-			</property-block>
-		</stat-block>
-	</div>
-</ng-container>
-<!--
-<div class="container">
-	<ul class="nav nav-pills" role="tablist">
-		<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index">
-			<li role="presentation"  [ngClass]="{'active': firstTab}" >
-				<a simplePageScroll href="#{{i}}" data-toggle="tab">{{monster.Name}}</a>
-			</li>
-		</ng-container>
-	</ul>
-	<div class="bg-success xpDiv" style="padding:10px;">
-		Total XP: {{encounterMonsterService.calculateXP()}}
-	</div>
-	<br />
-	<div class="tab-content">
-		<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index;">
-			<div role="tabpanel" [ngClass]="{'active': firstTab}" class="tab-pane" id="{{i}}">
+<div class="ui container">
+	<ng-container *ngFor="let monster of encounterMonsterService.getMonsters(); let firstTab = first; let i = index">
+		<div class="ui tab" [ngClass]="{'active': firstTab}" [attr.data-tab]="i">
+			<div class="ui grid" style="margin: 10px 0;">
 				<div class="row">
-					<div class="col-md-2">
-						<button class="btn btn-default" (click)="monster.generateHP(); checkHP(monster);"> Generate HP </button>
-					</div>
-					<div class="input-group col-md-3">
-						<span class="input-group-addon" [id]="i">Current HP</span>
-						<input #hp
-							class="form-control" [attr.aria-describedby]="i" onkeypress='return event.charCode >= 48 && event.charCode <= 57' 
-							[value]="monster.CurrentHP"
-							(keyup)="monster.CurrentHP=hp.value; checkHP(monster);" />
+					<button class="ui inverted green button" (click)="monster.generateHP()">
+						Generate HP
+					</button>
+				</div>
+				<div class="row">
+					<div class="ui labeled input">
+						<a class="ui label">
+							Current HP
+						</a>									<input #hp
+						class="text" [attr.aria-describedby]="i" onkeypress='return event.charCode >= 48 && event.charCode <= 57' 
+						[value]="monster.CurrentHP"
+						(keyup)="monster.CurrentHP=hp.value; checkHP(monster);" />
 					</div>
 				</div>
-				<stat-block>
-					<creature-heading>
-						<h1>{{monster.Name}}</h1>
-						<h2>{{monster.Type}}, {{monster.Align}}</h2>
-					</creature-heading>
-					
-					<top-stats>
-						<property-line>
-							<h4>Armor Class</h4>
-							<p> {{monster.AC}} </p>
-						</property-line>
-						
-						<property-line>
-							<h4>Hit Points</h4>
-							<p>{{monster.HP}}</p>
-						</property-line>
-						
-						<property-line>
-							<h4>Speed</h4>
-							<p>{{monster.Speed}}</p>
-						</property-line>
-						
-					   <abilities-block [attr.data-str]="monster.Strength"
-						[attr.data-dex]="monster.Dexterity"
-						[attr.data-con]="monster.Constitution"
-						[attr.data-int]="monster.Intelligence"
-						[attr.data-wis]="monster.Wisdom"
-						[attr.data-cha]="monster.Charisma"></abilities-block>
-						
-						<property-line *ngIf="monster.Immunities.length	> 0">
-							<h4>Immunities</h4>
-							<p>
-								{{monster.Immunities.join()}}
-							</p>
-						</property-line>
-						
-						<property-line *ngIf="monster.Resistances.length > 0">
-							<h4>Resistances</h4>
-							<p>
-								{{monster.Resistances.join()}}
-							</p>
-						</property-line>
-						
-						<property-line *ngIf="monster.Vulnerabilities.length > 0">
-							<h4>Vulnerabilities</h4>
-							<p>
-								{{monster.Vulnerabilities.join()}}
-							</p>
-						</property-line>
-						
-						<property-line *ngIf="monster.Senses.length	> 0">
-							<h4>Senses</h4>
-							<p>
-								{{monster.Senses.join()}}
-							</p>
-						</property-line>
-						
-						<property-line *ngIf="monster.Languages.length > 0">
-							<h4>Languages</h4>
-							<p>
-								{{monster.Languages.join()}}
-							</p>
-						</property-line>
-						
-						<property-line>
-							<h4>Challenge</h4>
-							<p>
-								{{monster.CR}} ({{encounterMonsterService.getXP(i)}})
-							</p>
-						</property-line>
-					</top-stats>
-					
-					<property-block *ngFor="let trait of monster.Traits">
-						<h4>{{trait.Name}}.</h4>
-						<p>
-							{{trait.Description.join()}}
-						</p>
-					</property-block>
-					
-					<h3> Actions </h3>
-					
-					<property-block *ngFor="let action of monster.Actions">
-						<h4>{{action.Name}}.</h4>
-						<p>
-							{{action.Description.join()}}
-						</p>
-					</property-block>
-					
-					<h3 *ngIf="monster.Reactions.length > 0"> Reactions </h3>
-					
-					<property-block *ngFor="let reaction of monster.Reactions">
-						<h4>{{reaction.Name}}.</h4>
-						<p>
-							{{reaction.Description.join()}}
-						</p>
-					</property-block>
-					
-					<h3 *ngIf="monster.Legendaries.length > 0"> Legendaries </h3>
-					
-					<property-block *ngFor="let legendary of monster.Legendaries">
-						<h4>{{legendary.Name}}.</h4>
-						<p>
-							{{legendary.Description.join()}}
-						</p>
-					</property-block>
-				</stat-block>
-
 			</div>
-		</ng-container>
-	</div>
-</div> -->
+			<stat-block>
+				<creature-heading>
+					<h1>{{monster.Name}}</h1>
+					<h2>{{monster.Type}}, {{monster.Align}}</h2>
+				</creature-heading>
+				
+				<top-stats>
+					<property-line>
+						<h4>Armor Class</h4>
+						<p> {{monster.AC}} </p>
+					</property-line>
+					
+					<property-line>
+						<h4>Hit Points</h4>
+						<p>{{monster.HP}}</p>
+					</property-line>
+					
+					<property-line>
+						<h4>Speed</h4>
+						<p>{{monster.Speed}}</p>
+					</property-line>
+					
+				   <abilities-block [attr.data-str]="monster.Strength"
+					[attr.data-dex]="monster.Dexterity"
+					[attr.data-con]="monster.Constitution"
+					[attr.data-int]="monster.Intelligence"
+					[attr.data-wis]="monster.Wisdom"
+					[attr.data-cha]="monster.Charisma"></abilities-block>
+					
+					<property-line *ngIf="monster.Immunities.length	> 0">
+						<h4>Immunities</h4>
+						<p>
+							{{monster.Immunities.join()}}
+						</p>
+					</property-line>
+					
+					<property-line *ngIf="monster.Resistances.length > 0">
+						<h4>Resistances</h4>
+						<p>
+							{{monster.Resistances.join()}}
+						</p>
+					</property-line>
+					
+					<property-line *ngIf="monster.Vulnerabilities.length > 0">
+						<h4>Vulnerabilities</h4>
+						<p>
+							{{monster.Vulnerabilities.join()}}
+						</p>
+					</property-line>
+					
+					<property-line *ngIf="monster.Senses.length	> 0">
+						<h4>Senses</h4>
+						<p>
+							{{monster.Senses.join()}}
+						</p>
+					</property-line>
+					
+					<property-line *ngIf="monster.Languages.length > 0">
+						<h4>Languages</h4>
+						<p>
+							{{monster.Languages.join()}}
+						</p>
+					</property-line>
+					
+					<property-line>
+						<h4>Challenge</h4>
+						<p>
+							{{monster.CR}} ({{encounterMonsterService.getXP(i)}})
+						</p>
+					</property-line>
+				</top-stats>
+				
+				<property-block *ngFor="let trait of monster.Traits">
+					<h4>{{trait.Name}}.</h4>
+					<p>
+						{{trait.Description.join()}}
+					</p>
+				</property-block>
+				
+				<h3> Actions </h3>
+				
+				<property-block *ngFor="let action of monster.Actions">
+					<h4>{{action.Name}}.</h4>
+					<p>
+						{{action.Description.join()}}
+					</p>
+				</property-block>
+				
+				<h3 *ngIf="monster.Reactions.length > 0"> Reactions </h3>
+				
+				<property-block *ngFor="let reaction of monster.Reactions">
+					<h4>{{reaction.Name}}.</h4>
+					<p>
+						{{reaction.Description.join()}}
+					</p>
+				</property-block>
+				
+				<h3 *ngIf="monster.Legendaries.length > 0"> Legendaries </h3>
+				
+				<property-block *ngFor="let legendary of monster.Legendaries">
+					<h4>{{legendary.Name}}.</h4>
+					<p>
+						{{legendary.Description.join()}}
+					</p>
+				</property-block>
+			</stat-block>
+		</div>
+	</ng-container>
+</div>

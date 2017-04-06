@@ -11,7 +11,9 @@ import { Component } from '@angular/core';
 				<a class="item" routerLink="/monsters" routerLinkActive="active"> Encounter </a>
 			</div>
 		
-			<h1>D&D 5e Encounter Generator</h1>
+			<div class="ui centered header">
+				<h1>D&D 5e Encounter Generator</h1>
+			</div>
 			<div class="ui container">
 				<router-outlet></router-outlet>
 			</div>
