@@ -30,8 +30,18 @@ export class EncounterComponent implements OnInit{
 	constructor(private monsterService: MonsterService, private router: Router, private encounterService: EncounterGeneratorService, private playerService: PlayerService, private encounterMonsterService: EncounterMonsterService){}
 
 	private generateEncounter(){	
+		let messageBox = jQuery('.ui.messageBox');
+		messageBox.addClass('hidden');
+		
 		if(this.playerService.length() <= 0){
-			console.error("Cannot generate encounter with no players. Please add at least one player.");
+			messageBox.empty();
+			messageBox.append('<i class="icon close">').children('i').click(function(){
+				jQuery(this).closest('.message').transition('fade');
+			});
+			messageBox.append('<div class="header">').children('div').text('Cannot generate encounter with no players. Please add at least one player.');
+			
+			messageBox.removeClass('warning').removeClass('hidden').addClass('negative');
+			
 			return;
 		}
 		
@@ -51,15 +61,20 @@ export class EncounterComponent implements OnInit{
 					(this.alignmentFilters.some(align => align.indexOf("lawful") === -1) && monster.Align === "any non-lawful alignment")));
 		
 		if(filteredMonsters.length === 0){
-			console.error("There are no monsters of types: " + this.typeFilters + " that match the filter and players that you have selected. " );
+			messageBox.empty();
+			messageBox.append('<i class="icon close">').children('i').click(function(){
+				jQuery(this).closest('.message').transition('fade');
+			});
+			messageBox.append('<div class="header">').append('<p>').children('div').text('There is no encounter that can be generated given the current parameters.').siblings('p').text('Please update your filters.');
+			
+			messageBox.removeClass('warning').removeClass('hidden').addClass('negative');
+			
 			return;
 		}
 		
 		this.encounterMonsterService.clearMonsters();
 		this.encounterMonsterService.addMonsters(this.encounterService.generateEncounter(filteredMonsters));
 		this.recalcXP();
-		
-		console.log(this.encounterMonsterService.getMonsters());
 	} 
 
 	private addPlayer(number : number){

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
 	selector: 'dnd-app',
 	template: `
-		<div class="ui inverted vertical masthead aligned segment" style="height: 100%;">
+		<div class="ui inverted vertical masthead aligned segment" style="height: 100%; overflow-y: scroll;">
 			<div class="ui inverted menu">
 				<a class="header item" routerLink="/encounter" routerLinkActive="active"> Random Encounter Generator </a>
 				<a class="item" routerLink="/spells" routerLinkActive="active"> Spell List </a>
