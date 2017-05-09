@@ -31,10 +31,10 @@ export class EncounterComponent implements OnInit{
 
 	private generateEncounter(){	
 		let messageBox = jQuery('.ui.messageBox');
+		messageBox.empty();
 		messageBox.addClass('hidden');
 		
 		if(this.playerService.length() <= 0){
-			messageBox.empty();
 			messageBox.append('<i class="icon close">').children('i').click(function(){
 				jQuery(this).closest('.message').transition('fade');
 			});
@@ -61,7 +61,6 @@ export class EncounterComponent implements OnInit{
 					(this.alignmentFilters.some(align => align.indexOf("lawful") === -1) && monster.Align === "any non-lawful alignment")));
 		
 		if(filteredMonsters.length === 0){
-			messageBox.empty();
 			messageBox.append('<i class="icon close">').children('i').click(function(){
 				jQuery(this).closest('.message').transition('fade');
 			});

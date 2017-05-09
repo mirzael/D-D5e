@@ -78,6 +78,20 @@
 						</p>
 					</property-line>
 					
+					<property-line *ngIf="monster.Bonuses.length > 0">
+						<h4>Bonuses</h4>
+						<p>
+							{{monster.Bonuses.join()}}
+						</p>
+					</property-line>
+					
+					<property-line *ngIf="monster.Saves.length > 0">
+						<h4>Saves</h4>
+						<p>
+							{{monster.Saves.join()}}
+						</p>
+					</property-line>
+					
 					<property-line *ngIf="monster.Vulnerabilities.length > 0">
 						<h4>Vulnerabilities</h4>
 						<p>
