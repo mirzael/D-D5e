@@ -19,6 +19,7 @@
 			<div class="ui basic teal button">Total XP</div>
 			<a class="ui inverted teal label">{{encounterMonsters.calculateXP()}}</a>
 		</div>
+		<div class="ui label" [ngClass]="{'blue': isEasyEncounter(), 'green': isMediumEncounter(), 'orange': isHardEncounter(), 'red':isDeadlyEncounter()}"> {{getDifficultyString()}}</div>
 	</div>
 	<div class="item">
 		<button class="ui inverted green button" routerLink="/monsters" (click)="internalJQuery('.ui.sidebar').sidebar('hide')"> Go To Details </button>

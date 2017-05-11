@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Monster } from '../monster/monster';
 import { MonsterService } from '../monster/monster.service';
 import { EncounterMonsterService } from './encounterMonsters.service';
-import { crMap, encounterMultipliers} from './encounterConstants';
+import { crMap, encounterMultipliers, Difficulty} from './encounterConstants';
 import { PagedList } from '../../paging/pagingList';
 
 declare var jQuery: any;
@@ -27,10 +27,14 @@ export class ManualEncounterComponent implements OnInit, AfterViewInit {
 	pagedMonsters: PagedList<Monster> = new PagedList<Monster>();
 	internalJQuery: any = jQuery;
 	xp: number = 0;
+	difficulty: Difficulty;
+	
 	constructor(private monsterService: MonsterService, private router: Router, private encounterMonsters: EncounterMonsterService ){}	
+	
 	ngOnInit(): void{
 		this.monsterService.getMonsters().subscribe(
-			monsters => {this.pagedMonsters.push(...monsters);},
+			monsters => {this.pagedMonsters.push(...monsters);
+			this.difficulty = this.encounterMonsters.getDifficulty();},
 			error => console.error(error)
 		);
 		
@@ -108,6 +112,7 @@ export class ManualEncounterComponent implements OnInit, AfterViewInit {
 	
 	private recalcXP(){
 		this.xp = this.encounterMonsters.calculateXP();
+		this.difficulty = this.encounterMonsters.getDifficulty();
 	}
 
 	
@@ -130,5 +135,25 @@ export class ManualEncounterComponent implements OnInit, AfterViewInit {
 					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("chaotic") > -1) && monster.Align.toLowerCase() === "any chaotic alignment") ||
 					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("good") === -1) && monster.Align.toLowerCase() === "any non-good alignment") ||
 					(this.alignmentFilters.some(align => align.toLowerCase().indexOf("lawful") === -1) && monster.Align.toLowerCase() === "any non-lawful alignment"));
+	}
+	
+	private isEasyEncounter(): boolean{
+		return this.difficulty === Difficulty.Easy;
+	}
+	
+	private isMediumEncounter(): boolean{
+		return this.difficulty === Difficulty.Medium;
+	}
+	
+	private isHardEncounter(): boolean{
+		return this.difficulty === Difficulty.Hard;
+	}
+	
+	private isDeadlyEncounter(): boolean{
+		return this.difficulty === Difficulty.Deadly;
+	}
+	
+	private getDifficultyString(): string{
+		return Difficulty[this.difficulty]; 
 	}
 }
